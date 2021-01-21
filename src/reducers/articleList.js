@@ -1,6 +1,6 @@
 import {
-  ARTICLE_FAVORITED,
-  ARTICLE_UNFAVORITED,
+  STORY_FAVORITED,
+  STORY_UNFAVORITED,
   SET_PAGE,
   APPLY_TAG_FILTER,
   HOME_PAGE_LOADED,
@@ -14,8 +14,8 @@ import {
 
 export default (state = {}, action) => {
   switch (action.type) {
-    case ARTICLE_FAVORITED:
-    case ARTICLE_UNFAVORITED:
+    case STORY_FAVORITED:
+    case STORY_UNFAVORITED:
       return {
         ...state,
         articles: state.articles.map(article => {

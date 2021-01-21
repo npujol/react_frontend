@@ -2,12 +2,12 @@ import {
   APP_LOAD,
   REDIRECT,
   LOGOUT,
-  ARTICLE_SUBMITTED,
+  STORY_SUBMITTED,
   SETTINGS_SAVED,
   LOGIN,
   REGISTER,
-  DELETE_ARTICLE,
-  ARTICLE_PAGE_UNLOADED,
+  DELETE_STORY,
+  STORY_PAGE_UNLOADED,
   EDITOR_PAGE_UNLOADED,
   HOME_PAGE_UNLOADED,
   PROFILE_PAGE_UNLOADED,
@@ -37,7 +37,7 @@ export default (state = defaultState, action) => {
       return { ...state, redirectTo: null };
     case LOGOUT:
       return { ...state, redirectTo: '/', token: null, currentUser: null };
-    case ARTICLE_SUBMITTED:
+    case STORY_SUBMITTED:
       const redirectUrl = `/article/${action.payload.article.slug}`;
       return { ...state, redirectTo: redirectUrl };
     case SETTINGS_SAVED:
@@ -54,9 +54,9 @@ export default (state = defaultState, action) => {
         token: action.error ? null : action.payload.token,
         currentUser: action.error ? null : action.payload.profile
       };
-    case DELETE_ARTICLE:
+    case DELETE_STORY:
       return { ...state, redirectTo: '/' };
-    case ARTICLE_PAGE_UNLOADED:
+    case STORY_PAGE_UNLOADED:
     case EDITOR_PAGE_UNLOADED:
     case HOME_PAGE_UNLOADED:
     case PROFILE_PAGE_UNLOADED:

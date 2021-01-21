@@ -54,17 +54,17 @@ class Editor extends React.Component {
 
     this.submitForm = ev => {
       ev.preventDefault();
-      const article = {
+      const story = {
         title: this.props.title,
         description: this.props.description,
         body: this.props.body,
         tagList: this.props.tagList
       };
 
-      const slug = { slug: this.props.articleSlug };
-      const promise = this.props.articleSlug ?
-        agent.Articles.update(Object.assign(article, slug)) :
-        agent.Articles.create(article);
+      const slug = { slug: this.props.storySlug };
+      const promise = this.props.storySlug ?
+        agent.Stories.update(Object.assign(story, slug)) :
+        agent.Stories.create(story);
 
       this.props.onSubmit(promise);
     };
@@ -74,7 +74,7 @@ class Editor extends React.Component {
     if (this.props.match.params.slug !== nextProps.match.params.slug) {
       if (nextProps.match.params.slug) {
         this.props.onUnload();
-        return this.props.onLoad(agent.Articles.get(this.props.match.params.slug));
+        return this.props.onLoad(agent.Stories.get(this.props.match.params.slug));
       }
       this.props.onLoad(null);
     }
@@ -82,7 +82,7 @@ class Editor extends React.Component {
 
   componentWillMount() {
     if (this.props.match.params.slug) {
-      return this.props.onLoad(agent.Articles.get(this.props.match.params.slug));
+      return this.props.onLoad(agent.Stories.get(this.props.match.params.slug));
     }
     this.props.onLoad(null);
   }
@@ -107,7 +107,7 @@ class Editor extends React.Component {
                     <input
                       className="form-control form-control-lg"
                       type="text"
-                      placeholder="Article Title"
+                      placeholder="Story Title"
                       value={this.props.title}
                       onChange={this.changeTitle} />
                   </fieldset>
@@ -116,7 +116,7 @@ class Editor extends React.Component {
                     <input
                       className="form-control"
                       type="text"
-                      placeholder="What's this article about?"
+                      placeholder="What's this story about?"
                       value={this.props.description}
                       onChange={this.changeDescription} />
                   </fieldset>
@@ -125,7 +125,7 @@ class Editor extends React.Component {
                     <textarea
                       className="form-control"
                       rows="8"
-                      placeholder="Write your article (in markdown)"
+                      placeholder="Write your story (in markdown)"
                       value={this.props.body}
                       onChange={this.changeBody}>
                     </textarea>
@@ -161,7 +161,7 @@ class Editor extends React.Component {
                     type="button"
                     disabled={this.props.inProgress}
                     onClick={this.submitForm}>
-                    Publish Article
+                    Publish Story
                   </button>
 
                 </fieldset>
