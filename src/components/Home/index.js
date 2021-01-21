@@ -2,7 +2,8 @@ import Banner from './Banner';
 import MainView from './MainView';
 import React from 'react';
 import Tags from './Tags';
-import agent from '../../agent';
+import { TagsApi, StoriesApi } from "../../client";
+
 import { connect } from 'react-redux';
 import {
   HOME_PAGE_LOADED,
@@ -11,6 +12,9 @@ import {
 } from '../../constants/actionTypes';
 
 const Promise = global.Promise;
+
+const storiesApi = new StoriesApi();
+const tagsApi = new TagsApi();
 
 const mapStateToProps = state => ({
   ...state.home,
@@ -24,17 +28,18 @@ const mapDispatchToProps = dispatch => ({
   onLoad: (tab, pager, payload) =>
     dispatch({ type: HOME_PAGE_LOADED, tab, pager, payload }),
   onUnload: () =>
-    dispatch({  type: HOME_PAGE_UNLOADED })
+    dispatch({ type: HOME_PAGE_UNLOADED })
 });
 
 class Home extends React.Component {
   componentWillMount() {
     const tab = this.props.token ? 'feed' : 'all';
     const articlesPromise = this.props.token ?
-      agent.Articles.feed :
-      agent.Articles.all;
-
-    this.props.onLoad(tab, articlesPromise, Promise.all([agent.Tags.getAll(), articlesPromise()]));
+      storiesApi.storiesList({ offset: 0, limit: 10 }) :
+      storiesApi.storiesList({ offset: 0, limit: 10 });
+    // this.props.onLoad(tab, articlesPromise, Promise.all([tagsApi.tagsList(), articlesPromise() ]));}
+    this.props.onLoad(
+      tab, articlesPromise, tagsApi.tagsList());
   }
 
   componentWillUnmount() {
@@ -55,10 +60,10 @@ class Home extends React.Component {
               <div className="sidebar">
 
                 <p>Popular Tags</p>
-{/* 
+
                 <Tags
                   tags={this.props.tags}
-                  onClickTag={this.props.onClickTag} /> */}
+                  onClickTag={this.props.onClickTag} />
 
               </div>
             </div>

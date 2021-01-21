@@ -1,4 +1,4 @@
-import { ApiClient } from "../client";
+import { ApiClient } from "./client";
 
 const ID_TOKEN_KEY = "id_token";
 const USERNAME = "username";

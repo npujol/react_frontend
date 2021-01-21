@@ -1,4 +1,4 @@
-import agent from './agent';
+import JwtService from "./jwt.service";
 import {
   ASYNC_START,
   ASYNC_END,
@@ -49,12 +49,13 @@ const promiseMiddleware = store => next => action => {
 const localStorageMiddleware = store => next => action => {
   if (action.type === REGISTER || action.type === LOGIN) {
     if (!action.error) {
-      window.localStorage.setItem('jwt', action.payload.user.token);
-      agent.setToken(action.payload.user.token);
+      window.localStorage.setItem('jwt', action.payload.token);
+      JwtService.saveCredentials(action.payload.username, action.payload.token);
+      JwtService.setHeader();
     }
   } else if (action.type === LOGOUT) {
     window.localStorage.setItem('jwt', '');
-    agent.setToken(null);
+    JwtService.destroyCredentials();
   }
 
   next(action);

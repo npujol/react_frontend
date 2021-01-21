@@ -1,13 +1,17 @@
 import { Link } from 'react-router-dom';
 import ListErrors from '../Common/ListErrors';
 import React from 'react';
-import agent from '../../agent';
 import { connect } from 'react-redux';
+import { AuthApi, UsersApi } from "../../client";
+
 import {
   UPDATE_FIELD_AUTH,
   REGISTER,
   REGISTER_PAGE_UNLOADED
 } from '../../constants/actionTypes';
+
+const authApi = new AuthApi();
+const usersApi = new UsersApi();
 
 const mapStateToProps = state => ({ ...state.auth });
 
@@ -19,7 +23,8 @@ const mapDispatchToProps = dispatch => ({
   onChangeUsername: value =>
     dispatch({ type: UPDATE_FIELD_AUTH, key: 'username', value }),
   onSubmit: (username, email, password) => {
-    const payload = agent.Auth.register(username, email, password);
+    const payload = authApi
+      .authRegistrationCreate({ email: email, password: password, username: username });
     dispatch({ type: REGISTER, payload })
   },
   onUnload: () =>

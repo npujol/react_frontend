@@ -3,11 +3,15 @@ import ListErrors from '../Common/ListErrors';
 import React from 'react';
 import agent from '../../agent';
 import { connect } from 'react-redux';
+import { AuthApi, UsersApi } from "../../client";
 import {
   UPDATE_FIELD_AUTH,
   LOGIN,
   LOGIN_PAGE_UNLOADED
 } from '../../constants/actionTypes';
+
+const authApi = new AuthApi();
+const usersApi = new UsersApi();
 
 const mapStateToProps = state => ({ ...state.auth });
 
@@ -17,7 +21,7 @@ const mapDispatchToProps = dispatch => ({
   onChangePassword: value =>
     dispatch({ type: UPDATE_FIELD_AUTH, key: 'password', value }),
   onSubmit: (email, password) =>
-    dispatch({ type: LOGIN, payload: agent.Auth.login(email, password) }),
+    dispatch({ type: LOGIN, payload: authApi.authLoginCreate({email:email, password:password}) }),
   onUnload: () =>
     dispatch({ type: LOGIN_PAGE_UNLOADED })
 });

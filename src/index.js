@@ -9,14 +9,14 @@ import { store, history} from './store';
 
 import App from './components/App/App';
 
-// import { ApiClient } from "./client";
+import { ApiClient } from "./client";
 
-// const apiClient = ApiClient.instance;
-// if (process.env.NODE_ENV === "production") {
-//   apiClient.basePath = "/api";
-// } else {
-//   apiClient.basePath = "http://localhost:8000/api".replace(/\/+$/, "");
-// }
+const apiClient = ApiClient.instance;
+if (process.env.NODE_ENV === "production") {
+  apiClient.basePath = "/api";
+} else {
+  apiClient.basePath = "http://localhost:8000/api".replace(/\/+$/, "");
+}
 
 ReactDOM.render((
   <Provider store={store}>
