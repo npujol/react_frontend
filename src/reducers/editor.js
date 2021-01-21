@@ -1,7 +1,7 @@
 import {
   EDITOR_PAGE_LOADED,
   EDITOR_PAGE_UNLOADED,
-  ARTICLE_SUBMITTED,
+  STORY_SUBMITTED,
   ASYNC_START,
   ADD_TAG,
   REMOVE_TAG,
@@ -23,14 +23,14 @@ export default (state = {}, action) => {
       };
     case EDITOR_PAGE_UNLOADED:
       return {};
-    case ARTICLE_SUBMITTED:
+    case STORY_SUBMITTED:
       return {
         ...state,
         inProgress: null,
         errors: action.error ? action.payload.errors : null
       };
     case ASYNC_START:
-      if (action.subtype === ARTICLE_SUBMITTED) {
+      if (action.subtype === STORY_SUBMITTED) {
         return { ...state, inProgress: true };
       }
       break;
