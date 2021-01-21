@@ -1,5 +1,7 @@
 import React from 'react';
-import agent from '../../agent';
+import { StoriesApi } from "../../client";
+
+const storiesApi = new StoriesApi();
 
 const Tags = props => {
   const tags = props.tags;
@@ -10,7 +12,7 @@ const Tags = props => {
           tags.map(tag => {
             const handleClick = ev => {
               ev.preventDefault();
-              props.onClickTag(tag, page => agent.Articles.byTag(tag, page), agent.Articles.byTag(tag));
+              props.onClickTag(tag, page => storiesApi.storiesList({ offset: 0, limit: 10, tagsTag: tag }), storiesApi.storiesList({ offset: 0, limit: 10, tagsTag: tag }));
             };
 
             return (

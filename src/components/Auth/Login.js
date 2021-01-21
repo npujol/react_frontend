@@ -3,7 +3,7 @@ import ListErrors from '../Common/ListErrors';
 import React from 'react';
 import agent from '../../agent';
 import { connect } from 'react-redux';
-import { AuthApi, UsersApi } from "../../client";
+import { AuthApi } from "../../client";
 import {
   UPDATE_FIELD_AUTH,
   LOGIN,
@@ -11,7 +11,6 @@ import {
 } from '../../constants/actionTypes';
 
 const authApi = new AuthApi();
-const usersApi = new UsersApi();
 
 const mapStateToProps = state => ({ ...state.auth });
 

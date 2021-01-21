@@ -1,4 +1,4 @@
-import agent from '../../agent';
+import JwtService from "../../jwt.service";
 import Header from './Header';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -41,11 +41,8 @@ class App extends React.Component {
 
   componentWillMount() {
     const token = window.localStorage.getItem('jwt');
-    if (token) {
-      agent.setToken(token);
-    }
-
-    this.props.onLoad(token ? agent.Auth.current() : null, token);
+  
+    this.props.onLoad(token ? JwtService.getUsername() : null, token);
   }
 
   render() {

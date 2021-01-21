@@ -1,21 +1,28 @@
-// import ArticleList from '../ArticleList';
+// import ArticleList from '../Article/ArticleList';
 import React from 'react';
-import agent from '../../agent';
+import { StoriesApi } from "../../client";
+
 import { connect } from 'react-redux';
 import { CHANGE_TAB } from '../../constants/actionTypes';
+
+const storiesApi = new StoriesApi();
 
 const YourFeedTab = props => {
   if (props.token) {
     const clickHandler = ev => {
       ev.preventDefault();
-      props.onTabClick('feed', agent.Articles.feed, agent.Articles.feed());
+      props.onTabClick(
+        'feed',
+        storiesApi.storiesList({ offset: 0, limit: 10 }),
+        storiesApi.storiesList({ offset: 0, limit: 10 })
+      );
     }
 
     return (
       <li className="nav-item">
-        <a  href=""
-            className={ props.tab === 'feed' ? 'nav-link active' : 'nav-link' }
-            onClick={clickHandler}>
+        <a href=""
+          className={props.tab === 'feed' ? 'nav-link active' : 'nav-link'}
+          onClick={clickHandler}>
           Your Feed
         </a>
       </li>
@@ -27,13 +34,17 @@ const YourFeedTab = props => {
 const GlobalFeedTab = props => {
   const clickHandler = ev => {
     ev.preventDefault();
-    props.onTabClick('all', agent.Articles.all, agent.Articles.all());
+    props.onTabClick(
+      'all',
+      storiesApi.storiesList({ offset: 0, limit: 10 }),
+      storiesApi.storiesList({ offset: 0, limit: 10 })
+    );
   };
   return (
     <li className="nav-item">
       <a
         href=""
-        className={ props.tab === 'all' ? 'nav-link active' : 'nav-link' }
+        className={props.tab === 'all' ? 'nav-link active' : 'nav-link'}
         onClick={clickHandler}>
         Global Feed
       </a>
@@ -71,19 +82,19 @@ const MainView = props => {
       <div className="feed-toggle">
         <ul className="nav nav-pills outline-active">
 
-          {/* <YourFeedTab
+          <YourFeedTab
             token={props.token}
             tab={props.tab}
             onTabClick={props.onTabClick} />
 
           <GlobalFeedTab tab={props.tab} onTabClick={props.onTabClick} />
 
-          <TagFilterTab tag={props.tag} /> */}
+          <TagFilterTab tag={props.tag} />
 
         </ul>
       </div>
-
-      {/* <ArticleList
+      {/* 
+      <ArticleList
         pager={props.pager}
         articles={props.articles}
         loading={props.loading}
