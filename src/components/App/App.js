@@ -4,12 +4,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { APP_LOAD, REDIRECT } from '../../constants/actionTypes';
 import { Route, Switch } from 'react-router-dom';
-// import Article from '../components/Article';
-// import Editor from '../components/Editor';
+import Story from '../Story/Story';
+import Editor from '../Story/Editor';
 import Home from '../Home';
 import Login from '../Auth/Login';
-// import Profile from '../components/Profile';
-// import ProfileFavorites from '../components/ProfileFavorites';
+import Profile from '../Profile/Profile';
+import ProfileFavorites from '../Profile/ProfileFavorites';
 import Register from '../Auth/Register';
 import Settings from '../Profile/Settings';
 import { store } from '../../store';
@@ -58,12 +58,12 @@ class App extends React.Component {
             <Route exact path="/" component={Home} />
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
-            {/* <Route path="/editor/:slug" component={Editor} /> */}
-            {/* <Route path="/editor" component={Editor} /> */}
-            {/* <Route path="/article/:id" component={Article} /> */}
+            <Route path="/editor/:slug" component={Editor} />
+            <Route path="/editor" component={Editor} />
+            <Route path="/story/:id" component={Story} />
             <Route path="/settings" component={Settings} />
-            {/* <Route path="/@:username/favorites" component={ProfileFavorites} /> */}
-            {/* <Route path="/@:username" component={Profile} /> */}
+            <Route path="/@:username/favorites" component={ProfileFavorites} />
+            <Route path="/@:username" component={Profile} />
           </Switch>
         </div>
       );
