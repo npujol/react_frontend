@@ -14,6 +14,10 @@ import Register from '../Auth/Register';
 import Settings from '../Profile/Settings';
 import { store } from '../../store';
 import { push } from 'react-router-redux';
+import { UsersApi } from "../../client"
+
+const usersApi = new UsersApi();
+
 
 const mapStateToProps = state => {
   return {
@@ -42,8 +46,11 @@ class App extends React.Component {
 
   componentWillMount() {
     const token = window.localStorage.getItem('jwt');
+    if (token) {
+      JwtService.setHeader();
+    }
 
-    this.props.onLoad(token ? JwtService.getUsername() : null, token);
+    this.props.onLoad(token ? usersApi.usersRead(JwtService.getUsername()) : null, token);
     console.log("in middleware", this.props);
   }
 
