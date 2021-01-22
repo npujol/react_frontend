@@ -5,7 +5,7 @@ export default (state = {}, action) => {
     case HOME_PAGE_LOADED:
       return {
         ...state,
-        tags: action.payload.results.map((obj) => obj.tag)
+        tags: action.payload[0].results.map((obj) => obj.tag)
       };
     case HOME_PAGE_UNLOADED:
       return {};

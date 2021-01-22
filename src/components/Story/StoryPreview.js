@@ -36,13 +36,13 @@ const StoryPreview = props => {
   return (
     <div className="story-preview">
       <div className="story-meta">
-        <Link to={`/@${story.author.username}`}>
-          <img src={story.author.image} alt={story.author.username} />
+        <Link to={`/@${story.owner.username}`}>
+          <img src={story.owner.image} alt={story.owner.username} />
         </Link>
 
         <div className="info">
-          <Link className="author" to={`/@${story.author.username}`}>
-            {story.author.username}
+          <Link className="owner" to={`/@${story.owner.username}`}>
+            {story.owner.username}
           </Link>
           <span className="date">
             {new Date(story.createdAt).toDateString()}
@@ -62,9 +62,9 @@ const StoryPreview = props => {
         <span>Read more...</span>
         <ul className="tag-list">
           {
-            story.tagList.map(tag => {
+            story.tags.map((tag, pk) => {
               return (
-                <li className="tag-default tag-pill tag-outline" key={tag}>
+                <li className="tag-default tag-pill tag-outline" key={pk}>
                   {tag}
                 </li>
               )

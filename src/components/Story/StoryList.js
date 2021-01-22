@@ -1,5 +1,5 @@
 import StoryPreview from './StoryPreview';
-import ListPagination from '../ListPagination';
+import ListPagination from '../Common/ListPagination';
 import React from 'react';
 
 const StoryList = props => {

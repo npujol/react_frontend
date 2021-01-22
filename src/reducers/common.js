@@ -25,26 +25,27 @@ const defaultState = {
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (state = defaultState, action) => {
+  console.log("payload in common", action.payload);
   switch (action.type) {
     case APP_LOAD:
       return {
         ...state,
         token: action.token || null,
         appLoaded: true,
-        currentUser: action.payload ? action.payload.profile : null
+        currentUser: action.payload ? action.payload : null
       };
     case REDIRECT:
       return { ...state, redirectTo: null };
     case LOGOUT:
       return { ...state, redirectTo: '/', token: null, currentUser: null };
     case STORY_SUBMITTED:
-      const redirectUrl = `/article/${action.payload.article.slug}`;
+      const redirectUrl = `/story/${action.payload.story.slug}`;
       return { ...state, redirectTo: redirectUrl };
     case SETTINGS_SAVED:
       return {
         ...state,
         redirectTo: action.error ? null : '/',
-        currentUser: action.error ? null : action.payload.profile
+        currentUser: action.error ? null : action.payload.username
       };
     case LOGIN:
     case REGISTER:
@@ -52,7 +53,7 @@ export default (state = defaultState, action) => {
         ...state,
         redirectTo: action.error ? null : '/',
         token: action.error ? null : action.payload.token,
-        currentUser: action.error ? null : action.payload.profile
+        currentUser: action.error ? null : action.payload.username
       };
     case DELETE_STORY:
       return { ...state, redirectTo: '/' };

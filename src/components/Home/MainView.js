@@ -1,4 +1,4 @@
-// import ArticleList from '../Article/ArticleList';
+import StoryList from '../Story/StoryList';
 import React from 'react';
 import { StoriesApi } from "../../client";
 
@@ -8,14 +8,17 @@ import { CHANGE_TAB } from '../../constants/actionTypes';
 const storiesApi = new StoriesApi();
 
 const YourFeedTab = props => {
+  // console.log("YourFeedTab", props);
+
   if (props.token) {
     const clickHandler = ev => {
       ev.preventDefault();
       props.onTabClick(
         'feed',
-        storiesApi.storiesList({ offset: 0, limit: 10 }),
-        storiesApi.storiesList({ offset: 0, limit: 10 })
+        storiesApi.storiesFeedList,
+        storiesApi.storiesFeedList({ offset: 0, limit: 10 })
       );
+
     }
 
     return (
@@ -32,12 +35,14 @@ const YourFeedTab = props => {
 };
 
 const GlobalFeedTab = props => {
+  // console.log("GlobalFeedTab", props);
+
   const clickHandler = ev => {
     ev.preventDefault();
     props.onTabClick(
       'all',
-      storiesApi.storiesList({ offset: 0, limit: 10 }),
-      storiesApi.storiesList({ offset: 0, limit: 10 })
+      storiesApi.storiesFeedList,
+      storiesApi.storiesFeedList({ offset: 0, limit: 10 })
     );
   };
   return (
@@ -53,6 +58,7 @@ const GlobalFeedTab = props => {
 };
 
 const TagFilterTab = props => {
+  // console.log("TagFilterTab", props);
   if (!props.tag) {
     return null;
   }
@@ -67,7 +73,7 @@ const TagFilterTab = props => {
 };
 
 const mapStateToProps = state => ({
-  ...state.articleList,
+  ...state.storyList,
   tags: state.home.tags,
   token: state.common.token
 });
@@ -77,6 +83,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const MainView = props => {
+  console.log("MainView", props.storiesList);
   return (
     <div className="col-md-9">
       <div className="feed-toggle">
@@ -93,13 +100,13 @@ const MainView = props => {
 
         </ul>
       </div>
-      {/* 
-      <ArticleList
+
+      <StoryList
         pager={props.pager}
-        articles={props.articles}
+        stories={props.stories}
         loading={props.loading}
-        articlesCount={props.articlesCount}
-        currentPage={props.currentPage} /> */}
+        storiesCount={props.storiesCount}
+        currentPage={props.currentPage} />
     </div>
   );
 };

@@ -34,13 +34,18 @@ const mapDispatchToProps = dispatch => ({
 class Home extends React.Component {
   componentWillMount() {
     const tab = this.props.token ? 'feed' : 'all';
-    const articlesPromise = this.props.token ?
-      storiesApi.storiesList({ offset: 0, limit: 10 }) :
-      storiesApi.storiesList({ offset: 0, limit: 10 });
-    // this.props.onLoad(tab, articlesPromise, Promise.all([tagsApi.tagsList(), articlesPromise() ]));}
+    const storiesPromise = this.props.token ?
+      storiesApi.storiesFeedList :
+      storiesApi.storiesFeedList;
     this.props.onLoad(
-      tab, articlesPromise, tagsApi.tagsList());
+      tab,
+      storiesPromise,
+      Promise.all([
+        tagsApi.tagsList(),
+        storiesApi.storiesFeedList({ offset: 0, limit: 10 })
+      ]));
   }
+
 
   componentWillUnmount() {
     this.props.onUnload();
