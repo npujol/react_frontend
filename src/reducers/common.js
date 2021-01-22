@@ -32,7 +32,7 @@ export default (state = defaultState, action) => {
         ...state,
         token: action.token || null,
         appLoaded: true,
-        currentUser: action.payload ? action.payload : null
+        currentUser: action.payload ? action.payload.profile : null
       };
     case REDIRECT:
       return { ...state, redirectTo: null };
@@ -45,7 +45,7 @@ export default (state = defaultState, action) => {
       return {
         ...state,
         redirectTo: action.error ? null : '/',
-        currentUser: action.error ? null : action.payload.username
+        currentUser: action.error ? null : action.payload
       };
     case LOGIN:
     case REGISTER:
@@ -53,7 +53,7 @@ export default (state = defaultState, action) => {
         ...state,
         redirectTo: action.error ? null : '/',
         token: action.error ? null : action.payload.token,
-        currentUser: action.error ? null : action.payload.username
+        currentUser: action.error ? null : action.payload.profile
       };
     case DELETE_STORY:
       return { ...state, redirectTo: '/' };

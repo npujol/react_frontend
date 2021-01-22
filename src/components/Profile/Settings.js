@@ -1,12 +1,15 @@
 import ListErrors from '../Common/ListErrors';
 import React from 'react';
 import agent from '../../agent';
+import { ProfilesApi } from "../../client"
 import { connect } from 'react-redux';
 import {
   SETTINGS_SAVED,
   SETTINGS_PAGE_UNLOADED,
   LOGOUT
 } from '../../constants/actionTypes';
+
+const profilesApi = new ProfilesApi();
 
 class SettingsForm extends React.Component {
   constructor() {
@@ -132,7 +135,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   onClickLogout: () => dispatch({ type: LOGOUT }),
   onSubmitForm: user =>
-    dispatch({ type: SETTINGS_SAVED, payload: agent.Auth.save(user) }),
+    dispatch({
+      type: SETTINGS_SAVED, payload: profilesApi.profilesUpdate(user.username, user)
+    }),
   onUnload: () => dispatch({ type: SETTINGS_PAGE_UNLOADED })
 });
 
