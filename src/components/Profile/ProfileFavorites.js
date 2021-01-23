@@ -1,12 +1,15 @@
 import { Profile, mapStateToProps } from './Profile';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import agent from '../../agent';
 import { connect } from 'react-redux';
 import {
   PROFILE_PAGE_LOADED,
   PROFILE_PAGE_UNLOADED
 } from '../../constants/actionTypes';
+import { ProfilesApi, StoriesApi } from "../../client"
+
+const profilesApi = new ProfilesApi();
+const storiesApi = new StoriesApi();
 
 const mapDispatchToProps = dispatch => ({
   onLoad: (pager, payload) =>
@@ -17,10 +20,20 @@ const mapDispatchToProps = dispatch => ({
 
 class ProfileFavorites extends Profile {
   componentWillMount() {
-    this.props.onLoad(page => agent.Articles.favoritedBy(this.props.match.params.username, page), Promise.all([
-      agent.Profile.get(this.props.match.params.username),
-      agent.Articles.favoritedBy(this.props.match.params.username)
-    ]));
+    console.log("ProfileFavorites", this.props.match.params.username);
+    this.props.onLoad(page => storiesApi.storiesList({
+      favoritedByUserUsername: this.props.match.params.username,
+      limit: 10,
+      offset: page
+    }),
+      Promise.all([
+        profilesApi.profilesRead(this.props.match.params.username),
+        storiesApi.storiesList({
+          favoritedByUserUsername: this.props.match.params.username,
+          limit: 10,
+          offset: 0
+        })
+      ]));
   }
 
   componentWillUnmount() {
@@ -34,7 +47,7 @@ class ProfileFavorites extends Profile {
           <Link
             className="nav-link"
             to={`/@${this.props.profile.username}`}>
-            My Articles
+            My Stories
           </Link>
         </li>
 
@@ -42,7 +55,7 @@ class ProfileFavorites extends Profile {
           <Link
             className="nav-link active"
             to={`/@${this.props.profile.username}/favorites`}>
-            Favorited Articles
+            Favorited Stories
           </Link>
         </li>
       </ul>

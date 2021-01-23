@@ -1,7 +1,7 @@
 import StoryList from '../Story/StoryList';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import agent from '../../agent';
+import { ProfilesApi, StoriesApi } from "../../client"
 import { connect } from 'react-redux';
 import {
   FOLLOW_USER,
@@ -9,6 +9,9 @@ import {
   PROFILE_PAGE_LOADED,
   PROFILE_PAGE_UNLOADED
 } from '../../constants/actionTypes';
+
+const profilesApi = new ProfilesApi();
+const storiesApi = new StoriesApi();
 
 const EditProfileSettings = props => {
   if (props.isUser) {
@@ -37,7 +40,7 @@ const FollowUserButton = props => {
 
   const handleClick = ev => {
     ev.preventDefault();
-    if (props.user.following) {
+    if (props.user.following === "true") {
       props.unfollow(props.user.username)
     } else {
       props.follow(props.user.username)
@@ -50,13 +53,13 @@ const FollowUserButton = props => {
       onClick={handleClick}>
       <i className="ion-plus-round"></i>
       &nbsp;
-      {props.user.following ? 'Unfollow' : 'Follow'} {props.user.username}
+      {props.user.following === "true" ? 'Unfollow' : 'Follow'} {props.user.username}
     </button>
   );
 };
 
 const mapStateToProps = state => ({
-  ...state.articleList,
+  ...state.storyList,
   currentUser: state.common.currentUser,
   profile: state.profile
 });
@@ -64,12 +67,12 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   onFollow: username => dispatch({
     type: FOLLOW_USER,
-    payload: agent.Profile.follow(username)
+    payload: profilesApi.profilesFollow(username, {})
   }),
   onLoad: payload => dispatch({ type: PROFILE_PAGE_LOADED, payload }),
   onUnfollow: username => dispatch({
     type: UNFOLLOW_USER,
-    payload: agent.Profile.unfollow(username)
+    payload: profilesApi.profilesUnfollow(username, {})
   }),
   onUnload: () => dispatch({ type: PROFILE_PAGE_UNLOADED })
 });
@@ -77,8 +80,12 @@ const mapDispatchToProps = dispatch => ({
 class Profile extends React.Component {
   componentWillMount() {
     this.props.onLoad(Promise.all([
-      agent.Profile.get(this.props.match.params.username),
-      agent.Articles.byAuthor(this.props.match.params.username)
+      profilesApi.profilesRead(this.props.match.params.username),
+      storiesApi.storiesList({
+        ownerUserUsername: this.props.match.params.username,
+        limit: 10,
+        offset: 0
+      })
     ]));
   }
 
@@ -93,7 +100,7 @@ class Profile extends React.Component {
           <Link
             className="nav-link active"
             to={`/@${this.props.profile.username}`}>
-            My Articles
+            My Stories
           </Link>
         </li>
 
@@ -101,7 +108,7 @@ class Profile extends React.Component {
           <Link
             className="nav-link"
             to={`/@${this.props.profile.username}/favorites`}>
-            Favorited Articles
+            Favorited Stories
           </Link>
         </li>
       </ul>
@@ -147,14 +154,14 @@ class Profile extends React.Component {
 
             <div className="col-xs-12 col-md-10 offset-md-1">
 
-              <div className="articles-toggle">
+              <div className="stories-toggle">
                 {this.renderTabs()}
               </div>
 
               <StoryList
                 pager={this.props.pager}
-                articles={this.props.articles}
-                articlesCount={this.props.articlesCount}
+                stories={this.props.stories}
+                storiesCount={this.props.storiesCount}
                 state={this.props.currentPage} />
             </div>
 

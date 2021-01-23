@@ -9,19 +9,19 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const ListPagination = props => {
-  if (props.articlesCount <= 10) {
+  if (props.storiesCount <= 10) {
     return null;
   }
 
   const range = [];
-  for (let i = 0; i < Math.ceil(props.articlesCount / 10); ++i) {
+  for (let i = 0; i < Math.ceil(props.storiesCount / 10); ++i) {
     range.push(i);
   }
 
   const setPage = page => {
-    if(props.pager) {
+    if (props.pager) {
       props.onSetPage(page, props.pager(page));
-    }else {
+    } else {
       props.onSetPage(page, agent.Articles.all(page))
     }
   };
@@ -39,7 +39,7 @@ const ListPagination = props => {
             };
             return (
               <li
-                className={ isCurrent ? 'page-item active' : 'page-item' }
+                className={isCurrent ? 'page-item active' : 'page-item'}
                 onClick={onClick}
                 key={v.toString()}>
 
