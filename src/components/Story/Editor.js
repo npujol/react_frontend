@@ -65,7 +65,12 @@ class Editor extends React.Component {
 
       const slug = { slug: this.props.storySlug };
       const promise = this.props.storySlug ?
-        storiesApi.storiesUpdate(slug, story) :
+        storiesApi.storiesUpdate(this.props.match.params.slug, {
+          title: this.props.title,
+          description: this.props.description,
+          body_markdown: this.props.body,
+          tags: this.props.tagList
+        }) :
         storiesApi.storiesCreate({
           title: this.props.title,
           description: this.props.description,

@@ -1,7 +1,9 @@
 import React from 'react';
-import agent from '../../../agent';
+import { StoriesApi } from "../../../client"
 import { connect } from 'react-redux';
 import { ADD_COMMENT } from '../../../constants/actionTypes';
+
+const storiesApi = new StoriesApi();
 
 const mapDispatchToProps = dispatch => ({
   onSubmit: payload =>
@@ -21,8 +23,10 @@ class CommentInput extends React.Component {
 
     this.createComment = ev => {
       ev.preventDefault();
-      const payload = agent.Comments.create(this.props.slug,
-        { body: this.state.body });
+      const payload = storiesApi.storiesCommentsCreate(
+        this.props.slug,
+        { body: this.state.body }
+      );
       this.setState({ body: '' });
       this.props.onSubmit(payload);
     };

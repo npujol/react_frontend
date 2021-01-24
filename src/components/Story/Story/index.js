@@ -1,10 +1,12 @@
 import StoryMeta from './StoryMeta';
 import CommentContainer from './CommentContainer';
 import React from 'react';
-import agent from '../../../agent';
+import { StoriesApi } from "../../../client"
 import { connect } from 'react-redux';
 import marked from 'marked';
 import { STORY_PAGE_LOADED, STORY_PAGE_UNLOADED } from '../../../constants/actionTypes';
+
+const storiesApi = new StoriesApi();
 
 const mapStateToProps = state => ({
   ...state.story,
@@ -21,8 +23,11 @@ const mapDispatchToProps = dispatch => ({
 class Story extends React.Component {
   componentWillMount() {
     this.props.onLoad(Promise.all([
-      agent.Stories.get(this.props.match.params.id),
-      agent.Comments.forStory(this.props.match.params.id)
+      storiesApi.storiesRead(this.props.match.params.id),
+      storiesApi.storiesCommentsList(
+        this.props.match.params.id,
+        { limit: 10, offset: 0 }
+      )
     ]));
   }
 
@@ -35,9 +40,11 @@ class Story extends React.Component {
       return null;
     }
 
-    const markup = { __html: marked(this.props.story.body, { sanitize: true }) };
+    // const markup = { __html: marked(this.props.story.body, { sanitize: true }) };
+    const markup = { __html: this.props.story.body };
+
     const canModify = this.props.currentUser &&
-      this.props.currentUser.username === this.props.story.author.username;
+      this.props.currentUser.username === this.props.story.owner.username;
     return (
       <div className="story-page">
 
@@ -61,11 +68,11 @@ class Story extends React.Component {
 
               <ul className="tag-list">
                 {
-                  this.props.story.tagList.map(tag => {
+                  this.props.story.tags.map((tag, pk) => {
                     return (
                       <li
                         className="tag-default tag-pill tag-outline"
-                        key={tag}>
+                        key={pk}>
                         {tag}
                       </li>
                     );

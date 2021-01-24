@@ -7,12 +7,13 @@ import {
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (state = {}, action) => {
+  console.log("storyjs", action.payload);
   switch (action.type) {
     case STORY_PAGE_LOADED:
       return {
         ...state,
-        article: action.payload[0].article,
-        comments: action.payload[1].comments
+        story: action.payload[0],
+        comments: action.payload[1].results
       };
     case STORY_PAGE_UNLOADED:
       return {};
@@ -22,7 +23,7 @@ export default (state = {}, action) => {
         commentErrors: action.error ? action.payload.errors : null,
         comments: action.error ?
           null :
-          (state.comments || []).concat([action.payload.comment])
+          (state.comments || []).concat([action.payload])
       };
     case DELETE_COMMENT:
       const commentId = action.commentId

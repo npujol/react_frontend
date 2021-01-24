@@ -1,7 +1,9 @@
 import React from 'react';
-import agent from '../../../agent';
+import { StoriesApi } from "../../../client"
 import { connect } from 'react-redux';
 import { DELETE_COMMENT } from '../../../constants/actionTypes';
+
+const storiesApi = new StoriesApi();
 
 const mapDispatchToProps = dispatch => ({
   onClick: (payload, commentId) =>
@@ -10,7 +12,7 @@ const mapDispatchToProps = dispatch => ({
 
 const DeleteButton = props => {
   const del = () => {
-    const payload = agent.Comments.delete(props.slug, props.commentId);
+    const payload = storiesApi.storiesCommentsDelete(props.commentId, props.slug);
     props.onClick(payload, props.commentId);
   };
 

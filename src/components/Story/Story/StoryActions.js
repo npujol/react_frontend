@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
 import React from 'react';
-import agent from '../../../agent';
+import { StoriesApi } from "../../../client"
 import { connect } from 'react-redux';
 import { DELETE_STORY } from '../../../constants/actionTypes';
+
+const storiesApi = new StoriesApi();
 
 const mapDispatchToProps = dispatch => ({
   onClickDelete: payload =>
@@ -12,7 +14,7 @@ const mapDispatchToProps = dispatch => ({
 const StoryActions = props => {
   const story = props.story;
   const del = () => {
-    props.onClickDelete(agent.Stories.del(story.slug))
+    props.onClickDelete(storiesApi.storiesDelete(story.slug))
   };
   if (props.canModify) {
     return (

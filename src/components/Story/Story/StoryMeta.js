@@ -6,13 +6,13 @@ const StoryMeta = props => {
   const story = props.story;
   return (
     <div className="story-meta">
-      <Link to={`/@${story.author.username}`}>
-        <img src={story.author.image} alt={story.author.username} />
+      <Link to={`/@${story.owner.username}`}>
+        <img src={story.owner.image} alt={story.owner.username} />
       </Link>
 
       <div className="info">
-        <Link to={`/@${story.author.username}`} className="author">
-          {story.author.username}
+        <Link to={`/@${story.owner.username}`} className="owner">
+          {story.owner.username}
         </Link>
         <span className="date">
           {new Date(story.createdAt).toDateString()}

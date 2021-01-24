@@ -10,16 +10,17 @@ import {
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (state = {}, action) => {
+  console.log("editorjs", action.payload)
   switch (action.type) {
     case EDITOR_PAGE_LOADED:
       return {
         ...state,
-        articleSlug: action.payload ? action.payload.article.slug : '',
-        title: action.payload ? action.payload.article.title : '',
-        description: action.payload ? action.payload.article.description : '',
-        body: action.payload ? action.payload.article.body : '',
+        storySlug: action.payload ? action.payload.slug : '',
+        title: action.payload ? action.payload.title : '',
+        description: action.payload ? action.payload.description : '',
+        body: action.payload ? action.payload.body : '',
         tagInput: '',
-        tagList: action.payload ? action.payload.article.tagList : []
+        tagList: action.payload ? action.payload.tags : []
       };
     case EDITOR_PAGE_UNLOADED:
       return {};
