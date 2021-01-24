@@ -39,7 +39,7 @@ export default (state = defaultState, action) => {
     case LOGOUT:
       return { ...state, redirectTo: '/', token: null, currentUser: null };
     case STORY_SUBMITTED:
-      const redirectUrl = `/story/${action.payload.story.slug}`;
+      const redirectUrl = `/story/${action.payload.slug}`;
       return { ...state, redirectTo: redirectUrl };
     case SETTINGS_SAVED:
       return {

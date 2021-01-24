@@ -1,6 +1,6 @@
 import ListErrors from '../Common/ListErrors';
 import React from 'react';
-import agent from '../../agent';
+import { StoriesApi } from "../../client"
 import { connect } from 'react-redux';
 import {
   ADD_TAG,
@@ -10,6 +10,8 @@ import {
   EDITOR_PAGE_UNLOADED,
   UPDATE_FIELD_EDITOR
 } from '../../constants/actionTypes';
+
+const storiesApi = new StoriesApi();
 
 const mapStateToProps = state => ({
   ...state.editor
@@ -25,7 +27,7 @@ const mapDispatchToProps = dispatch => ({
   onSubmit: payload =>
     dispatch({ type: STORY_SUBMITTED, payload }),
   onUnload: payload =>
-    dispatch({ type: EDITOR_PAGE_UNLOADED }),
+    dispatch({ type: EDITOR_PAGE_UNLOADED, payload }),
   onUpdateField: (key, value) =>
     dispatch({ type: UPDATE_FIELD_EDITOR, key, value })
 });
@@ -63,8 +65,13 @@ class Editor extends React.Component {
 
       const slug = { slug: this.props.storySlug };
       const promise = this.props.storySlug ?
-        agent.Stories.update(Object.assign(story, slug)) :
-        agent.Stories.create(story);
+        storiesApi.storiesUpdate(slug, story) :
+        storiesApi.storiesCreate({
+          title: this.props.title,
+          description: this.props.description,
+          body_markdown: this.props.body,
+          tags: this.props.tagList
+        });
 
       this.props.onSubmit(promise);
     };
@@ -74,7 +81,9 @@ class Editor extends React.Component {
     if (this.props.match.params.slug !== nextProps.match.params.slug) {
       if (nextProps.match.params.slug) {
         this.props.onUnload();
-        return this.props.onLoad(agent.Stories.get(this.props.match.params.slug));
+        return this.props.onLoad(
+          storiesApi.storiesRead(this.props.match.params.slug)
+        );
       }
       this.props.onLoad(null);
     }
@@ -82,7 +91,9 @@ class Editor extends React.Component {
 
   componentWillMount() {
     if (this.props.match.params.slug) {
-      return this.props.onLoad(agent.Stories.get(this.props.match.params.slug));
+      return this.props.onLoad(
+        storiesApi.storiesRead(this.props.match.params.slug)
+      );
     }
     this.props.onLoad(null);
   }

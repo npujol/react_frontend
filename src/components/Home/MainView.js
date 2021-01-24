@@ -8,15 +8,19 @@ import { CHANGE_TAB } from '../../constants/actionTypes';
 const storiesApi = new StoriesApi();
 
 const YourFeedTab = props => {
-  // console.log("YourFeedTab", props);
+  console.log("now", props);
 
   if (props.token) {
     const clickHandler = ev => {
       ev.preventDefault();
       props.onTabClick(
         'feed',
-        storiesApi.storiesFeedList,
-        storiesApi.storiesFeedList({ offset: 0, limit: 10 })
+        storiesApi.storiesList,
+        storiesApi.storiesList({
+          ownerUserUsername: props.currentUser.username,
+          offset: 0,
+          limit: 10
+        })
       );
 
     }
@@ -35,7 +39,6 @@ const YourFeedTab = props => {
 };
 
 const GlobalFeedTab = props => {
-  // console.log("GlobalFeedTab", props);
 
   const clickHandler = ev => {
     ev.preventDefault();
@@ -58,7 +61,6 @@ const GlobalFeedTab = props => {
 };
 
 const TagFilterTab = props => {
-  // console.log("TagFilterTab", props);
   if (!props.tag) {
     return null;
   }
@@ -75,7 +77,8 @@ const TagFilterTab = props => {
 const mapStateToProps = state => ({
   ...state.storyList,
   tags: state.home.tags,
-  token: state.common.token
+  token: state.common.token,
+  currentUser: state.common.currentUser
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -92,6 +95,7 @@ const MainView = props => {
           <YourFeedTab
             token={props.token}
             tab={props.tab}
+            currentUser={props.currentUser}
             onTabClick={props.onTabClick} />
 
           <GlobalFeedTab tab={props.tab} onTabClick={props.onTabClick} />
