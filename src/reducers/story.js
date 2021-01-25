@@ -7,7 +7,7 @@ import {
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (state = {}, action) => {
-  console.log("storyjs", action.payload);
+  // console.log("storyjs", action.payload);
   switch (action.type) {
     case STORY_PAGE_LOADED:
       return {

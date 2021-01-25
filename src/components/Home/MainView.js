@@ -8,7 +8,7 @@ import { CHANGE_TAB } from '../../constants/actionTypes';
 const storiesApi = new StoriesApi();
 
 const YourFeedTab = props => {
-  console.log("now", props);
+  // console.log("now", props);
 
   if (props.token) {
     const clickHandler = ev => {
@@ -86,7 +86,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const MainView = props => {
-  console.log("MainView", props.storiesList);
+  // console.log("MainView", props.storiesList);
   return (
     <div className="col-md-9">
       <div className="feed-toggle">

@@ -20,7 +20,7 @@ const mapDispatchToProps = dispatch => ({
 
 class ProfileFavorites extends Profile {
   componentWillMount() {
-    console.log("ProfileFavorites", this.props.match.params.username);
+    // console.log("ProfileFavorites", this.props.match.params.username);
     this.props.onLoad(page => storiesApi.storiesList({
       favoritedByUserUsername: this.props.match.params.username,
       limit: 10,

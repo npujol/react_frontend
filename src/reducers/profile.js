@@ -7,7 +7,7 @@ import {
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (state = {}, action) => {
-  console.log("profile reducer", action.payload);
+  // console.log("profile reducer", action.payload);
   switch (action.type) {
     case PROFILE_PAGE_LOADED:
       return {

@@ -10,7 +10,7 @@ import {
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (state = {}, action) => {
-  console.log("editorjs", action.payload)
+  // console.log("editorjs", action.payload)
   switch (action.type) {
     case EDITOR_PAGE_LOADED:
       return {
