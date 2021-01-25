@@ -1,6 +1,5 @@
 import ListErrors from '../Common/ListErrors';
 import React from 'react';
-import agent from '../../agent';
 import { ProfilesApi } from "../../client"
 import { connect } from 'react-redux';
 import {

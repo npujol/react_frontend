@@ -20,11 +20,11 @@ export default (state = {}, action) => {
       return {
         ...state,
         stories: state.stories.map(story => {
-          if (story.slug === action.payload.story.slug) {
+          if (story.slug === action.payload.slug) {
             return {
               ...story,
-              favorited: action.payload.story.favorited,
-              favoritesCount: action.payload.story.favoritesCount
+              favorited: action.payload.favorited,
+              favoritesCount: action.payload.favoritesCount
             };
           }
           return story;

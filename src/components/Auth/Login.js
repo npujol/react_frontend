@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import ListErrors from '../Common/ListErrors';
 import React from 'react';
-import agent from '../../agent';
 import { connect } from 'react-redux';
 import { AuthApi } from "../../client";
 import {
@@ -20,7 +19,7 @@ const mapDispatchToProps = dispatch => ({
   onChangePassword: value =>
     dispatch({ type: UPDATE_FIELD_AUTH, key: 'password', value }),
   onSubmit: (email, password) =>
-    dispatch({ type: LOGIN, payload: authApi.authLoginCreate({email:email, password:password}) }),
+    dispatch({ type: LOGIN, payload: authApi.authLoginCreate({ email: email, password: password }) }),
   onUnload: () =>
     dispatch({ type: LOGIN_PAGE_UNLOADED })
 });

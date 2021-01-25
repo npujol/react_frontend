@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import agent from '../../agent';
+import { StoriesApi } from "../../client"
 import { connect } from 'react-redux';
 import { STORY_FAVORITED, STORY_UNFAVORITED } from '../../constants/actionTypes';
+
+const storiesApi = new StoriesApi();
 
 const FAVORITED_CLASS = 'btn btn-sm btn-primary';
 const NOT_FAVORITED_CLASS = 'btn btn-sm btn-outline-primary';
@@ -10,23 +12,23 @@ const NOT_FAVORITED_CLASS = 'btn btn-sm btn-outline-primary';
 const mapDispatchToProps = dispatch => ({
   favorite: slug => dispatch({
     type: STORY_FAVORITED,
-    payload: agent.Stories.favorite(slug)
+    payload: storiesApi.storiesFavorite(slug, {})
   }),
   unfavorite: slug => dispatch({
     type: STORY_UNFAVORITED,
-    payload: agent.Stories.unfavorite(slug)
+    payload: storiesApi.storiesUnfavorite(slug, {})
   })
 });
 
 const StoryPreview = props => {
   const story = props.story;
-  const favoriteButtonClass = story.favorited ?
+  const favoriteButtonClass = story.favorited == "false" ?
     FAVORITED_CLASS :
     NOT_FAVORITED_CLASS;
 
   const handleClick = ev => {
     ev.preventDefault();
-    if (story.favorited) {
+    if (story.favorited == "true") {
       props.unfavorite(story.slug);
     } else {
       props.favorite(story.slug);
