@@ -12,6 +12,8 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+
 
 
 const Promise = global.Promise;
@@ -48,8 +50,9 @@ const GeneralHomeGrid = props => {
         </Grid>
         <Grid item xs={3}>
           <Paper className={classes.paper}>
-            <p>Popular Tags</p>
-
+            <Typography variant="h5" component="h5" gutterBottom>
+              Popular Tags
+            </Typography>
             <Tags
               tags={props.tags}
               onClickTag={props.onClickTag} />
