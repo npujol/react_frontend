@@ -17,8 +17,6 @@ import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import MenuList from '@material-ui/core/MenuList';
 
-
-
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -104,7 +102,12 @@ const LoggedInView = props => {
             <AccountCircle />
           </IconButton>
 
-          <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
+          <Popper
+            open={open}
+            anchorEl={anchorRef.current}
+            role={undefined}
+            transition
+            disablePortal>
             {({ TransitionProps, placement }) => (
               <Grow
                 {...TransitionProps}
