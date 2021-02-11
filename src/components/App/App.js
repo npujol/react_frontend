@@ -51,7 +51,7 @@ class App extends React.Component {
     }
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const token = window.localStorage.getItem('jwt');
     if (token) {
       JwtService.setHeader();

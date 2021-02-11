@@ -1,26 +1,30 @@
 import StoryActions from './StoryActions';
 import { Link } from 'react-router-dom';
 import React from 'react';
+import CardHeader from '@material-ui/core/CardHeader';
+import Avatar from '@material-ui/core/Avatar';
+
 
 const StoryMeta = props => {
   const story = props.story;
   return (
-    <div className="story-meta">
+    <CardHeader
+    avatar={
       <Link to={`/@${story.owner.username}`}>
-        <img src={story.owner.image} alt={story.owner.username} />
+        <Avatar
+          aria-label="recipe"
+          src={story.owner.image ? story.owner.image : "https://picsum.photos/510/300?random"}
+          alt={story.owner.username}>
+        </Avatar>
       </Link>
-
-      <div className="info">
-        <Link to={`/@${story.owner.username}`} className="owner">
-          {story.owner.username}
-        </Link>
-        <span className="date">
-          {new Date(story.createdAt).toDateString()}
-        </span>
-      </div>
-
+    }
+    action={
       <StoryActions canModify={props.canModify} story={story} />
-    </div>
+    }
+
+    title={story.title}
+    subheader={new Date(story.createdAt).toDateString()}
+  />
   );
 };
 

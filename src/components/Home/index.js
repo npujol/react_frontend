@@ -79,7 +79,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 class Home extends React.Component {
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const tab = this.props.token ? 'feed' : 'all';
     const storiesPromise = this.props.token ?
       storiesApi.storiesFeedList :
