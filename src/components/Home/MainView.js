@@ -4,11 +4,51 @@ import { StoriesApi } from "../../client";
 
 import { connect } from 'react-redux';
 import { CHANGE_TAB } from '../../constants/actionTypes';
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 
 const storiesApi = new StoriesApi();
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    width: '100%',
+    backgroundColor: theme.palette.background.paper,
+  },
+}));
+
+
+function a11yProps(index) {
+  return {
+    id: `scrollable-force-tab-${index}`,
+    'aria-controls': `scrollable-force-tabpanel-${index}`,
+  };
+}
+
+
+const GlobalFeedTab = props => {
+
+  const clickHandler = ev => {
+    ev.preventDefault();
+    props.onTabClick(
+      'all',
+      storiesApi.storiesFeedList,
+      storiesApi.storiesFeedList({ offset: 0, limit: 10 })
+    );
+  };
+  return (
+    <Tab
+      label=" Global Feed"
+      {...a11yProps(0)}
+      onClick={clickHandler}>
+    </Tab>
+  );
+};
+
 
 const YourFeedTab = props => {
-  console.log("now", props);
+  // console.log("now", props);
 
   if (props.token) {
     const clickHandler = ev => {
@@ -26,39 +66,17 @@ const YourFeedTab = props => {
     }
 
     return (
-      <li className="nav-item">
-        <a href=""
-          className={props.tab === 'feed' ? 'nav-link active' : 'nav-link'}
-          onClick={clickHandler}>
-          Your Feed
-        </a>
-      </li>
+      <Tab
+        label="Your Feed"
+        {...a11yProps(1)}
+        onClick={clickHandler}>
+      </Tab>
     );
   }
   return null;
 };
 
-const GlobalFeedTab = props => {
 
-  const clickHandler = ev => {
-    ev.preventDefault();
-    props.onTabClick(
-      'all',
-      storiesApi.storiesFeedList,
-      storiesApi.storiesFeedList({ offset: 0, limit: 10 })
-    );
-  };
-  return (
-    <li className="nav-item">
-      <a
-        href=""
-        className={props.tab === 'all' ? 'nav-link active' : 'nav-link'}
-        onClick={clickHandler}>
-        Global Feed
-      </a>
-    </li>
-  );
-};
 
 const TagFilterTab = props => {
   if (!props.tag) {
@@ -66,11 +84,10 @@ const TagFilterTab = props => {
   }
 
   return (
-    <li className="nav-item">
-      <a href="" className="nav-link active">
-        <i className="ion-pound"></i> {props.tag}
-      </a>
-    </li>
+    <Tab
+      label={props.tag}
+      {...a11yProps(2)}>
+    </Tab>
   );
 };
 
@@ -86,31 +103,44 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const MainView = props => {
-  console.log("MainView", props.storiesList);
-  return (
-    <div className="col-md-9">
-      <div className="feed-toggle">
-        <ul className="nav nav-pills outline-active">
+  const classes = useStyles();
+  const [value, setValue] = React.useState(0);
 
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+
+
+  // console.log("MainView", props.storiesList);
+  return (
+    <div className={classes.root}>
+      <AppBar position="static" color="default">
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          indicatorColor="primary"
+          textColor="primary"
+          centered
+        >
+          <GlobalFeedTab
+            tab={props.tab}
+            onTabClick={props.onTabClick} />
           <YourFeedTab
             token={props.token}
             tab={props.tab}
             currentUser={props.currentUser}
             onTabClick={props.onTabClick} />
-
-          <GlobalFeedTab tab={props.tab} onTabClick={props.onTabClick} />
-
           <TagFilterTab tag={props.tag} />
+        </Tabs>
 
-        </ul>
-      </div>
-
-      <StoryList
-        pager={props.pager}
-        stories={props.stories}
-        loading={props.loading}
-        storiesCount={props.storiesCount}
-        currentPage={props.currentPage} />
+        <StoryList
+          pager={props.pager}
+          stories={props.stories}
+          loading={props.loading}
+          storiesCount={props.storiesCount}
+          currentPage={props.currentPage} />
+      </AppBar>
     </div>
   );
 };
