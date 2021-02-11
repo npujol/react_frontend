@@ -3,6 +3,18 @@ import React from 'react';
 import { StoriesApi } from "../../../client"
 import { connect } from 'react-redux';
 import { DELETE_STORY } from '../../../constants/actionTypes';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { makeStyles } from '@material-ui/core/styles';
+
+
+const useStyles = makeStyles((theme) => ({
+  margin: {
+    margin: theme.spacing(1),
+  },
+  extendedIcon: {
+    marginRight: theme.spacing(1),
+  },
+}));
 
 const storiesApi = new StoriesApi();
 
@@ -13,21 +25,24 @@ const mapDispatchToProps = dispatch => ({
 
 const StoryActions = props => {
   const story = props.story;
+  const classes = useStyles();
+
   const del = () => {
     props.onClickDelete(storiesApi.storiesDelete(story.slug))
   };
+
   if (props.canModify) {
     return (
       <span>
 
-        <Link
+        {/* <Link
           to={`/editor/${story.slug}`}
-          className="btn btn-outline-secondary btn-sm">
+          >
           <i className="ion-edit"></i> Edit Story
-        </Link>
+        </Link> */}
 
-        <button className="btn btn-outline-danger btn-sm" onClick={del}>
-          <i className="ion-trash-a"></i> Delete Story
+        <button aria-label="delete" className={classes.margin} onClick={del}>
+        <DeleteIcon fontSize="small" />
         </button>
 
       </span>

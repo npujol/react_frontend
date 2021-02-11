@@ -19,7 +19,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 class ProfileFavorites extends Profile {
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     // console.log("ProfileFavorites", this.props.match.params.username);
     this.props.onLoad(page => storiesApi.storiesList({
       favoritedByUserUsername: this.props.match.params.username,

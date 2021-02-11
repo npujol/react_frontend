@@ -158,7 +158,6 @@ class Header extends React.Component {
             <Link to="/" className="nav-link">
               <Button
                 disableElevation
-                variant="h1"
                 className="title"
               >
                 {this.props.appName.toLowerCase()}

@@ -14,7 +14,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import { red, grey } from '@material-ui/core/colors';
+import { red } from '@material-ui/core/colors';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import Chip from '@material-ui/core/Chip';
 
@@ -30,17 +30,11 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     backgroundColor: red[500],
-  },
-  favorite: {
-    color: red[500],
-  },
-  nofavorite: {
-    color: grey[500],
   }
 }));
 
-const FAVORITED_CLASS = useStyles.favorite;
-const NOT_FAVORITED_CLASS = useStyles.unfavorite;
+const FAVORITED_CLASS = "";
+const NOT_FAVORITED_CLASS = "";
 
 const mapDispatchToProps = dispatch => ({
   favorite: slug => dispatch({
@@ -55,17 +49,15 @@ const mapDispatchToProps = dispatch => ({
 
 const StoryPreview = props => {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
-
 
   const story = props.story;
-  const favoriteButtonClass = story.favorited == "false" ?
+  const favoriteButtonClass = story.favorited === "false" ?
     FAVORITED_CLASS :
     NOT_FAVORITED_CLASS;
 
   const handleClick = ev => {
     ev.preventDefault();
-    if (story.favorited == "true") {
+    if (story.favorited === "true") {
       props.unfavorite(story.slug);
     } else {
       props.favorite(story.slug);
@@ -115,8 +107,8 @@ const StoryPreview = props => {
           <FavoriteIcon /> {story.favoritesCount}
         </IconButton>
         <Link to={`/story/${story.slug}`}>
-          <Button aria-expanded={expanded} size="small" variant="outlined" color="black">
-            Learn More
+          <Button size="small" variant="outlined">
+            Read more
         </Button>
         </Link>
       </CardActions>

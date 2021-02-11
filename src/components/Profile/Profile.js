@@ -78,7 +78,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 class Profile extends React.Component {
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.props.onLoad(Promise.all([
       profilesApi.profilesRead(this.props.match.params.username),
       storiesApi.storiesList({
