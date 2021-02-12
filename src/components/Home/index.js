@@ -97,7 +97,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 class Home extends React.Component {
   componentWillMount() {
-    const tab = this.props.token ? "feed" : "all";
+    const tab = this.props.token ? 1 : 0;
     const storiesPromise = this.props.token
       ? storiesApi.storiesFeedList
       : storiesApi.storiesList;
@@ -123,6 +123,7 @@ class Home extends React.Component {
           appName={this.props.appName}
           onClickTag={this.props.onClickTag}
           tags={this.props.tags}
+          tab={this.props.tab}
         />
       </div>
     );

@@ -9,8 +9,8 @@ import {
   PROFILE_PAGE_LOADED,
   PROFILE_PAGE_UNLOADED,
   PROFILE_FAVORITES_PAGE_LOADED,
-  PROFILE_FAVORITES_PAGE_UNLOADED
-} from '../constants/actionTypes';
+  PROFILE_FAVORITES_PAGE_UNLOADED,
+} from "../constants/actionTypes";
 
 export default (state = {}, action) => {
   // console.log("StoryList", action.payload);
@@ -19,23 +19,23 @@ export default (state = {}, action) => {
     case STORY_UNFAVORITED:
       return {
         ...state,
-        stories: state.stories.map(story => {
+        stories: state.stories.map((story) => {
           if (story.slug === action.payload.slug) {
             return {
               ...story,
               favorited: action.payload.favorited,
-              favoritesCount: action.payload.favoritesCount
+              favoritesCount: action.payload.favoritesCount,
             };
           }
           return story;
-        })
+        }),
       };
     case SET_PAGE:
       return {
         ...state,
         stories: action.payload.results,
         storiesCount: action.payload.count,
-        currentPage: action.page
+        currentPage: action.page,
       };
     case APPLY_TAG_FILTER:
       return {
@@ -43,19 +43,21 @@ export default (state = {}, action) => {
         pager: action.pager,
         stories: action.payload.results,
         storiesCount: action.payload.count,
-        tab: null,
+        tab: 3,
         tag: action.tag,
-        currentPage: 0
+        currentPage: 0,
       };
     case HOME_PAGE_LOADED:
       return {
         ...state,
         pager: action.pager,
         tags: action.payload[0].results.map((obj) => obj.tag),
-        stories: action.payload[1] ? action.payload[1].results.map((obj) => obj) : [],
+        stories: action.payload[1]
+          ? action.payload[1].results.map((obj) => obj)
+          : [],
         storiesCount: action.payload[1].count,
         currentPage: 0,
-        tab: action.tab
+        tab: action.tab,
       };
     case HOME_PAGE_UNLOADED:
       return {};
@@ -67,16 +69,18 @@ export default (state = {}, action) => {
         storiesCount: action.payload.count,
         tab: action.tab,
         currentPage: 0,
-        tag: null
+        tag: null,
       };
     case PROFILE_PAGE_LOADED:
     case PROFILE_FAVORITES_PAGE_LOADED:
       return {
         ...state,
         pager: action.pager,
-        stories: action.payload[1] ? action.payload[1].results.map((obj) => obj) : [],
+        stories: action.payload[1]
+          ? action.payload[1].results.map((obj) => obj)
+          : [],
         storiesCount: action.payload[1] ? action.payload[1].count : 0,
-        currentPage: 0
+        currentPage: 0,
       };
     case PROFILE_PAGE_UNLOADED:
     case PROFILE_FAVORITES_PAGE_UNLOADED:
