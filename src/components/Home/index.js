@@ -123,7 +123,7 @@ class Home extends React.Component {
           appName={this.props.appName}
           onClickTag={this.props.onClickTag}
           tags={this.props.tags}
-          tab={this.props.tab}
+          tab={this.props.tab ? this.props.tab : 0}
         />
       </div>
     );
