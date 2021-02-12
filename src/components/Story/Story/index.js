@@ -106,7 +106,7 @@ const mapDispatchToProps = dispatch => ({
 
 
 class Story extends React.Component {
-  UNSAFE_componentWillMount() {
+  componentWillMount() {
     this.props.onLoad(Promise.all([
       storiesApi.storiesRead(this.props.match.params.id),
       storiesApi.storiesCommentsList(

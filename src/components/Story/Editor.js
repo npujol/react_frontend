@@ -82,7 +82,7 @@ class Editor extends React.Component {
     };
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (this.props.match.params.slug !== nextProps.match.params.slug) {
       if (nextProps.match.params.slug) {
         this.props.onUnload();
@@ -94,7 +94,7 @@ class Editor extends React.Component {
     }
   }
 
-  UNSAFE_componentWillMount() {
+  componentWillMount() {
     if (this.props.match.params.slug) {
       return this.props.onLoad(
         storiesApi.storiesRead(this.props.match.params.slug)

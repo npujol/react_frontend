@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import HomeIcon from '@material-ui/icons/Home';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import Menu from '@material-ui/core/Menu';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import MenuItem from '@material-ui/core/MenuItem';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import Badge from '@material-ui/core/Badge';
@@ -16,6 +16,12 @@ import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import MenuList from '@material-ui/core/MenuList';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import { connect } from 'react-redux';
+import {
+  LOGOUT
+} from '../../constants/actionTypes';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,20 +30,32 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     marginRight: theme.spacing(2),
   },
+  buttons: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  },
+  title: {
+    flexGrow: 1,
+  },
 }));
 
 const LoggedOutView = props => {
+  const classes = useStyles();
 
   if (!props.currentUser) {
     return (
-      <div>
-        <Link to="/login" className="nav-link">
+      <ButtonGroup className={classes.buttons} size="large" color="primary" aria-label="large outlined primary button group">
+        <Link to="/login" >
           <Button to="/login" variant="outlined" color="inherit">Login</Button>
         </Link>
-        <Link to="/login" className="nav-link">
+        <Link to="/login">
           <Button to="/register" variant="outlined" color="inherit">Register</Button>
         </Link>
-      </div>
+      </ButtonGroup>
     );
   }
   return null;
@@ -72,7 +90,6 @@ const LoggedInView = props => {
     if (prevOpen.current === true && open === false) {
       anchorRef.current.focus();
     }
-
     prevOpen.current = open;
   }, [open]);
 
@@ -80,18 +97,17 @@ const LoggedInView = props => {
   if (props.currentUser) {
     return (
       <div className={classes.root}>
-        <Link to="/" className="nav-link">
+        <Link to="/">
           <IconButton to="/login" edge="start" color="inherit" aria-label="home">
             <HomeIcon />
           </IconButton>
         </Link>
-        <div>
           <IconButton aria-label="show 17 new notifications" color="inherit">
             <Badge badgeContent={17} color="secondary">
               <NotificationsIcon />
             </Badge>
           </IconButton>
-          <IconButton
+          {/* <IconButton
             aria-label="account of current user"
             color="inherit"
             ref={anchorRef}
@@ -100,9 +116,25 @@ const LoggedInView = props => {
             onClick={handleToggle}
           >
             <AccountCircle />
-          </IconButton>
+          </IconButton> */}
+          <Link to={`/@${props.currentUser.username}`}>
 
-          <Popper
+          <IconButton
+            aria-label="The final profile"
+            color="inherit"
+          >
+            <AccountCircle />
+          </IconButton>
+          </Link>
+          <IconButton 
+          onClick={props.onClickLogout} 
+          edge="start" 
+          color="inherit" 
+          aria-label="home">
+            <ExitToAppIcon />
+          </IconButton>
+          {/* <Popper
+          className={classes.paper}
             open={open}
             anchorEl={anchorRef.current}
             role={undefined}
@@ -117,20 +149,19 @@ const LoggedInView = props => {
                   <ClickAwayListener onClickAway={handleClose}>
                     <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
                       <MenuItem>
-                        <Link to="/editor" className="nav-link">
-                          <i className="ion-compose"></i>&nbsp;New Post
+                        <Link to="/editor" >
+                          New Post
                           </Link>
                       </MenuItem>
                       <MenuItem>
-                        <Link to="/settings" className="nav-link">
-                          <i className="ion-gear-a"></i>&nbsp;Settings
+                        <Link to="/settings" >
+                          Settings
                           </Link>
                       </MenuItem>
                       <MenuItem>
                         <Link
                           to={`/@${props.currentUser.username}`}
-                          className="nav-link">
-                          <img src={props.currentUser.image} className="user-pic" alt={props.currentUser.username} />
+                          >
                           {props.currentUser.username}
                         </Link>
                       </MenuItem>
@@ -139,8 +170,8 @@ const LoggedInView = props => {
                 </Paper>
               </Grow>
             )}
-          </Popper>
-        </div>
+          </Popper> */}
+      
       </div>
     );
   }
@@ -148,14 +179,33 @@ const LoggedInView = props => {
 };
 
 
+const mapStateToProps = state => ({
+  ...state.common,
+  currentUser: state.common.currentUser
+});
+
+const mapDispatchToProps = dispatch => ({
+  onClickLogout: () => dispatch({ type: LOGOUT }),
+});
+
+
+
 class Header extends React.Component {
+  constructor(props) {
+    super(props);
+    this.onClickLogout = this.onClickLogout.bind(this);
+  }
+
+  onClickLogout() {
+    this.props.onClickLogout();
+  }
 
   render() {
     return (
       <div>
         <AppBar position="static">
           <Toolbar>
-            <Link to="/" className="nav-link">
+            <Link to="/" >
               <Button
                 disableElevation
                 className="title"
@@ -165,7 +215,7 @@ class Header extends React.Component {
             </Link>
             <hr />
             <LoggedOutView currentUser={this.props.currentUser} />
-            <LoggedInView currentUser={this.props.currentUser} open={true} />
+            <LoggedInView onClickLogout={this.onClickLogout} currentUser={this.props.currentUser} open={true} />
           </Toolbar>
         </AppBar>
       </div>
@@ -173,4 +223,4 @@ class Header extends React.Component {
   }
 }
 
-export default Header;
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

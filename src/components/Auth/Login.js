@@ -46,14 +46,7 @@ const useStyles = makeStyles({
 
 const authApi = new AuthApi();
 
-const mapStateToProps = state => ({ ...state.auth });
 
-const mapDispatchToProps = dispatch => ({
-  onSubmit: (email, password) =>
-    dispatch({ type: LOGIN, payload: authApi.authLoginCreate({ email: email, password: password }) }),
-  onUnload: () =>
-    dispatch({ type: LOGIN_PAGE_UNLOADED })
-});
 
 const validationSchema = yup.object({
   email: yup
@@ -132,6 +125,15 @@ const WithMaterialUI = (props) => {
     </Card>
   );
 };
+
+const mapStateToProps = state => ({ ...state.auth });
+
+const mapDispatchToProps = dispatch => ({
+  onSubmit: (email, password) =>
+    dispatch({ type: LOGIN, payload: authApi.authLoginCreate({ email: email, password: password }) }),
+  onUnload: () =>
+    dispatch({ type: LOGIN_PAGE_UNLOADED })
+});
 
 class Login extends React.Component {
   constructor(props) {

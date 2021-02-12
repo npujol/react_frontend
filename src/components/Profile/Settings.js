@@ -40,7 +40,7 @@ class SettingsForm extends React.Component {
     };
   }
 
-  UNSAFE_componentWillMount() {
+  componentWillMount() {
     if (this.props.currentUser) {
       Object.assign(this.state, {
         image: this.props.currentUser.image || '',
@@ -51,7 +51,7 @@ class SettingsForm extends React.Component {
     }
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (nextProps.currentUser) {
       this.setState(Object.assign({}, this.state, {
         image: nextProps.currentUser.image || '',
