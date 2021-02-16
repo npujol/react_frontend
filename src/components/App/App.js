@@ -1,9 +1,17 @@
 import { APP_LOAD, REDIRECT } from "../../constants/actionTypes";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import JwtService from "../../jwt.service";
 import Header from "./Header";
+import Story from "../Story/Story";
+import Editor from "../Story/Editor";
 import Home from "../Home";
+import Login from "../Auth/Login";
+import Profile from "../Profile/Profile";
+import ProfileFavorites from "../Profile/ProfileFavorites";
+import Register from "../Auth/Register";
+import Settings from "../Profile/Settings";
 import { UsersApi } from "../../client";
 import { useRoutes, A } from "hookrouter";
 import routes from "./router";
@@ -14,21 +22,6 @@ import theme from "../../theme";
 import GlobalStyles from "../../GlobalStyles";
 
 const usersApi = new UsersApi();
-
-// const mapStateToProps = (state) => {
-//   return {
-//     appLoaded: state.common.appLoaded,
-//     appName: state.common.appName,
-//     currentUser: state.common.currentUser,
-//     redirectTo: state.common.redirectTo,
-//   };
-// };
-
-// const mapDispatchToProps = (dispatch) => ({
-//   onLoad: (payload, token) =>
-//     dispatch({ type: APP_LOAD, payload, token, skipTracking: true }),
-//   onRedirect: () => dispatch({ type: REDIRECT }),
-// });
 
 const App = () => {
   const routeResult = useRoutes(routes);
@@ -55,10 +48,10 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    console.log("nextProps", redirectTo, "history", history);
+    console.log("redirectTo", redirectTo, "history", history);
     if (redirectTo) {
       history.push(redirectTo);
-      onRedirect();
+      // onRedirect();
     }
   }, [redirectTo]);
 
@@ -93,19 +86,35 @@ const App = () => {
   );
   if (appLoaded) {
     return (
-      <MuiThemeProvider theme={theme}>
-        <CssBaseline />
-        <GlobalStyles />
-        <div>
-          <Header
-            appName={appName}
-            currentUser={currentUser ? currentUser : null}
-          />
-        </div>
-        <Suspense fallback={<Fragment />}>
-          <div>{routeResult || <Home />}</div>
-        </Suspense>
-      </MuiThemeProvider>
+      <BrowserRouter>
+        <MuiThemeProvider theme={theme}>
+          <CssBaseline />
+          <GlobalStyles />
+          <div>
+            <Header
+              appName={appName}
+              currentUser={currentUser ? currentUser : null}
+            />
+          </div>
+          <Suspense fallback={<Fragment />}>
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route path="/login" component={Login} />
+              <Route path="/register" component={Register} />
+              <Route path="/editor/:slug" component={Editor} />
+              <Route path="/editor" component={Editor} />
+              <Route path="/story/:id" component={Story} />
+              <Route path="/settings" component={Settings} />
+              <Route
+                path="/@:username/favorites"
+                component={ProfileFavorites}
+              />
+              <Route path="/@:username" component={Profile} />
+            </Switch>
+            {/* <div>{routeResult || <Home />}</div> */}
+          </Suspense>
+        </MuiThemeProvider>
+      </BrowserRouter>
     );
   }
   return (

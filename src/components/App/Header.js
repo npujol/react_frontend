@@ -1,5 +1,5 @@
-import { A } from "hookrouter";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
@@ -13,7 +13,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Tooltip from "@material-ui/core/Tooltip";
 import { LOGOUT } from "../../constants/actionTypes";
-
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,22 +45,16 @@ const LoggedOutView = (props) => {
         color="primary"
         aria-label="large outlined primary button group"
       >
-        <Button
-          variant="contained"
-          color="secondary"
-          component={A}
-          href="/login"
-        >
-          Login
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          component={A}
-          href="/register"
-        >
-          Register
-        </Button>
+        <Link to="/login">
+          <Button variant="contained" color="secondary" to="/login">
+            Login
+          </Button>
+        </Link>
+        <Link to="/register">
+          <Button variant="contained" color="secondary" to="/register">
+            Register
+          </Button>
+        </Link>
       </ButtonGroup>
     );
   }
@@ -74,30 +67,19 @@ const LoggedInView = (props) => {
     return (
       <div className={classes.root}>
         <Tooltip title="Home" placement="bottom">
-          <div>
-            <IconButton
-              component={A}
-              href="/"
-              edge="start"
-              color="default"
-              aria-label="home"
-            >
+          <Link to="/">
+            <IconButton to="/" edge="start" color="default" aria-label="home">
               <HomeIcon />
             </IconButton>
-          </div>
+          </Link>
         </Tooltip>
 
         <Tooltip title="Your profile" placement="bottom">
-          <div>
-            <IconButton
-              component={A}
-              href={`/@${props.currentUser.username}`}
-              aria-label="The final profile"
-              color="default"
-            >
+          <Link to={`/@${props.currentUser.username}`}>
+            <IconButton aria-label="The final profile" color="default">
               <AccountCircle />
             </IconButton>
-          </div>
+          </Link>
         </Tooltip>
 
         <Tooltip title="Your notifications" placement="bottom">
@@ -136,9 +118,11 @@ const Header = (props) => {
     <div>
       <AppBar position="static">
         <Toolbar>
-          <Button disableElevation className="title" component={A} href="/">
-            {props.appName}
-          </Button>
+          <Link to={"/"}>
+            <Button to={"/"} disableElevation className="title">
+              {props.appName}
+            </Button>
+          </Link>
           <hr />
           <LoggedOutView currentUser={props.currentUser} />
           <LoggedInView
