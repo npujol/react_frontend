@@ -1,8 +1,7 @@
 import { A } from "hookrouter";
-import React from "react";
-import { connect } from "react-redux";
+import React, { useEffect } from "react";
 import { AuthApi } from "../../client";
-
+import { useSelector, useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -53,7 +52,31 @@ const validationSchema = yup.object({
     .required("Password is required"),
 });
 
-const WithMaterialUI = (props) => {
+const mapStateToProps = (state) => ({ ...state.auth });
+
+const mapDispatchToProps = (dispatch) => ({
+  onSubmit: (email, password) =>
+    dispatch({
+      type: LOGIN,
+      payload: authApi.authLoginCreate({ email: email, password: password }),
+    }),
+  onUnload: () => dispatch({ type: LOGIN_PAGE_UNLOADED }),
+});
+
+const Login = () => {
+  // constructor(props) {
+  //   super(props);
+  //   this.handleSubmit = this.handleSubmit.bind(this);
+  // }
+
+  // function handleSubmit(email, password) {
+  //   this.props.onSubmit(email, password);
+  // }
+
+  // componentWillUnmount() {
+  //   this.props.onUnload();
+  // }
+
   const classes = useStyles();
 
   const formik = useFormik({
@@ -63,9 +86,25 @@ const WithMaterialUI = (props) => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      props.handleSubmit(values.email, values.password);
+      handleSubmit(values.email, values.password);
     },
   });
+  const dispatch = useDispatch();
+
+  function handleSubmit(email, password) {
+    dispatch({
+      type: LOGIN,
+      payload: authApi.authLoginCreate({ email: email, password: password }),
+    });
+  }
+
+  function onUnload() {
+    dispatch({ type: LOGIN_PAGE_UNLOADED });
+  }
+
+  useEffect(() => {
+    onUnload();
+  }, []);
 
   return (
     <Card className={classes.root} variant="outlined">
@@ -116,38 +155,4 @@ const WithMaterialUI = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({ ...state.auth });
-
-const mapDispatchToProps = (dispatch) => ({
-  onSubmit: (email, password) =>
-    dispatch({
-      type: LOGIN,
-      payload: authApi.authLoginCreate({ email: email, password: password }),
-    }),
-  onUnload: () => dispatch({ type: LOGIN_PAGE_UNLOADED }),
-});
-
-class Login extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleSubmit(email, password) {
-    this.props.onSubmit(email, password);
-  }
-
-  componentWillUnmount() {
-    this.props.onUnload();
-  }
-
-  render() {
-    return (
-      <div>
-        <WithMaterialUI handleSubmit={this.handleSubmit}></WithMaterialUI>
-      </div>
-    );
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default Login;
