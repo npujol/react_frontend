@@ -51,7 +51,7 @@ const App = () => {
     console.log("redirectTo", redirectTo, "history", history);
     if (redirectTo) {
       history.push(redirectTo);
-      // onRedirect();
+      onRedirect();
     }
   }, [redirectTo]);
 
@@ -111,7 +111,6 @@ const App = () => {
               />
               <Route path="/@:username" component={Profile} />
             </Switch>
-            {/* <div>{routeResult || <Home />}</div> */}
           </Suspense>
         </MuiThemeProvider>
       </BrowserRouter>
@@ -123,7 +122,6 @@ const App = () => {
         appName={appName}
         currentUser={currentUser ? currentUser : null}
       />
-      {routeResult || <Home />}
     </div>
   );
 };

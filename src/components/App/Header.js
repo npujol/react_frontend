@@ -107,6 +107,8 @@ const LoggedInView = (props) => {
 };
 
 const Header = (props) => {
+  const classes = useStyles();
+
   const commonState = useSelector((state) => state.common);
   const dispatch = useDispatch();
 
@@ -119,7 +121,7 @@ const Header = (props) => {
       <AppBar position="static">
         <Toolbar>
           <Link to={"/"}>
-            <Button to={"/"} disableElevation className="title">
+            <Button to={"/"} className={classes.title}>
               {props.appName}
             </Button>
           </Link>

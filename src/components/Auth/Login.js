@@ -1,5 +1,6 @@
-import { A } from "hookrouter";
 import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
+
 import { AuthApi } from "../../client";
 import { useSelector, useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
@@ -52,32 +53,9 @@ const validationSchema = yup.object({
     .required("Password is required"),
 });
 
-const mapStateToProps = (state) => ({ ...state.auth });
-
-const mapDispatchToProps = (dispatch) => ({
-  onSubmit: (email, password) =>
-    dispatch({
-      type: LOGIN,
-      payload: authApi.authLoginCreate({ email: email, password: password }),
-    }),
-  onUnload: () => dispatch({ type: LOGIN_PAGE_UNLOADED }),
-});
-
 const Login = () => {
-  // constructor(props) {
-  //   super(props);
-  //   this.handleSubmit = this.handleSubmit.bind(this);
-  // }
-
-  // function handleSubmit(email, password) {
-  //   this.props.onSubmit(email, password);
-  // }
-
-  // componentWillUnmount() {
-  //   this.props.onUnload();
-  // }
-
   const classes = useStyles();
+  const authState = useSelector((state) => ({ ...state.auth }));
 
   const formik = useFormik({
     initialValues: {
@@ -92,10 +70,18 @@ const Login = () => {
   const dispatch = useDispatch();
 
   function handleSubmit(email, password) {
-    dispatch({
-      type: LOGIN,
-      payload: authApi.authLoginCreate({ email: email, password: password }),
-    });
+    authApi
+      .authLoginCreate({
+        email: email,
+        password: password,
+      })
+      .then((response) =>
+        dispatch({
+          type: LOGIN,
+          payload: response,
+        })
+      )
+      .catch((error) => console.log(JSON.parse(error.response.text)));
   }
 
   function onUnload() {
@@ -148,9 +134,9 @@ const Login = () => {
           </form>
         </Grid>
       </CardContent>
-      <A href="/register">
+      <Link to="/register">
         <Typography className={classes.link}>Need an account?</Typography>
-      </A>
+      </Link>
     </Card>
   );
 };
