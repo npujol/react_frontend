@@ -1,99 +1,144 @@
-import { Link } from 'react-router-dom';
-import ListErrors from '../Common/ListErrors';
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
+
 import { AuthApi } from "../../client";
-import {
-  UPDATE_FIELD_AUTH,
-  LOGIN,
-  LOGIN_PAGE_UNLOADED
-} from '../../constants/actionTypes';
+import { useSelector, useDispatch } from "react-redux";
+import { makeStyles } from "@material-ui/core/styles";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import Grid from "@material-ui/core/Grid";
+import { useFormik } from "formik";
+import * as yup from "yup";
+
+import { LOGIN, LOGIN_PAGE_UNLOADED } from "../../constants/actionTypes";
+
+const useStyles = makeStyles({
+  root: {
+    minWidth: 275,
+    marginBottom: 12,
+    marginTop: 12,
+    alignContent: "center",
+  },
+  title: {
+    fontSize: 20,
+    textAlign: "center",
+    marginBottom: 12,
+    marginTop: 12,
+  },
+  link: {
+    fontSize: 12,
+    textAlign: "center",
+    marginBottom: 12,
+    marginTop: 12,
+  },
+  item: {
+    marginBottom: 12,
+    marginTop: 12,
+  },
+});
 
 const authApi = new AuthApi();
 
-const mapStateToProps = state => ({ ...state.auth });
-
-const mapDispatchToProps = dispatch => ({
-  onChangeEmail: value =>
-    dispatch({ type: UPDATE_FIELD_AUTH, key: 'email', value }),
-  onChangePassword: value =>
-    dispatch({ type: UPDATE_FIELD_AUTH, key: 'password', value }),
-  onSubmit: (email, password) =>
-    dispatch({ type: LOGIN, payload: authApi.authLoginCreate({ email: email, password: password }) }),
-  onUnload: () =>
-    dispatch({ type: LOGIN_PAGE_UNLOADED })
+const validationSchema = yup.object({
+  email: yup
+    .string("Enter your email")
+    .email("Enter a valid email")
+    .required("Email is required"),
+  password: yup
+    .string("Enter your password")
+    .min(8, "Password should be of minimum 8 characters length")
+    .required("Password is required"),
 });
 
-class Login extends React.Component {
-  constructor() {
-    super();
-    this.changeEmail = ev => this.props.onChangeEmail(ev.target.value);
-    this.changePassword = ev => this.props.onChangePassword(ev.target.value);
-    this.submitForm = (email, password) => ev => {
-      ev.preventDefault();
-      this.props.onSubmit(email, password);
-    };
+const Login = () => {
+  const classes = useStyles();
+  const authState = useSelector((state) => ({ ...state.auth }));
+
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      handleSubmit(values.email, values.password);
+    },
+  });
+  const dispatch = useDispatch();
+
+  function handleSubmit(email, password) {
+    authApi
+      .authLoginCreate({
+        email: email,
+        password: password,
+      })
+      .then((response) =>
+        dispatch({
+          type: LOGIN,
+          payload: response,
+        })
+      )
+      .catch((error) => console.log(JSON.parse(error.response.text)));
   }
 
-  componentWillUnmount() {
-    this.props.onUnload();
+  function onUnload() {
+    dispatch({ type: LOGIN_PAGE_UNLOADED });
   }
 
-  render() {
-    const email = this.props.email;
-    const password = this.props.password;
-    return (
-      <div className="auth-page">
-        <div className="container page">
-          <div className="row">
+  useEffect(() => {
+    onUnload();
+  }, []);
 
-            <div className="col-md-6 offset-md-3 col-xs-12">
-              <h1 className="text-xs-center">Sign In</h1>
-              <p className="text-xs-center">
-                <Link to="/register">
-                  Need an account?
-                </Link>
-              </p>
+  return (
+    <Card className={classes.root} variant="outlined">
+      <CardContent>
+        <Typography
+          className={classes.title}
+          gutterBottom
+          variant="h5"
+          component="h2"
+        >
+          Sign In
+        </Typography>
+        <Grid container justify="center" spacing={3}>
+          <form onSubmit={formik.handleSubmit}>
+            <TextField
+              className={classes.item}
+              fullWidth
+              id="email"
+              name="email"
+              label="Email"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              error={formik.touched.email && Boolean(formik.errors.email)}
+              helperText={formik.touched.email && formik.errors.email}
+            />
+            <TextField
+              className={classes.item}
+              fullWidth
+              id="password"
+              name="password"
+              label="Password"
+              type="password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              error={formik.touched.password && Boolean(formik.errors.password)}
+              helperText={formik.touched.password && formik.errors.password}
+            />
+            <Button color="primary" variant="contained" fullWidth type="submit">
+              Sign in
+            </Button>
+          </form>
+        </Grid>
+      </CardContent>
+      <Link to="/register">
+        <Typography className={classes.link}>Need an account?</Typography>
+      </Link>
+    </Card>
+  );
+};
 
-              <ListErrors errors={this.props.errors} />
-
-              <form onSubmit={this.submitForm(email, password)}>
-                <fieldset>
-
-                  <fieldset className="form-group">
-                    <input
-                      className="form-control form-control-lg"
-                      type="email"
-                      placeholder="Email"
-                      value={email}
-                      onChange={this.changeEmail} />
-                  </fieldset>
-
-                  <fieldset className="form-group">
-                    <input
-                      className="form-control form-control-lg"
-                      type="password"
-                      placeholder="Password"
-                      value={password}
-                      onChange={this.changePassword} />
-                  </fieldset>
-
-                  <button
-                    className="btn btn-lg btn-primary pull-xs-right"
-                    type="submit"
-                    disabled={this.props.inProgress}>
-                    Sign in
-                  </button>
-
-                </fieldset>
-              </form>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    );
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default Login;

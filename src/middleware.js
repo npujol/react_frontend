@@ -57,7 +57,7 @@ const localStorageMiddleware = store => next => action => {
     window.localStorage.setItem('jwt', '');
     JwtService.destroyCredentials();
   }
-
+  console.log("action", action)
   next(action);
 };
 

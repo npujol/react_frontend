@@ -94,7 +94,7 @@ class Editor extends React.Component {
     }
   }
 
-  UNSAFE_componentWillMount() {
+  componentWillMount() {
     if (this.props.match.params.slug) {
       return this.props.onLoad(
         storiesApi.storiesRead(this.props.match.params.slug)
