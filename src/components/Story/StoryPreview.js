@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { A } from "hookrouter";
 import { StoriesApi } from "../../client";
 import { connect } from "react-redux";
 import {
@@ -82,7 +82,7 @@ const StoryPreview = (props) => {
       <Card className={classes.root}>
         <CardHeader
           avatar={
-            <Link to={`/@${story.owner.username}`}>
+            <A href={`/@${story.owner.username}`}>
               <Avatar
                 aria-label="recipe"
                 src={
@@ -92,7 +92,7 @@ const StoryPreview = (props) => {
                 }
                 alt={story.owner.username}
               ></Avatar>
-            </Link>
+            </A>
           }
           title={story.title}
           subheader={new Date(story.createdAt).toDateString()}
@@ -113,11 +113,11 @@ const StoryPreview = (props) => {
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
-          <Link to={`/story/${story.slug}`}>
+          <A href={`/story/${story.slug}`}>
             <Button size="small" color="primary" variant="contained">
               Read more
             </Button>
-          </Link>
+          </A>
           <IconButton
             className={classes.buttons}
             aria-label="add to favorites"

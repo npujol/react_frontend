@@ -1,9 +1,9 @@
-import CommentInput from './CommentInput';
-import CommentList from './CommentList';
-import { Link } from 'react-router-dom';
-import React from 'react';
+import CommentInput from "./CommentInput";
+import CommentList from "./CommentList";
+import { A } from "hookrouter";
+import React from "react";
 
-const CommentContainer = props => {
+const CommentContainer = (props) => {
   if (props.currentUser) {
     return (
       <div className="col-xs-12 col-md-8 offset-md-2">
@@ -15,23 +15,25 @@ const CommentContainer = props => {
         <CommentList
           comments={props.comments}
           slug={props.slug}
-          currentUser={props.currentUser} />
+          currentUser={props.currentUser}
+        />
       </div>
     );
   } else {
     return (
       <div className="col-xs-12 col-md-8 offset-md-2">
         <p>
-          <Link to="/login">Sign in</Link>
+          <A href="/login">Sign in</A>
           &nbsp;or&nbsp;
-          <Link to="/register">sign up</Link>
+          <A href="/register">sign up</A>
           &nbsp;to add comments on this story.
         </p>
 
         <CommentList
           comments={props.comments}
           slug={props.slug}
-          currentUser={props.currentUser} />
+          currentUser={props.currentUser}
+        />
       </div>
     );
   }

@@ -14,7 +14,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import { Link } from "react-router-dom";
+import { A } from "hookrouter";
 
 const Promise = global.Promise;
 
@@ -48,11 +48,11 @@ const GeneralHomeGrid = (props) => {
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Paper className={classes.banner}>
-            <Link to="/editor">
+            <A href="/editor">
               <Fab color="secondary" aria-label="add">
                 <AddIcon />
               </Fab>
-            </Link>
+            </A>
             <Typography
               className={classes.paper}
               variant="h4"

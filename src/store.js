@@ -6,6 +6,8 @@ import reducer from './reducer';
 
 import { routerMiddleware } from 'react-router-redux'
 import createHistory from 'history/createBrowserHistory';
+import { BrowserRouter, Route, Switch, useHistory } from "react-router-dom";
+
 
 export const history = createHistory();
 
