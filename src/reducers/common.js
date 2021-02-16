@@ -34,7 +34,7 @@ export default (state = defaultState, action) => {
         currentUser: action.payload ? action.payload.profile : null,
       };
     case REDIRECT:
-      return { ...state, redirectTo: "/" };
+      return { ...state, redirectTo: null };
     case LOGOUT:
       return { ...state, redirectTo: "/", token: null, currentUser: null };
     case STORY_SUBMITTED:
