@@ -48,11 +48,11 @@ const GeneralHomeGrid = (props) => {
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Paper className={classes.banner}>
-            <A href="/editor">
+            {/* <A href="/editor">
               <Fab color="secondary" aria-label="add">
                 <AddIcon />
               </Fab>
-            </A>
+            </A> */}
             <Typography
               className={classes.paper}
               variant="h4"
@@ -64,16 +64,14 @@ const GeneralHomeGrid = (props) => {
           </Paper>
         </Grid>
         <Grid item xs={9}>
-          <Paper className={classes.paper}>
-            <MainView />
-          </Paper>
+          <Paper className={classes.paper}>{/* <MainView /> */}</Paper>
         </Grid>
         <Grid item xs={3}>
           <Paper className={classes.paper}>
             <Typography variant="h5" component="h5" gutterBottom>
               Popular Tags
             </Typography>
-            <Tags tags={props.tags} onClickTag={props.onClickTag} />
+            {/* <Tags tags={props.tags} onClickTag={props.onClickTag} /> */}
           </Paper>
         </Grid>
       </Grid>
