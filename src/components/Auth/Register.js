@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
-
 import React, { useEffect } from "react";
-import { AuthApi, UsersApi } from "../../client";
+import { AuthApi } from "../../client";
 import { useSelector, useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
@@ -12,22 +11,24 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import {
-  UPDATE_FIELD_AUTH,
-  REGISTER,
-  REGISTER_PAGE_UNLOADED,
-} from "../../constants/actionTypes";
+import { REGISTER, REGISTER_PAGE_UNLOADED } from "../../constants/actionTypes";
 
 const authApi = new AuthApi();
-const usersApi = new UsersApi();
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex",
-    flexDirection: "column",
+    minWidth: "50%",
     marginBottom: 12,
     marginTop: 12,
     alignContent: "center",
-    alignItems: "center",
+
+    "& .MuiTextField-root": {
+      margin: theme.spacing(2),
+      width: "100%",
+    },
+    "& .MuiButton-root": {
+      margin: theme.spacing(2),
+      width: "100%",
+    },
   },
   title: {
     fontSize: 20,
@@ -36,36 +37,11 @@ const useStyles = makeStyles({
     marginTop: 12,
   },
   link: {
-    fontSize: 12,
     textAlign: "center",
     marginBottom: 12,
     marginTop: 12,
   },
-  item: {
-    marginBottom: 12,
-    marginTop: 12,
-  },
-});
-
-// const mapStateToProps = (state) => ({ ...state.auth });
-
-// const mapDispatchToProps = (dispatch) => ({
-//   onChangeEmail: (value) =>
-//     dispatch({ type: UPDATE_FIELD_AUTH, key: "email", value }),
-//   onChangePassword: (value) =>
-//     dispatch({ type: UPDATE_FIELD_AUTH, key: "password", value }),
-//   onChangeUsername: (value) =>
-//     dispatch({ type: UPDATE_FIELD_AUTH, key: "username", value }),
-//   onSubmit: (username, email, password) => {
-//     const payload = authApi.authRegistrationCreate({
-//       email: email,
-//       password: password,
-//       username: username,
-//     });
-//     dispatch({ type: REGISTER, payload });
-//   },
-//   onUnload: () => dispatch({ type: REGISTER_PAGE_UNLOADED }),
-// });
+}));
 
 const validationSchema = yup.object({
   username: yup
@@ -83,19 +59,10 @@ const validationSchema = yup.object({
 });
 
 const Register = () => {
-  // constructor() {
-  //   super();
-  //   this.changeEmail = (ev) => this.props.onChangeEmail(ev.target.value);
-  //   this.changePassword = (ev) => this.props.onChangePassword(ev.target.value);
-  //   this.changeUsername = (ev) => this.props.onChangeUsername(ev.target.value);
-  //   this.submitForm = (username, email, password) => (ev) => {
-  //     ev.preventDefault();
-  //     this.props.onSubmit(username, email, password);
-  //   };
-  // }
-
   const classes = useStyles();
-  const authState = useSelector((state) => ({ ...state.auth }));
+  const emailError = useSelector((state) => state.common.emailError);
+  const usernameError = useSelector((state) => state.common.usernameError);
+  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
@@ -113,26 +80,22 @@ const Register = () => {
       dispatch({ type: REGISTER, payload });
     },
   });
-  const dispatch = useDispatch();
-
-  function handleSubmit(email, password) {
-    dispatch({
-      type: LOGIN,
-      payload: authApi.authLoginCreate({ email: email, password: password }),
-    });
-  }
-
-  function onUnload() {
-    dispatch({ type: REGISTER_PAGE_UNLOADED });
-  }
 
   useEffect(() => {
-    onUnload();
-  }, []);
+    dispatch({ type: REGISTER_PAGE_UNLOADED });
+  }, [dispatch]);
 
-  // const email = this.props.email;
-  // const password = this.props.password;
-  // const username = this.props.username;
+  useEffect(() => {
+    if (emailError !== undefined) {
+      formik.setErrors({ email: emailError });
+    }
+  }, [emailError, formik]);
+
+  useEffect(() => {
+    if (usernameError !== undefined) {
+      formik.setErrors({ username: usernameError });
+    }
+  }, [usernameError, formik]);
 
   return (
     <Card className={classes.root} variant="outlined">
@@ -148,8 +111,6 @@ const Register = () => {
         <Grid container justify="center" spacing={3}>
           <form onSubmit={formik.handleSubmit}>
             <TextField
-              className={classes.item}
-              fullWidth
               id="username"
               name="username"
               label="username"
@@ -159,8 +120,6 @@ const Register = () => {
               helperText={formik.touched.username && formik.errors.username}
             />
             <TextField
-              className={classes.item}
-              fullWidth
               id="email"
               name="email"
               label="Email"
@@ -170,8 +129,6 @@ const Register = () => {
               helperText={formik.touched.email && formik.errors.email}
             />
             <TextField
-              className={classes.item}
-              fullWidth
               id="password"
               name="password"
               label="Password"
@@ -181,7 +138,7 @@ const Register = () => {
               error={formik.touched.password && Boolean(formik.errors.password)}
               helperText={formik.touched.password && formik.errors.password}
             />
-            <Button color="primary" variant="contained" fullWidth type="submit">
+            <Button color="primary" variant="contained" type="submit">
               Create
             </Button>
           </form>

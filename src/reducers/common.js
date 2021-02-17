@@ -48,13 +48,24 @@ export default (state = defaultState, action) => {
         currentUser: action.error !== undefined ? null : action.payload,
       };
     case LOGIN:
-    case REGISTER:
       return {
         ...state,
         redirectTo: action.error !== undefined ? null : "/",
         token: action.error !== undefined ? null : action.payload.token,
         currentUser: action.error !== undefined ? null : action.payload.profile,
         errors: action.error ? action.payload.errors.error : undefined,
+        inProgress: true,
+      };
+    case REGISTER:
+      return {
+        ...state,
+        redirectTo: action.error !== undefined ? null : "/",
+        token: action.error !== undefined ? null : action.payload.token,
+        currentUser: action.error !== undefined ? null : action.payload.profile,
+        usernameError: action.error
+          ? action.payload.errors.username
+          : undefined,
+        emailError: action.error ? action.payload.errors.email : undefined,
         inProgress: true,
       };
 

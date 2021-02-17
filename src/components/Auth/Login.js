@@ -60,6 +60,7 @@ const validationSchema = yup.object({
 const Login = () => {
   const classes = useStyles();
   const errors = useSelector((state) => state.common.errors);
+  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
@@ -68,16 +69,16 @@ const Login = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
+      const payload = authApi.authLoginCreate({
+        email: values.email,
+        password: values.password,
+      });
       dispatch({
         type: LOGIN,
-        payload: authApi.authLoginCreate({
-          email: values.email,
-          password: values.password,
-        }),
+        payload: payload,
       });
     },
   });
-  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch({ type: LOGIN_PAGE_UNLOADED });
