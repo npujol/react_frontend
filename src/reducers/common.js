@@ -1,11 +1,11 @@
 import {
   APP_LOAD,
   REDIRECT,
+  LOGIN,
+  REGISTER,
   LOGOUT,
   STORY_SUBMITTED,
   SETTINGS_SAVED,
-  LOGIN,
-  REGISTER,
   DELETE_STORY,
   STORY_PAGE_UNLOADED,
   EDITOR_PAGE_UNLOADED,
@@ -25,6 +25,7 @@ const defaultState = {
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (state = defaultState, action) => {
+  console.log("payload in common", action.payload);
   switch (action.type) {
     case APP_LOAD:
       return {
@@ -53,7 +54,10 @@ export default (state = defaultState, action) => {
         redirectTo: action.error !== undefined ? null : "/",
         token: action.error !== undefined ? null : action.payload.token,
         currentUser: action.error !== undefined ? null : action.payload.profile,
+        errors: action.error ? action.payload.errors.error : undefined,
+        inProgress: true,
       };
+
     case DELETE_STORY:
       return { ...state, redirectTo: "/" };
     case STORY_PAGE_UNLOADED:

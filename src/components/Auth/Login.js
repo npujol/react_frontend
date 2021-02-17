@@ -15,12 +15,21 @@ import * as yup from "yup";
 
 import { LOGIN, LOGIN_PAGE_UNLOADED } from "../../constants/actionTypes";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
-    minWidth: 275,
+    minWidth: "50%",
     marginBottom: 12,
     marginTop: 12,
     alignContent: "center",
+
+    "& .MuiTextField-root": {
+      margin: theme.spacing(2),
+      width: "100%",
+    },
+    "& .MuiButton-root": {
+      margin: theme.spacing(2),
+      width: "100%",
+    },
   },
   title: {
     fontSize: 20,
@@ -29,16 +38,11 @@ const useStyles = makeStyles({
     marginTop: 12,
   },
   link: {
-    fontSize: 12,
     textAlign: "center",
     marginBottom: 12,
     marginTop: 12,
   },
-  item: {
-    marginBottom: 12,
-    marginTop: 12,
-  },
-});
+}));
 
 const authApi = new AuthApi();
 
@@ -55,7 +59,7 @@ const validationSchema = yup.object({
 
 const Login = () => {
   const classes = useStyles();
-  const authState = useSelector((state) => ({ ...state.auth }));
+  const errors = useSelector((state) => state.common.errors);
 
   const formik = useFormik({
     initialValues: {
@@ -64,33 +68,26 @@ const Login = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      handleSubmit(values.email, values.password);
+      dispatch({
+        type: LOGIN,
+        payload: authApi.authLoginCreate({
+          email: values.email,
+          password: values.password,
+        }),
+      });
     },
   });
   const dispatch = useDispatch();
 
-  function handleSubmit(email, password) {
-    authApi
-      .authLoginCreate({
-        email: email,
-        password: password,
-      })
-      .then((response) =>
-        dispatch({
-          type: LOGIN,
-          payload: response,
-        })
-      )
-      .catch((error) => console.log(JSON.parse(error.response.text)));
-  }
-
-  function onUnload() {
+  useEffect(() => {
     dispatch({ type: LOGIN_PAGE_UNLOADED });
-  }
+  }, [dispatch]);
 
   useEffect(() => {
-    onUnload();
-  }, []);
+    if (errors !== undefined) {
+      alert(errors);
+    }
+  }, [errors]);
 
   return (
     <Card className={classes.root} variant="outlined">
@@ -103,11 +100,9 @@ const Login = () => {
         >
           Sign In
         </Typography>
-        <Grid container justify="center" spacing={3}>
+        <Grid container justify="center">
           <form onSubmit={formik.handleSubmit}>
             <TextField
-              className={classes.item}
-              fullWidth
               id="email"
               name="email"
               label="Email"
@@ -117,8 +112,6 @@ const Login = () => {
               helperText={formik.touched.email && formik.errors.email}
             />
             <TextField
-              className={classes.item}
-              fullWidth
               id="password"
               name="password"
               label="Password"
@@ -128,7 +121,7 @@ const Login = () => {
               error={formik.touched.password && Boolean(formik.errors.password)}
               helperText={formik.touched.password && formik.errors.password}
             />
-            <Button color="primary" variant="contained" fullWidth type="submit">
+            <Button color="primary" variant="contained" type="submit">
               Sign in
             </Button>
           </form>
