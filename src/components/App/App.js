@@ -29,28 +29,22 @@ const App = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  function onLoad(payload, token) {
-    dispatch({ type: APP_LOAD, payload, token, skipTracking: true });
-  }
-  function onRedirect() {
-    dispatch({ type: REDIRECT });
-  }
-
   useEffect(() => {
     const token = window.localStorage.getItem("jwt");
     if (token) {
       JwtService.setHeader();
     }
-    onLoad(token ? usersApi.usersRead(JwtService.getUsername()) : null, token);
-  }, []);
+    const payload = token ? usersApi.usersRead(JwtService.getUsername()) : null;
+    dispatch({ type: APP_LOAD, payload, token, skipTracking: true });
+  }, [dispatch]);
 
   useEffect(() => {
     console.log("redirectTo", redirectTo, "history", history.location);
     if (redirectTo) {
       history.push(redirectTo);
-      onRedirect();
+      dispatch({ type: REDIRECT });
     }
-  }, [redirectTo]);
+  }, [dispatch, history, redirectTo]);
 
   if (appLoaded) {
     return (
