@@ -1,8 +1,10 @@
 import MainView from "./MainView";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
 import Tags from "./Tags";
 import { TagsApi, StoriesApi } from "../../client";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
 import {
@@ -14,7 +16,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import { A } from "hookrouter";
 
 const Promise = global.Promise;
 
@@ -40,19 +41,78 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const GeneralHomeGrid = (props) => {
+// const mapStateToProps = (state) => ({
+//   ...state.home,
+//   appName: state.common.appName,
+//   token: state.common.token,
+// });
+
+// const mapDispatchToProps = (dispatch) => ({
+//   onClickTag: (tag, pager, payload) =>
+//     dispatch({ type: APPLY_TAG_FILTER, tag, pager, payload }),
+//   onLoad: (tab, pager, payload) =>
+//     dispatch({ type: HOME_PAGE_LOADED, tab, pager, payload }),
+//   onUnload: () => dispatch({ type: HOME_PAGE_UNLOADED }),
+// });
+
+const Home = () => {
   const classes = useStyles();
+  const currentUser = useSelector((state) => state.common.currentUser);
+  const dispatch = useDispatch();
+  const tags = useSelector((state) => state.home.tags);
+
+  const [tab, setTab] = useState(() => (currentUser ? 1 : 0));
+  const [storiesPromise, setStoriesPromise] = useState(() =>
+    currentUser ? storiesApi.storiesFeedList : storiesApi.storiesList
+  );
+
+  // function componentWillMount() {
+  //   const tab = currentUser ? 1 : 0;
+  //   const storiesPromise = currentUser
+  //     ? storiesApi.storiesFeedList
+  //     : storiesApi.storiesList;
+  //   this.props.onLoad(
+  //     tab,
+  //     storiesPromise,
+  //     Promise.all([
+  //       tagsApi.tagsList(),
+  //       storiesApi.storiesFeedList({ offset: 0, limit: 10 }),
+  //     ])
+  //   );
+  // }
+  function onClickTag(tag, pager, payload) {
+    dispatch({ type: APPLY_TAG_FILTER, tag, pager, payload });
+  }
+  // function onLoad(tab, pager, payload) {
+  //   dispatch({ type: HOME_PAGE_LOADED, tab, storiesPromise, payload });
+  // }
+
+  // function componentWillUnmount() {
+  //   this.props.onUnload();
+  // }
+
+  useEffect(() => {
+    const payload = Promise.all([
+      tagsApi.tagsList(),
+      storiesApi.storiesFeedList({ offset: 0, limit: 10 }),
+    ]);
+    dispatch({ type: HOME_PAGE_LOADED, tab, storiesPromise, payload });
+  }, [tab, storiesPromise, dispatch]);
+
+  useEffect(() => {
+    dispatch({ type: HOME_PAGE_UNLOADED });
+  }, [dispatch]);
 
   return (
     <div className={classes.root}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Paper className={classes.banner}>
-            {/* <A href="/editor">
+            <Link to="/editor">
               <Fab color="secondary" aria-label="add">
                 <AddIcon />
               </Fab>
-            </A> */}
+            </Link>
             <Typography
               className={classes.paper}
               variant="h4"
@@ -64,14 +124,16 @@ const GeneralHomeGrid = (props) => {
           </Paper>
         </Grid>
         <Grid item xs={9}>
-          <Paper className={classes.paper}>{/* <MainView /> */}</Paper>
+          <Paper className={classes.paper}>
+            <MainView />
+          </Paper>
         </Grid>
         <Grid item xs={3}>
           <Paper className={classes.paper}>
             <Typography variant="h5" component="h5" gutterBottom>
               Popular Tags
             </Typography>
-            {/* <Tags tags={props.tags} onClickTag={props.onClickTag} /> */}
+            <Tags tags={tags} onClickTag={onClickTag} />
           </Paper>
         </Grid>
       </Grid>
@@ -79,53 +141,4 @@ const GeneralHomeGrid = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  ...state.home,
-  appName: state.common.appName,
-  token: state.common.token,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onClickTag: (tag, pager, payload) =>
-    dispatch({ type: APPLY_TAG_FILTER, tag, pager, payload }),
-  onLoad: (tab, pager, payload) =>
-    dispatch({ type: HOME_PAGE_LOADED, tab, pager, payload }),
-  onUnload: () => dispatch({ type: HOME_PAGE_UNLOADED }),
-});
-
-class Home extends React.Component {
-  componentWillMount() {
-    const tab = this.props.token ? 1 : 0;
-    const storiesPromise = this.props.token
-      ? storiesApi.storiesFeedList
-      : storiesApi.storiesList;
-    this.props.onLoad(
-      tab,
-      storiesPromise,
-      Promise.all([
-        tagsApi.tagsList(),
-        storiesApi.storiesFeedList({ offset: 0, limit: 10 }),
-      ])
-    );
-  }
-
-  componentWillUnmount() {
-    this.props.onUnload();
-  }
-
-  render() {
-    return (
-      <div>
-        <GeneralHomeGrid
-          token={this.props.token}
-          appName={this.props.appName}
-          onClickTag={this.props.onClickTag}
-          tags={this.props.tags}
-          tab={this.props.tab ? this.props.tab : 0}
-        />
-      </div>
-    );
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default Home;

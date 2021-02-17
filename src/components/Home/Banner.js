@@ -8,9 +8,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Banner = ({ appName, token }) => {
+const Banner = ({ currentUser }) => {
   const classes = useStyles();
-  if (token) {
+  if (currentUser) {
     return null;
   }
   return (

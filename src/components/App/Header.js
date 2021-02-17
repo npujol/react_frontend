@@ -1,4 +1,4 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -108,8 +108,6 @@ const LoggedInView = (props) => {
 
 const Header = (props) => {
   const classes = useStyles();
-
-  const commonState = useSelector((state) => state.common);
   const dispatch = useDispatch();
 
   function onClickLogout() {

@@ -1,8 +1,8 @@
 import StoryList from "../Story/StoryList";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { StoriesApi } from "../../client";
 
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CHANGE_TAB } from "../../constants/actionTypes";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -25,7 +25,7 @@ const GlobalFeedTab = (props) => {
       storiesApi.storiesFeedList({ offset: 0, limit: 10 })
     );
   };
-  return <Tab label=" Global" onClick={clickHandler}></Tab>;
+  return <Tab label=" Global" value={0} onClick={clickHandler}></Tab>;
 };
 
 const YourFeedTab = (props) => {
@@ -45,7 +45,7 @@ const YourFeedTab = (props) => {
       );
     };
 
-    return <Tab label="Yours" onClick={clickHandler}></Tab>;
+    return <Tab label="Yours" value={1} onClick={clickHandler}></Tab>;
   }
   return null;
 };
@@ -67,7 +67,7 @@ const FavoritesTab = (props) => {
       );
     };
 
-    return <Tab label="Favorites" onClick={clickHandler}></Tab>;
+    return <Tab label="Favorites" onClick={clickHandler} value={2}></Tab>;
   }
   return null;
 };
@@ -77,61 +77,81 @@ const TagFilterTab = (props) => {
     return null;
   }
 
-  return <Tab label={props.tag}></Tab>;
+  return <Tab label={props.tag} value={3}></Tab>;
 };
 
-const mapStateToProps = (state) => ({
-  ...state.storyList,
-  tags: state.home.tags,
-  token: state.common.token,
-  currentUser: state.common.currentUser,
-});
+// const mapStateToProps = (state) => ({
+//   ...state.storyList,
+//   tags: state.home.tags,
+//   token: state.common.token,
+//   currentUser: state.common.currentUser,
+// });
 
-const mapDispatchToProps = (dispatch) => ({
-  onTabClick: (tab, pager, payload) =>
-    dispatch({ type: CHANGE_TAB, tab, pager, payload }),
-});
+// const mapDispatchToProps = (dispatch) => ({
+//   onTabClick: (tab, pager, payload) =>
+//     dispatch({ type: CHANGE_TAB, tab, pager, payload }),
+// });
 
 const MainView = (props) => {
   const classes = useStyles();
+  const token = useSelector((state) => state.common.token);
+  const tabStore = useSelector((state) => state.storyList.tab);
+
+  const storyList = useSelector((state) => state.storyList);
+  const currentUser = useSelector((state) => state.common.currentUser);
+
+  const dispatch = useDispatch();
+  const [value, setValue] = useState(0);
+  // function onClickTag(tag, pager, payload) {
+  //   dispatch({ type: APPLY_TAG_FILTER, tag, pager, payload });
+  // }
+
+  function onTabClick(tab, pager, payload) {
+    dispatch({ type: CHANGE_TAB, tab, pager, payload });
+  }
   const handleChange = (event, newValue) => {
+    console.log("newValue for the tag", newValue);
     setValue(newValue);
   };
+
+  useEffect(() => {
+    setValue(tabStore);
+  }, [tabStore]);
 
   return (
     <div className={classes.root}>
       <AppBar position="static" color="default">
         <Tabs
-          value={props.tab}
+          value={value}
           onChange={handleChange}
           indicatorColor="primary"
           textColor="primary"
           centered
         >
-          <GlobalFeedTab onTabClick={props.onTabClick} />
+          <GlobalFeedTab onTabClick={onTabClick} />
           <YourFeedTab
-            token={props.token}
-            currentUser={props.currentUser}
-            onTabClick={props.onTabClick}
+            token={token}
+            currentUser={currentUser}
+            onTabClick={onTabClick}
           />
           <FavoritesTab
-            token={props.token}
-            currentUser={props.currentUser}
-            onTabClick={props.onTabClick}
+            token={token}
+            currentUser={currentUser}
+            onTabClick={onTabClick}
           />
           <TagFilterTab tag={props.tag} />
         </Tabs>
 
         <StoryList
-          pager={props.pager}
-          stories={props.stories}
-          loading={props.loading}
-          storiesCount={props.storiesCount}
-          currentPage={props.currentPage}
+          pager={storyList.pager}
+          stories={storyList.stories}
+          loading={storyList.loading}
+          storiesCount={storyList.storiesCount}
+          currentPage={storyList.currentPage}
         />
       </AppBar>
     </div>
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MainView);
+export default MainView;
