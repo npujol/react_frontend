@@ -12,6 +12,7 @@ import {
   PROFILE_FAVORITES_PAGE_UNLOADED,
 } from "../constants/actionTypes";
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default (state = {}, action) => {
   // console.log("StoryList", action.payload);
   switch (action.type) {
@@ -51,11 +52,13 @@ export default (state = {}, action) => {
       return {
         ...state,
         pager: action.pager,
-        tags: action.payload[0].results.map((obj) => obj.tag),
-        stories: action.payload[1]
+        tags: action.payload
+          ? action.payload[0].results.map((obj) => obj.tag)
+          : [],
+        stories: action.payload
           ? action.payload[1].results.map((obj) => obj)
           : [],
-        storiesCount: action.payload[1].count,
+        storiesCount: action.payload ? action.payload[1].count : 0,
         currentPage: 0,
         tab: action.tab,
       };

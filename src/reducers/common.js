@@ -33,6 +33,7 @@ export default (state = defaultState, action) => {
         token: action.token || null,
         appLoaded: true,
         currentUser: action.payload ? action.payload.profile : null,
+        offline: action.payload ? false : true,
       };
     case REDIRECT:
       return { ...state, redirectTo: null };
