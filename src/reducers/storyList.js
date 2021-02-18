@@ -60,7 +60,6 @@ export default (state = {}, action) => {
           : [],
         storiesCount: action.payload ? action.payload[1].count : 0,
         currentPage: 0,
-        tab: action.tab,
       };
     case HOME_PAGE_UNLOADED:
       return {};

@@ -1,6 +1,6 @@
-import MainView from "./MainView";
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import StoryList from "../Story/StoryList";
+
+import React, { useEffect } from "react";
 
 import Tags from "./Tags";
 import TabsMenu from "./TabsMenu";
@@ -8,8 +8,6 @@ import TabsMenu from "./TabsMenu";
 import Banner from "./Banner";
 import { TagsApi, StoriesApi } from "../../client";
 import { useDispatch, useSelector } from "react-redux";
-import AddIcon from "@material-ui/icons/Add";
-import Fab from "@material-ui/core/Fab";
 import {
   HOME_PAGE_LOADED,
   HOME_PAGE_UNLOADED,
@@ -44,63 +42,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// const mapStateToProps = (state) => ({
-//   ...state.home,
-//   appName: state.common.appName,
-//   token: state.common.token,
-// });
-
-// const mapDispatchToProps = (dispatch) => ({
-//   onClickTag: (tag, pager, payload) =>
-//     dispatch({ type: APPLY_TAG_FILTER, tag, pager, payload }),
-//   onLoad: (tab, pager, payload) =>
-//     dispatch({ type: HOME_PAGE_LOADED, tab, pager, payload }),
-//   onUnload: () => dispatch({ type: HOME_PAGE_UNLOADED }),
-// });
-
 const Home = () => {
   const classes = useStyles();
   const currentUser = useSelector((state) => state.common.currentUser);
   const dispatch = useDispatch();
   const tags = useSelector((state) => state.home.tags);
+  const storyList = useSelector((state) => state.storyList);
 
-  const [tab, setTab] = useState(() => (currentUser ? 1 : 0));
-  const [storiesPromise, setStoriesPromise] = useState(() =>
-    currentUser ? storiesApi.storiesFeedList : storiesApi.storiesList
-  );
-
-  // function componentWillMount() {
-  //   const tab = currentUser ? 1 : 0;
-  //   const storiesPromise = currentUser
-  //     ? storiesApi.storiesFeedList
-  //     : storiesApi.storiesList;
-  //   this.props.onLoad(
-  //     tab,
-  //     storiesPromise,
-  //     Promise.all([
-  //       tagsApi.tagsList(),
-  //       storiesApi.storiesFeedList({ offset: 0, limit: 10 }),
-  //     ])
-  //   );
-  // }
   function onClickTag(tag, pager, payload) {
     dispatch({ type: APPLY_TAG_FILTER, tag, pager, payload });
   }
-  // function onLoad(tab, pager, payload) {
-  //   dispatch({ type: HOME_PAGE_LOADED, tab, storiesPromise, payload });
-  // }
-
-  // function componentWillUnmount() {
-  //   this.props.onUnload();
-  // }
 
   useEffect(() => {
     const payload = Promise.all([
       tagsApi.tagsList(),
-      storiesApi.storiesFeedList({ offset: 0, limit: 10 }),
+      storiesApi.storiesList({
+        favoritedByUserUsername: currentUser.username,
+        offset: 0,
+        limit: 10,
+      }),
     ]);
-    dispatch({ type: HOME_PAGE_LOADED, tab, storiesPromise, payload });
-  }, [tab, storiesPromise, dispatch]);
+    const storiesPromise = storiesApi.storiesList;
+    dispatch({ type: HOME_PAGE_LOADED, storiesPromise, payload });
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch({ type: HOME_PAGE_UNLOADED });
@@ -115,7 +79,13 @@ const Home = () => {
         <Grid item xs={9}>
           <Paper className={classes.paper}>
             <TabsMenu tab={2} />
-            {/* <MainView /> */}
+            <StoryList
+              pager={storyList.pager}
+              stories={storyList.stories}
+              loading={storyList.loading}
+              storiesCount={storyList.storiesCount}
+              currentPage={storyList.currentPage}
+            />
           </Paper>
         </Grid>
         <Grid item xs={3}>
