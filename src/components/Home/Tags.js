@@ -40,19 +40,17 @@ const Tags = (props) => {
               storiesApi.storiesList({ offset: 0, limit: 10, tagsTag: tag })
             ); */
             }
-            history.push(`/${tag}`);
+            history.push(`/${tag.tag}`);
           };
 
           return (
-            <Link to={`/${tag}`}>
-              <Chip
-                variant="outlined"
-                size="small"
-                label={tag}
-                key={tag}
-                onClick={handleClick}
-              />
-            </Link>
+            <Chip
+              variant="outlined"
+              size="small"
+              label={tag.tag}
+              key={tag.pk}
+              onClick={handleClick}
+            />
           );
         })}
       </div>
