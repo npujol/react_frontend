@@ -3,13 +3,14 @@ import { A } from "hookrouter";
 import React from "react";
 import CardHeader from "@material-ui/core/CardHeader";
 import Avatar from "@material-ui/core/Avatar";
+import { Link } from "react-router-dom";
 
 const StoryMeta = (props) => {
   const story = props.story;
   return (
     <CardHeader
       avatar={
-        <A href={`/@${story.owner.username}`}>
+        <Link to={`/@${story.owner.username}`}>
           <Avatar
             aria-label="recipe"
             src={
@@ -19,7 +20,7 @@ const StoryMeta = (props) => {
             }
             alt={story.owner.username}
           ></Avatar>
-        </A>
+        </Link>
       }
       action={<StoryActions canModify={props.canModify} story={story} />}
       title={story.title}

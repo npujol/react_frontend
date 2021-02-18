@@ -1,12 +1,13 @@
 import { Profile, mapStateToProps } from "./Profile";
 import React from "react";
-import { A } from "hookrouter";
+
 import { connect } from "react-redux";
 import {
   PROFILE_PAGE_LOADED,
   PROFILE_PAGE_UNLOADED,
 } from "../../constants/actionTypes";
 import { ProfilesApi, StoriesApi } from "../../client";
+import { Link } from "react-router-dom";
 
 const profilesApi = new ProfilesApi();
 const storiesApi = new StoriesApi();
@@ -46,9 +47,9 @@ class ProfileFavorites extends Profile {
     return (
       <ul className="nav nav-pills outline-active">
         <li className="nav-item">
-          <A className="nav-link" href={`/@${this.props.profile.username}`}>
+          <Link className="nav-link" to={`/@${this.props.profile.username}`}>
             My Stories
-          </A>
+          </Link>
         </li>
 
         <li className="nav-item">

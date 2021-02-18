@@ -1,6 +1,7 @@
 import DeleteButton from "./DeleteButton";
 import { A } from "hookrouter";
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Comment = (props) => {
   const comment = props.comment;
@@ -12,17 +13,17 @@ const Comment = (props) => {
         <p className="card-text">{comment.body}</p>
       </div>
       <div className="card-footer">
-        <A href={`/@${comment.owner.username}`} className="comment-owner">
+        <Link to={`/@${comment.owner.username}`} className="comment-owner">
           <img
             src={comment.owner.image}
             className="comment-owner-img"
             alt={comment.owner.username}
           />
-        </A>
+        </Link>
         &nbsp;
-        <A href={`/@${comment.owner.username}`} className="comment-owner">
+        <Link to={`/@${comment.owner.username}`} className="comment-owner">
           {comment.owner.username}
-        </A>
+        </Link>
         <span className="date-posted">
           {new Date(comment.createdAt).toDateString()}
         </span>

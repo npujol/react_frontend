@@ -23,6 +23,7 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import Chip from "@material-ui/core/Chip";
 import { Divider } from "@material-ui/core";
 import Tags from "../Home/Tags";
+import { Link } from "react-router-dom";
 
 const storiesApi = new StoriesApi();
 
@@ -82,7 +83,7 @@ const StoryPreview = (props) => {
       <Card className={classes.root}>
         <CardHeader
           avatar={
-            <A href={`/@${story.owner.username}`}>
+            <Link to={`/@${story.owner.username}`}>
               <Avatar
                 aria-label="recipe"
                 src={
@@ -92,7 +93,7 @@ const StoryPreview = (props) => {
                 }
                 alt={story.owner.username}
               ></Avatar>
-            </A>
+            </Link>
           }
           title={story.title}
           subheader={new Date(story.createdAt).toDateString()}
@@ -113,11 +114,11 @@ const StoryPreview = (props) => {
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
-          <A href={`/story/${story.slug}`}>
+          <Link to={`/story/${story.slug}`}>
             <Button size="small" color="primary" variant="contained">
               Read more
             </Button>
-          </A>
+          </Link>
           <IconButton
             className={classes.buttons}
             aria-label="add to favorites"

@@ -6,7 +6,10 @@ import JwtService from "../../jwt.service";
 import Header from "./Header";
 import Story from "../Story/Story";
 import Editor from "../Story/Editor";
-import Home from "../Home";
+import HomeGlobal from "../Home/HomeGlobal";
+import HomeYours from "../Home/HomeYours";
+import HomeFavorites from "../Home/HomeFavorites";
+import HomeTag from "../Home/HomeTag";
 import Login from "../Auth/Login";
 import Profile from "../Profile/Profile";
 import ProfileFavorites from "../Profile/ProfileFavorites";
@@ -59,7 +62,10 @@ const App = () => {
         </div>
         <Suspense fallback={<Fragment />}>
           <Switch>
-            <Route exact path="/" component={Home} />
+            <Route exact path="/" component={HomeGlobal} />
+            <Route path="/yours" component={HomeYours} />
+            <Route path="/favorites" component={HomeFavorites} />
+            <Route path="/:tag" component={HomeTag} />
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
             <Route path="/editor/:slug" component={Editor} />
