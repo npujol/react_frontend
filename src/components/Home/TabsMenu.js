@@ -3,12 +3,12 @@ import React, { useState, useEffect } from "react";
 import { StoriesApi } from "../../client";
 
 import { useDispatch, useSelector } from "react-redux";
-import { CHANGE_TAB } from "../../constants/actionTypes";
+import { CHANGE_TAB, CHANGE_TAB_REDIRECT } from "../../constants/actionTypes";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const storiesApi = new StoriesApi();
 const useStyles = makeStyles({
@@ -20,30 +20,33 @@ const useStyles = makeStyles({
 const GlobalFeedTab = (props) => {
   const clickHandler = (ev) => {
     ev.preventDefault();
-    props.onTabClick(
-      0,
-      storiesApi.storiesFeedList,
-      storiesApi.storiesFeedList({ offset: 0, limit: 10 })
-    );
+    // props.onTabClick(
+    //   0,
+    //   storiesApi.storiesFeedList,
+    //   storiesApi.storiesFeedList({ offset: 0, limit: 10 })
+    // );
+    props.onTabClick({ route: "/" });
   };
   return <Tab label=" Global" value={0} onClick={clickHandler}></Tab>;
 };
 
 const YourFeedTab = (props) => {
+
   // console.log("now", props);
 
-  if (props.token) {
+  if (props.currentUser) {
     const clickHandler = (ev) => {
       ev.preventDefault();
-      props.onTabClick(
-        1,
-        storiesApi.storiesList,
-        storiesApi.storiesList({
-          ownerUserUsername: props.currentUser.username,
-          offset: 0,
-          limit: 10,
-        })
-      );
+      // props.onTabClick(
+      //   1,
+      //   storiesApi.storiesList,
+      //   storiesApi.storiesList({
+      //     ownerUserUsername: props.currentUser.username,
+      //     offset: 0,
+      //     limit: 10,
+      //   })
+      // );
+      props.onTabClick({ route: "/yours" });
     };
 
     return <Tab label="Yours" value={1} onClick={clickHandler}></Tab>;
@@ -54,18 +57,19 @@ const YourFeedTab = (props) => {
 const FavoritesTab = (props) => {
   // console.log("now", props);
 
-  if (props.token) {
+  if (props.currentUser) {
     const clickHandler = (ev) => {
       ev.preventDefault();
-      props.onTabClick(
-        2,
-        storiesApi.storiesList,
-        storiesApi.storiesList({
-          favoritedByUserUsername: props.currentUser.username,
-          offset: 0,
-          limit: 10,
-        })
-      );
+      // props.onTabClick(
+      //   2,
+      //   storiesApi.storiesList,
+      //   storiesApi.storiesList({
+      //     favoritedByUserUsername: props.currentUser.username,
+      //     offset: 0,
+      //     limit: 10,
+      //   })
+      // );
+      props.onTabClick({ route: "/favorites" });
     };
 
     return <Tab label="Favorites" onClick={clickHandler} value={2}></Tab>;
@@ -99,24 +103,20 @@ const TabsMenu = (props) => {
 
   const dispatch = useDispatch();
   const [value, setValue] = useState(props.tab);
-  const history = useHistory();
   // function onClickTag(tag, pager, payload) {
   //   dispatch({ type: APPLY_TAG_FILTER, tag, pager, payload });
   // }
 
-  function onTabClick(tab, pager, payload) {
-    dispatch({ type: CHANGE_TAB, tab, pager, payload });
-  }
-  function handleTabClick(path) {
+  // function onTabClick(tab, pager, payload) {
+  //   dispatch({ type: CHANGE_TAB, tab, pager, payload });
+  // }
+  function onTabClick(payload) {
     // history.push(path);
+    dispatch({ type: CHANGE_TAB_REDIRECT, payload });
   }
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
-  // useEffect(() => {
-  //   history.push("/");
-  // }, [value, history]);
 
   if (currentUser) {
     return (
@@ -129,7 +129,7 @@ const TabsMenu = (props) => {
             textColor="primary"
             centered
           >
-            <Link to="/">
+            {/* <Link to="/">
               <Tab label=" Global"></Tab>
             </Link>
             <Link to="/yours">
@@ -140,19 +140,11 @@ const TabsMenu = (props) => {
             </Link>
             <Link to={`/${props.tag}`}>
               <Tab label={props.tag}></Tab>
-            </Link>
-            {/* <GlobalFeedTab onTabClick={onTabClick} /> */}
-            {/* <YourFeedTab
-                token={token}
-                currentUser={currentUser}
-                onTabClick={onTabClick}
-              />
-              <FavoritesTab
-                token={token}
-                currentUser={currentUser}
-                onTabClick={onTabClick}
-              />
-              <TagFilterTab tag={props.tag} /> */}
+            </Link> */}
+            <GlobalFeedTab onTabClick={onTabClick} />
+            <YourFeedTab currentUser={currentUser} onTabClick={onTabClick} />
+            <FavoritesTab currentUser={currentUser} onTabClick={onTabClick} />
+            <TagFilterTab tag={props.tag} />
           </Tabs>
         </AppBar>
       </div>
@@ -169,15 +161,12 @@ const TabsMenu = (props) => {
             centered
           >
             {/* <Link to="/"> */}
-            <Tab label=" Global" onClick={handleTabClick("/")}></Tab>
+            {/* <Tab label=" Global" onClick={handleTabClick}></Tab> */}
             {/* // </Link> */}
             {/* <Link to={`/${props.tag}`}> */}
-            <TagFilterTab
-              label={props.tag}
-              onClick={handleTabClick(`/${props.tag}`)}
-            ></TagFilterTab>
+            <TagFilterTab label={props.tag} onClick={onTabClick}></TagFilterTab>
             {/* </Link> */}
-            {/* <GlobalFeedTab onTabClick={onTabClick} /> */}
+            <GlobalFeedTab onTabClick={onTabClick} />
             {/* <YourFeedTab
           token={token}
           currentUser={currentUser}
@@ -187,8 +176,8 @@ const TabsMenu = (props) => {
           token={token}
           currentUser={currentUser}
           onTabClick={onTabClick}
-        />
-        <TagFilterTab tag={props.tag} /> */}
+        />*/}
+            <TagFilterTab tag={props.tag} />
           </Tabs>
         </AppBar>
       </div>

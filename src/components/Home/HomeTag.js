@@ -121,7 +121,7 @@ const Home = () => {
         <Grid item xs={3}>
           <Paper className={classes.paper}>
             <Typography variant="h5" component="h5" gutterBottom>
-              Popular Tags dentro de tags
+              Popular Tags
             </Typography>
             <Tags tags={tags} onClickTag={onClickTag} />
           </Paper>

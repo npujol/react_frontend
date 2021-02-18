@@ -2,7 +2,9 @@ import React from "react";
 import { StoriesApi } from "../../client";
 import { makeStyles } from "@material-ui/core/styles";
 import Chip from "@material-ui/core/Chip";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { CHANGE_TAB, CHANGE_TAB_REDIRECT } from "../../constants/actionTypes";
 
 const storiesApi = new StoriesApi();
 
@@ -20,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 const Tags = (props) => {
   const classes = useStyles();
   const tags = props.tags;
-  const history = useHistory();
+  const dispatch = useDispatch();
 
   if (tags) {
     return (
@@ -40,7 +42,11 @@ const Tags = (props) => {
               storiesApi.storiesList({ offset: 0, limit: 10, tagsTag: tag })
             ); */
             }
-            history.push(`/${tag.tag}`);
+            const payload = { route: `/${tag.tag}` };
+            dispatch({ type: CHANGE_TAB_REDIRECT, payload });
+            {
+              /* history.push(`/${tag.tag}`); */
+            }
           };
 
           return (

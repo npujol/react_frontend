@@ -15,6 +15,8 @@ import {
   SETTINGS_PAGE_UNLOADED,
   LOGIN_PAGE_UNLOADED,
   REGISTER_PAGE_UNLOADED,
+  CHANGE_TAB,
+  CHANGE_TAB_REDIRECT,
 } from "../constants/actionTypes";
 
 const defaultState = {
@@ -33,7 +35,7 @@ export default (state = defaultState, action) => {
         token: action.token || null,
         appLoaded: true,
         currentUser: action.payload ? action.payload.profile : null,
-        offline: action.payload ? false : true,
+        offline: action.payload ? true : false,
       };
     case REDIRECT:
       return { ...state, redirectTo: null };
@@ -47,6 +49,11 @@ export default (state = defaultState, action) => {
         ...state,
         redirectTo: action.error !== undefined ? null : "/",
         currentUser: action.error !== undefined ? null : action.payload,
+      };
+    case CHANGE_TAB_REDIRECT:
+      return {
+        ...state,
+        redirectTo: action.payload.route,
       };
     case LOGIN:
       return {
