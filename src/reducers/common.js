@@ -36,6 +36,7 @@ export default (state = defaultState, action) => {
         appLoaded: true,
         currentUser: action.payload ? action.payload.profile : null,
         offline: action.payload ? true : false,
+        redirectTo: "/",
       };
     case REDIRECT:
       return { ...state, redirectTo: null };

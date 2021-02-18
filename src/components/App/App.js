@@ -63,15 +63,15 @@ const App = () => {
         <Suspense fallback={<Fragment />}>
           <Switch>
             <Route exact path="/" component={HomeGlobal} />
-            <Route path="/yours" component={HomeYours} />
-            <Route path="/favorites" component={HomeFavorites} />
+            <Route exact path="/yours" component={HomeYours} />
+            <Route exact path="/favorites" component={HomeFavorites} />
             <Route path="/:tag" component={HomeTag} />
-            <Route path="/login" component={Login} />
-            <Route path="/register" component={Register} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/register" component={Register} />
             <Route path="/editor/:slug" component={Editor} />
-            <Route path="/editor" component={Editor} />
+            <Route exact path="/editor" component={Editor} />
             <Route path="/story/:id" component={Story} />
-            <Route path="/settings" component={Settings} />
+            <Route exact path="/settings" component={Settings} />
             <Route path="/@:username/favorites" component={ProfileFavorites} />
             <Route path="/@:username" component={Profile} />
           </Switch>
