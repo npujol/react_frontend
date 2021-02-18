@@ -42,7 +42,7 @@ const Tags = (props) => {
               storiesApi.storiesList({ offset: 0, limit: 10, tagsTag: tag })
             ); */
             }
-            const payload = { route: `/${tag.tag}` };
+            const payload = { route: `/tag/${tag.tag}` };
             dispatch({ type: CHANGE_TAB_REDIRECT, payload });
             {
               /* history.push(`/${tag.tag}`); */

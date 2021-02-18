@@ -65,7 +65,7 @@ const App = () => {
             <Route exact path="/" component={HomeGlobal} />
             <Route exact path="/yours" component={HomeYours} />
             <Route exact path="/favorites" component={HomeFavorites} />
-            <Route path="/:tag" component={HomeTag} />
+            <Route path="/tag/:tag" component={HomeTag} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
             <Route path="/editor/:slug" component={Editor} />
