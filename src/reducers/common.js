@@ -15,7 +15,6 @@ import {
   SETTINGS_PAGE_UNLOADED,
   LOGIN_PAGE_UNLOADED,
   REGISTER_PAGE_UNLOADED,
-  CHANGE_TAB,
   CHANGE_TAB_REDIRECT,
 } from "../constants/actionTypes";
 
@@ -23,11 +22,12 @@ const defaultState = {
   appName: "My stories",
   token: null,
   viewChangeCounter: 0,
+  offline: true,
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (state = defaultState, action) => {
-  console.log("payload in common", action.payload);
+  // console.log("payload in common", action.payload);
   switch (action.type) {
     case APP_LOAD:
       return {
