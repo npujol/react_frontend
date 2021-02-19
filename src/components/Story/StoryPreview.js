@@ -1,11 +1,8 @@
 import React from "react";
-import { A } from "hookrouter";
 import { StoriesApi } from "../../client";
-import { connect } from "react-redux";
 import {
   STORY_FAVORITED,
   STORY_UNFAVORITED,
-  APPLY_TAG_FILTER,
 } from "../../constants/actionTypes";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -20,10 +17,10 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import { red } from "@material-ui/core/colors";
 import FavoriteIcon from "@material-ui/icons/Favorite";
-import Chip from "@material-ui/core/Chip";
 import { Divider } from "@material-ui/core";
 import Tags from "../Home/Tags";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 const storiesApi = new StoriesApi();
 
@@ -31,6 +28,8 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 4,
     alignContent: "center",
+    marginBottom: 12,
+    marginTop: 12,
   },
   media: {
     height: 0,
@@ -44,37 +43,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const FAVORITED_CLASS = "";
-const NOT_FAVORITED_CLASS = "";
-
-const mapDispatchToProps = (dispatch) => ({
-  favorite: (slug) =>
-    dispatch({
-      type: STORY_FAVORITED,
-      payload: storiesApi.storiesFavorite(slug, {}),
-    }),
-  unfavorite: (slug) =>
-    dispatch({
-      type: STORY_UNFAVORITED,
-      payload: storiesApi.storiesUnfavorite(slug, {}),
-    }),
-  onClickTag: (tag, pager, payload) =>
-    dispatch({ type: APPLY_TAG_FILTER, tag, pager, payload }),
-});
-
 const StoryPreview = (props) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const story = props.story;
-  const favoriteButtonClass =
-    story.favorited === "false" ? FAVORITED_CLASS : NOT_FAVORITED_CLASS;
-
-  const handleClick = (ev) => {
+  const handleClickToggleFavorite = (ev) => {
     ev.preventDefault();
     if (story.favorited === "true") {
-      props.unfavorite(story.slug);
+      dispatch({
+        type: STORY_UNFAVORITED,
+        payload: storiesApi.storiesUnfavorite(story.slug, {}),
+      });
     } else {
-      props.favorite(story.slug);
+      dispatch({
+        type: STORY_FAVORITED,
+        payload: storiesApi.storiesFavorite(story.slug, {}),
+      });
     }
   };
 
@@ -122,8 +107,7 @@ const StoryPreview = (props) => {
           <IconButton
             className={classes.buttons}
             aria-label="add to favorites"
-            className={favoriteButtonClass}
-            onClick={handleClick}
+            onClick={handleClickToggleFavorite}
           >
             <FavoriteIcon /> {story.favoritesCount}
           </IconButton>
@@ -135,4 +119,4 @@ const StoryPreview = (props) => {
   );
 };
 
-export default connect(() => ({}), mapDispatchToProps)(StoryPreview);
+export default StoryPreview;

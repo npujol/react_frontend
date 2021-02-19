@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Chip from "@material-ui/core/Chip";
 import { useDispatch } from "react-redux";
 import { CHANGE_TAB_REDIRECT } from "../../constants/actionTypes";
+import { v4 as uuidv4 } from "uuid";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,7 +28,7 @@ const Tags = (props) => {
         {tags.map((tag) => {
           const handleClick = (ev) => {
             ev.preventDefault();
-            const payload = { route: `/tag/${tag.tag}` };
+            const payload = { route: `/tag/${tag}` };
             dispatch({ type: CHANGE_TAB_REDIRECT, payload });
           };
 
@@ -35,8 +36,8 @@ const Tags = (props) => {
             <Chip
               variant="outlined"
               size="small"
-              label={tag.tag}
-              key={tag.pk}
+              label={tag}
+              key={uuidv4()}
               onClick={handleClick}
             />
           );

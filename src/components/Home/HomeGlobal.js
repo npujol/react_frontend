@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Tags from "./Tags";
 import TabsMenu from "./TabsMenu";
 import StoryList from "../Story/StoryList";

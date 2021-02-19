@@ -28,6 +28,7 @@
     "redux-logger": "^3.0.1",
     "superagent": "^3.8.2",
     "superagent-promise": "^1.1.0",
+    "uuid": "^8.3.2",
     "web-vitals": "^0.2.4",
     "yup": "^0.32.8"
   },
