@@ -14,7 +14,7 @@ import {
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (state = {}, action) => {
-  // console.log("StoryList", action.payload);
+  console.log("StoryList", action.payload);
   switch (action.type) {
     case STORY_FAVORITED:
     case STORY_UNFAVORITED:
@@ -42,8 +42,12 @@ export default (state = {}, action) => {
       return {
         ...state,
         pager: action.pager,
-        stories: action.payload.results,
-        storiesCount: action.payload.count,
+        stories:
+          action.payload !== undefined
+            ? action.payload[1].results.map((obj) => obj)
+            : [],
+        storiesCount:
+          action.payload !== undefined ? action.payload[1].count : 0,
         tab: 3,
         tag: action.tag,
         currentPage: 0,
@@ -52,13 +56,16 @@ export default (state = {}, action) => {
       return {
         ...state,
         pager: action.pager,
-        tags: action.payload
-          ? action.payload[0].results.map((obj) => obj.tag)
-          : [],
-        stories: action.payload
-          ? action.payload[1].results.map((obj) => obj)
-          : [],
-        storiesCount: action.payload ? action.payload[1].count : 0,
+        tags:
+          action.payload !== undefined
+            ? action.payload[0].results.map((obj) => obj.tag)
+            : [],
+        stories:
+          action.payload !== undefined
+            ? action.payload[1].results.map((obj) => obj)
+            : [],
+        storiesCount:
+          action.payload !== undefined ? action.payload[1].count : 0,
         currentPage: 0,
       };
     case HOME_PAGE_UNLOADED:
@@ -67,8 +74,12 @@ export default (state = {}, action) => {
       return {
         ...state,
         pager: action.pager,
-        stories: action.payload.results.map((obj) => obj),
-        storiesCount: action.payload.count,
+        stories:
+          action.payload !== undefined
+            ? action.payload[1].results.map((obj) => obj)
+            : [],
+        storiesCount:
+          action.payload !== undefined ? action.payload[1].count : 0,
         tab: action.tab,
         currentPage: 0,
         tag: null,
@@ -78,10 +89,12 @@ export default (state = {}, action) => {
       return {
         ...state,
         pager: action.pager,
-        stories: action.payload[1]
-          ? action.payload[1].results.map((obj) => obj)
-          : [],
-        storiesCount: action.payload[1] ? action.payload[1].count : 0,
+        stories:
+          action.payload !== undefined
+            ? action.payload[1].results.map((obj) => obj)
+            : [],
+        storiesCount:
+          action.payload[1] !== undefined ? action.payload[1].count : 0,
         currentPage: 0,
       };
     case PROFILE_PAGE_UNLOADED:
