@@ -1,15 +1,10 @@
 import StoryList from "../Story/StoryList";
-
 import React, { useEffect } from "react";
-
 import Tags from "./Tags";
 import TabsMenu from "./TabsMenu";
-
 import Banner from "./Banner";
-import { TagsApi, StoriesApi } from "../../client";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  HOME_PAGE_LOADED,
   HOME_PAGE_UNLOADED,
   APPLY_TAG_FILTER,
 } from "../../constants/actionTypes";
@@ -17,9 +12,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-
-const storiesApi = new StoriesApi();
-const tagsApi = new TagsApi();
+import { fetchStoriesFavorites } from "../../thunk/thunkStories.js";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -51,19 +44,8 @@ const Home = () => {
     dispatch({ type: APPLY_TAG_FILTER, tag, pager, payload });
   }
 
-  async function fetchFavoritesPayload(dispatch) {
-    const tags = await tagsApi.tagsList();
-    const stories = await storiesApi.storiesList({
-      favoritedByUserUsername: currentUser.username,
-      offset: 0,
-      limit: 10,
-    });
-    const payload = [tags, stories];
-    dispatch({ type: HOME_PAGE_LOADED, payload });
-  }
-
   useEffect(() => {
-    fetchFavoritesPayload(dispatch);
+    dispatch(fetchStoriesFavorites(currentUser.username));
   }, [dispatch]);
 
   useEffect(() => {

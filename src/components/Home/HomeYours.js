@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import Tags from "./Tags";
 import TabsMenu from "./TabsMenu";
 import Banner from "./Banner";
-import { TagsApi, StoriesApi } from "../../client";
 import { useDispatch, useSelector } from "react-redux";
 import {
   HOME_PAGE_LOADED,
@@ -14,9 +13,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-
-const storiesApi = new StoriesApi();
-const tagsApi = new TagsApi();
+import { fetchStoriesYours } from "../../thunk/thunkStories.js";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,19 +45,8 @@ const Home = () => {
     dispatch({ type: APPLY_TAG_FILTER, tag, pager, payload });
   }
 
-  async function fetchYoursPayload(dispatch) {
-    const tags = await tagsApi.tagsList();
-    const stories = await storiesApi.storiesList({
-      ownerUserUsername: currentUser.username,
-      offset: 0,
-      limit: 10,
-    });
-    const payload = [tags, stories];
-    dispatch({ type: HOME_PAGE_LOADED, payload });
-  }
-
   useEffect(() => {
-    fetchYoursPayload(dispatch);
+    dispatch(fetchStoriesYours(currentUser.username));
   }, [dispatch]);
 
   useEffect(() => {

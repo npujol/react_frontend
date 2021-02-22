@@ -2,23 +2,19 @@ import React, { useEffect } from "react";
 import Tags from "./Tags";
 import TabsMenu from "./TabsMenu";
 import StoryList from "../Story/StoryList";
-
 import Banner from "./Banner";
-import { TagsApi, StoriesApi } from "../../client";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  HOME_PAGE_LOADED,
   HOME_PAGE_UNLOADED,
   APPLY_TAG_FILTER,
 } from "../../constants/actionTypes";
+
+import { fetchStoriesGlobal } from "../../thunk/thunkStories.js";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-
-const storiesApi = new StoriesApi();
-const tagsApi = new TagsApi();
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,15 +46,8 @@ const Home = () => {
     dispatch({ type: APPLY_TAG_FILTER, tag, pager, payload });
   }
 
-  async function fetchGlobalPayload(dispatch) {
-    const tags = await tagsApi.tagsList();
-    const stories = await storiesApi.storiesFeedList({ offset: 0, limit: 10 });
-    const payload = [tags, stories];
-    dispatch({ type: HOME_PAGE_LOADED, payload });
-  }
-
   useEffect(() => {
-    fetchGlobalPayload(dispatch);
+    dispatch(fetchStoriesGlobal());
   }, [dispatch]);
 
   useEffect(() => {
