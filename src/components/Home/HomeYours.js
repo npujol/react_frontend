@@ -15,7 +15,6 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
-const Promise = global.Promise;
 const storiesApi = new StoriesApi();
 const tagsApi = new TagsApi();
 
@@ -49,17 +48,19 @@ const Home = () => {
     dispatch({ type: APPLY_TAG_FILTER, tag, pager, payload });
   }
 
+  async function fetchYoursPayload(dispatch) {
+    const tags = await tagsApi.tagsList();
+    const stories = await storiesApi.storiesList({
+      ownerUserUsername: currentUser.username,
+      offset: 0,
+      limit: 10,
+    });
+    const payload = [tags, stories];
+    dispatch({ type: HOME_PAGE_LOADED, payload });
+  }
+
   useEffect(() => {
-    const payload = Promise.all([
-      tagsApi.tagsList(),
-      storiesApi.storiesList({
-        ownerUserUsername: currentUser.username,
-        offset: 0,
-        limit: 10,
-      }),
-    ]);
-    const storiesPromise = storiesApi.storiesList;
-    dispatch({ type: HOME_PAGE_LOADED, storiesPromise, payload });
+    fetchYoursPayload(dispatch);
   }, [dispatch]);
 
   useEffect(() => {
