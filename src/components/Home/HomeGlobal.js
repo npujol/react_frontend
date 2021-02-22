@@ -9,7 +9,7 @@ import {
   APPLY_TAG_FILTER,
 } from "../../constants/actionTypes";
 
-import { fetchStoriesGlobal } from "../../thunk/thunkStories.js";
+import { fetchStoriesGlobal } from "../../thunk/storiesThunk.js";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
