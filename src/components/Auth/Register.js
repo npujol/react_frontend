@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import React, { useEffect } from "react";
-import { AuthApi } from "../../client";
 import { useSelector, useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
@@ -11,9 +10,10 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { REGISTER, REGISTER_PAGE_UNLOADED } from "../../constants/actionTypes";
+import { register } from "../../thunk/authThunk.js";
 
-const authApi = new AuthApi();
+import { REGISTER_PAGE_UNLOADED } from "../../constants/actionTypes";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: "50%",
@@ -72,12 +72,7 @@ const Register = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      const payload = authApi.authRegistrationCreate({
-        email: values.email,
-        password: values.password,
-        username: values.username,
-      });
-      dispatch({ type: REGISTER, payload });
+      dispatch(register(values));
     },
   });
 

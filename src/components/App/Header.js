@@ -12,7 +12,7 @@ import Badge from "@material-ui/core/Badge";
 import { makeStyles } from "@material-ui/core/styles";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Tooltip from "@material-ui/core/Tooltip";
-import { LOGOUT } from "../../constants/actionTypes";
+import { logout } from "../../thunk/authThunk";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -111,7 +111,7 @@ const Header = (props) => {
   const dispatch = useDispatch();
 
   function onClickLogout() {
-    dispatch({ type: LOGOUT });
+    dispatch(logout());
   }
 
   return (

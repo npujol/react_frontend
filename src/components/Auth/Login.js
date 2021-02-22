@@ -12,8 +12,7 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import { useFormik } from "formik";
 import * as yup from "yup";
-
-import { LOGIN, LOGIN_PAGE_UNLOADED } from "../../constants/actionTypes";
+import { login, unloadLogin } from "../../thunk/authThunk.js";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,8 +43,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const authApi = new AuthApi();
-
 const validationSchema = yup.object({
   email: yup
     .string("Enter your email")
@@ -69,20 +66,13 @@ const Login = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      const payload = authApi.authLoginCreate({
-        email: values.email,
-        password: values.password,
-      });
-      dispatch({
-        type: LOGIN,
-        payload: payload,
-      });
+      dispatch(login(values));
     },
   });
 
   useEffect(() => {
-    dispatch({ type: LOGIN_PAGE_UNLOADED });
-  }, [dispatch]);
+    dispatch(unloadLogin());
+  }, []);
 
   useEffect(() => {
     if (errors !== undefined) {
