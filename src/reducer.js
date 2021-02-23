@@ -1,5 +1,4 @@
 import story from "./modules/Story/story.reducer";
-import storyList from "./modules/Story/storyList.reducer";
 import auth from "./modules/Auth/auth.reducer";
 import common from "./modules/App/common.reducer";
 import editor from "./modules/Story/editor.reducer";
@@ -11,7 +10,6 @@ import { combineReducers } from "redux";
 
 export default combineReducers({
   story,
-  storyList,
   auth,
   common,
   editor,

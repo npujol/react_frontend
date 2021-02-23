@@ -1,10 +1,12 @@
 import React from "react";
-import { StoriesApi } from "../../../client";
+import { useDispatch } from "react-redux";
+
+import { v4 as uuidv4 } from "uuid";
+
 import { makeStyles } from "@material-ui/core/styles";
 import Chip from "@material-ui/core/Chip";
-import { useDispatch } from "react-redux";
-import { CHANGE_TAB_REDIRECT } from "../../../constants/actionTypes";
-import { v4 as uuidv4 } from "uuid";
+
+import { changeTabRedirect } from "../home.thunk.js";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,7 +31,7 @@ const Tags = (props) => {
           const handleClick = (ev) => {
             ev.preventDefault();
             const payload = { route: `/tag/${tag}` };
-            dispatch({ type: CHANGE_TAB_REDIRECT, payload });
+            dispatch(changeTabRedirect(payload));
           };
 
           return (

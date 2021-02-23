@@ -1,15 +1,12 @@
 import React, { useState } from "react";
-import { StoriesApi } from "../../../client";
-
 import { useDispatch, useSelector } from "react-redux";
-import {
-  CHANGE_TAB,
-  CHANGE_TAB_REDIRECT,
-} from "../../../constants/actionTypes";
+
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
+
+import { changeTabRedirect } from "../home.thunk.js";
 
 const useStyles = makeStyles({
   root: {
@@ -59,12 +56,12 @@ const TagFilterTab = (props) => {
 
 const TabsMenu = (props) => {
   const classes = useStyles();
-  const currentUser = useSelector((state) => state.common.currentUser);
+  const currentUser = useSelector((state) => state.auth.currentUser);
   const [value, setValue] = useState(props.tab);
   const dispatch = useDispatch();
 
-  function onTabClick(payload) {
-    dispatch({ type: CHANGE_TAB_REDIRECT, payload });
+  function onTabClick(route) {
+    dispatch(changeTabRedirect(route));
   }
   const handleChange = (event, newValue) => {
     event.preventDefault();
@@ -82,18 +79,6 @@ const TabsMenu = (props) => {
             textColor="primary"
             centered
           >
-            {/* <Link to="/">
-              <Tab label=" Global"></Tab>
-            </Link>
-            <Link to="/yours">
-              <Tab label=" Yours"></Tab>
-            </Link>
-            <Link to="/favorites">
-              <Tab label=" Favorites"></Tab>
-            </Link>
-            <Link to={`/${props.tag}`}>
-              <Tab label={props.tag}></Tab>
-            </Link> */}
             <GlobalFeedTab onTabClick={onTabClick} />
             <YourFeedTab currentUser={currentUser} onTabClick={onTabClick} />
             <FavoritesTab currentUser={currentUser} onTabClick={onTabClick} />
@@ -113,23 +98,8 @@ const TabsMenu = (props) => {
             textColor="primary"
             centered
           >
-            {/* <Link to="/"> */}
-            {/* <Tab label=" Global" onClick={handleTabClick}></Tab> */}
-            {/* // </Link> */}
-            {/* <Link to={`/${props.tag}`}> */}
             <TagFilterTab label={props.tag} onClick={onTabClick}></TagFilterTab>
-            {/* </Link> */}
             <GlobalFeedTab onTabClick={onTabClick} />
-            {/* <YourFeedTab
-          token={token}
-          currentUser={currentUser}
-          onTabClick={onTabClick}
-        />
-        <FavoritesTab
-          token={token}
-          currentUser={currentUser}
-          onTabClick={onTabClick}
-        />*/}
             <TagFilterTab tag={props.tag} />
           </Tabs>
         </AppBar>

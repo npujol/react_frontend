@@ -1,4 +1,8 @@
-import { LOAD_HOME_PAGE } from "../../constants/actionTypes.js";
+import {
+  LOAD_HOME_PAGE,
+  UNLOAD_HOME_PAGE,
+  CHANGE_TAB_REDIRECT,
+} from "../../constants/actionTypes.js";
 
 import { TagsApi, StoriesApi } from "../../client";
 const storiesApi = new StoriesApi();
@@ -49,4 +53,12 @@ export const fetchStoriesYours = (username) => {
     const payload = [tags, stories];
     dispatch({ type: LOAD_HOME_PAGE, payload });
   };
+};
+
+export const unloadHome = () => {
+  return { type: UNLOAD_HOME_PAGE };
+};
+
+export const changeTabRedirect = (route) => {
+  return { type: CHANGE_TAB_REDIRECT, payload: route };
 };

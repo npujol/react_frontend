@@ -1,4 +1,4 @@
-import StoryList from "../../Story/components/StoryList";
+import StoryList from "../../Home/components/StoryList";
 import React from "react";
 import { Link } from "react-router-dom";
 import { ProfilesApi, StoriesApi } from "../../../client";
@@ -59,7 +59,7 @@ const FollowUserButton = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  ...state.storyList,
+  ...state.home,
   currentUser: state.common.currentUser,
   profile: state.profile,
 });

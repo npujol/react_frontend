@@ -1,20 +1,18 @@
-import StoryList from "../../Story/components/StoryList";
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import Tags from "./Tags";
-import TabsMenu from "./TabsMenu";
-import Banner from "./Banner";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  LOAD_HOME_PAGE,
-  UNLOAD_HOME_PAGE,
-  APPLY_TAG_FILTER,
-} from "../../../constants/actionTypes";
+
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import { fetchStoriesTag } from  "../home.thunk.js";
+
+import Tags from "./Tags";
+import TabsMenu from "./TabsMenu";
+import Banner from "./Banner";
+import StoryList from "./StoryList";
+
+import { fetchStoriesTag, unloadHome } from "../home.thunk.js";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,22 +35,21 @@ const useStyles = makeStyles((theme) => ({
 
 const Home = () => {
   const classes = useStyles();
-  const currentUser = useSelector((state) => state.common.currentUser);
   const dispatch = useDispatch();
+
+  const currentUser = useSelector((state) => state.auth.currentUser);
   const paramTag = useParams();
   const tags = useSelector((state) => state.home.tags);
-  const storyList = useSelector((state) => state.storyList);
-
-  function onClickTag(tag, pager, payload) {
-    dispatch({ type: APPLY_TAG_FILTER, tag, pager, payload });
-  }
+  const storyList = useSelector((state) => state.home);
 
   useEffect(() => {
     dispatch(fetchStoriesTag(paramTag.tag));
   }, [paramTag, dispatch]);
 
   useEffect(() => {
-    dispatch({ type: UNLOAD_HOME_PAGE });
+    return () => {
+      dispatch(unloadHome());
+    };
   }, [dispatch]);
 
   return (
@@ -63,9 +60,13 @@ const Home = () => {
         </Grid>
         <Grid item xs={9}>
           <Paper className={classes.paper}>
-            <TabsMenu tab={currentUser ? 3 : 1} tag={paramTag.tag} />
+            <TabsMenu
+              tab={currentUser ? 3 : 1}
+              tag={paramTag.tag}
+              currentUser={currentUser}
+            />
             <StoryList
-              pager={storyList.pager}
+              // pager={storyList.pager}
               stories={storyList.stories}
               loading={storyList.loading}
               storiesCount={storyList.storiesCount}
@@ -78,7 +79,7 @@ const Home = () => {
             <Typography variant="h5" component="h5" gutterBottom>
               Popular Tags
             </Typography>
-            <Tags tags={tags} onClickTag={onClickTag} />
+            <Tags tags={tags} />
           </Paper>
         </Grid>
       </Grid>
