@@ -1,14 +1,14 @@
-import StoryList from "../Story/StoryList";
+import StoryList from "../../Story/components/StoryList";
 import React from "react";
-import { A } from "../../Story/components/Story/node_modules/hookrouter";
-import { ProfilesApi, StoriesApi } from "../../client";
+import { Link } from "react-router-dom";
+import { ProfilesApi, StoriesApi } from "../../../client";
 import { connect } from "react-redux";
 import {
   FOLLOW_USER,
   UNFOLLOW_USER,
   PROFILE_PAGE_LOADED,
   PROFILE_PAGE_UNLOADED,
-} from "../../constants/actionTypes";
+} from "../../../constants/actionTypes";
 
 const profilesApi = new ProfilesApi();
 const storiesApi = new StoriesApi();
@@ -16,12 +16,12 @@ const storiesApi = new StoriesApi();
 const EditProfileSettings = (props) => {
   if (props.isUser) {
     return (
-      <A
-        href="/settings"
+      <Link
+        to="/settings"
         className="btn btn-sm btn-outline-secondary action-btn"
       >
         <i className="ion-gear-a"></i> Edit Profile Settings
-      </A>
+      </Link>
     );
   }
   return null;
@@ -101,21 +101,21 @@ class Profile extends React.Component {
     return (
       <ul className="nav nav-pills outline-active">
         <li className="nav-item">
-          <A
+          <Link
             className="nav-link active"
-            href={`/@${this.props.profile.username}`}
+            to={`/@${this.props.profile.username}`}
           >
             My Stories
-          </A>
+          </Link>
         </li>
 
         <li className="nav-item">
-          <A
+          <Link
             className="nav-link"
-            href={`/@${this.props.profile.username}/favorites`}
+            to={`/@${this.props.profile.username}/favorites`}
           >
             Favorited Stories
-          </A>
+          </Link>
         </li>
       </ul>
     );

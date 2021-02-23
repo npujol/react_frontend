@@ -1,4 +1,4 @@
-import StoryList from "../Story/StoryList";
+import StoryList from "../../Story/components/StoryList";
 import React, { useEffect } from "react";
 import Tags from "./Tags";
 import TabsMenu from "./TabsMenu";
@@ -7,12 +7,12 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   HOME_PAGE_UNLOADED,
   APPLY_TAG_FILTER,
-} from "../../constants/actionTypes";
+} from "../../../constants/actionTypes";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import { fetchStoriesFavorites } from "../../thunk/storiesThunk.js";
+import { fetchStoriesFavorites } from "../../../thunk/storiesThunk.js";
 
 const useStyles = makeStyles((theme) => ({
   root: {

@@ -1,9 +1,9 @@
 import React from "react";
-import { StoriesApi } from "../../client";
+import { StoriesApi } from "../../../client";
 import { makeStyles } from "@material-ui/core/styles";
 import Chip from "@material-ui/core/Chip";
 import { useDispatch } from "react-redux";
-import { CHANGE_TAB_REDIRECT } from "../../constants/actionTypes";
+import { CHANGE_TAB_REDIRECT } from "../../../constants/actionTypes";
 import { v4 as uuidv4 } from "uuid";
 
 const useStyles = makeStyles((theme) => ({

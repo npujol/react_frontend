@@ -5,8 +5,8 @@ import { connect } from "react-redux";
 import {
   PROFILE_PAGE_LOADED,
   PROFILE_PAGE_UNLOADED,
-} from "../../constants/actionTypes";
-import { ProfilesApi, StoriesApi } from "../../client";
+} from "../../../constants/actionTypes";
+import { ProfilesApi, StoriesApi } from "../../../client";
 import { Link } from "react-router-dom";
 
 const profilesApi = new ProfilesApi();
@@ -53,12 +53,12 @@ class ProfileFavorites extends Profile {
         </li>
 
         <li className="nav-item">
-          <A
+          <Link
             className="nav-link active"
-            href={`/@${this.props.profile.username}/favorites`}
+            to={`/@${this.props.profile.username}/favorites`}
           >
             Favorited Stories
-          </A>
+          </Link>
         </li>
       </ul>
     );

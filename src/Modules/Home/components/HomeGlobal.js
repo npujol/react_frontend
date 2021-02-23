@@ -1,15 +1,15 @@
 import React, { useEffect } from "react";
 import Tags from "./Tags";
 import TabsMenu from "./TabsMenu";
-import StoryList from "../Story/StoryList";
+import StoryList from "../../Story/components/StoryList";
 import Banner from "./Banner";
 import { useDispatch, useSelector } from "react-redux";
 import {
   HOME_PAGE_UNLOADED,
   APPLY_TAG_FILTER,
-} from "../../constants/actionTypes";
+} from "../../../constants/actionTypes";
 
-import { fetchStoriesGlobal } from "../../thunk/storiesThunk.js";
+import { fetchStoriesGlobal } from "../../../thunk/storiesThunk.js";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";

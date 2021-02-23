@@ -1,4 +1,4 @@
-import StoryList from "../Story/StoryList";
+import StoryList from "../../Story/components/StoryList";
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Tags from "./Tags";
@@ -9,12 +9,12 @@ import {
   HOME_PAGE_LOADED,
   HOME_PAGE_UNLOADED,
   APPLY_TAG_FILTER,
-} from "../../constants/actionTypes";
+} from "../../../constants/actionTypes";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import { fetchStoriesTag } from "../../thunk/storiesThunk.js";
+import { fetchStoriesTag } from "../../../thunk/storiesThunk.js";
 
 const useStyles = makeStyles((theme) => ({
   root: {

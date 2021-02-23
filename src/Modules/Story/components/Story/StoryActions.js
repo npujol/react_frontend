@@ -1,4 +1,4 @@
-import { A } from "hookrouter";
+import { Link } from "react-router-dom";
 import React from "react";
 import { StoriesApi } from "../../../../client";
 import { connect } from "react-redux";
@@ -32,11 +32,11 @@ const StoryActions = (props) => {
   if (props.canModify) {
     return (
       <span>
-        {/* <A
-          href={`/editor/${story.slug}`}
+        {/* <Link
+          to={`/editor/${story.slug}`}
           >
           <i className="ion-edit"></i> Edit Story
-        </A> */}
+        </Link> */}
 
         <button aria-label="delete" className={classes.margin} onClick={del}>
           <DeleteIcon fontSize="small" />

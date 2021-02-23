@@ -1,5 +1,5 @@
 import StoryPreview from "./StoryPreview";
-import ListPagination from "../Common/ListPagination";
+import ListPagination from "../../Common/components/ListPagination";
 import React from "react";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";

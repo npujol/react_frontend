@@ -1,6 +1,6 @@
 import StoryMeta from "./StoryMeta";
 import CommentContainer from "./CommentContainer";
-import { A } from "hookrouter";
+import { Link } from "react-router-dom";
 
 import React from "react";
 import { StoriesApi } from "../../../../client";

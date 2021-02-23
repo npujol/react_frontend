@@ -12,7 +12,7 @@ import Badge from "@material-ui/core/Badge";
 import { makeStyles } from "@material-ui/core/styles";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Tooltip from "@material-ui/core/Tooltip";
-import { logout } from "../../thunk/authThunk";
+import { logout } from "../../../thunk/authThunk";
 
 const useStyles = makeStyles((theme) => ({
   root: {

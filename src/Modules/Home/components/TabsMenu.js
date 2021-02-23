@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import { StoriesApi } from "../../client";
+import { StoriesApi } from "../../../client";
 
 import { useDispatch, useSelector } from "react-redux";
-import { CHANGE_TAB, CHANGE_TAB_REDIRECT } from "../../constants/actionTypes";
+import {
+  CHANGE_TAB,
+  CHANGE_TAB_REDIRECT,
+} from "../../../constants/actionTypes";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";

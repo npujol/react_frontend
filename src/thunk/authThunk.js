@@ -50,7 +50,7 @@ export const unloadLogin = () => {
 export const logout = () => {
   return async (dispatch) => {
     window.localStorage.setItem("jwt", "");
-    JwtService.destroyCredentials();
+    jwtService.destroyCredentials();
     dispatch({ type: LOGOUT });
   };
 };
