@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { Switch, BrowserRouter as Router } from "react-router-dom";
 import { store } from "./store";
 
-import App from "./Modules/App/components/App.js";
+import App from "./modules/App/components/App.js";
 
 import { ApiClient } from "./client";
 
