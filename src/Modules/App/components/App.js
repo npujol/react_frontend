@@ -1,26 +1,26 @@
-import { APP_LOAD, REDIRECT } from "../../constants/actionTypes";
+import { APP_LOAD, REDIRECT } from "../../../constants/actionTypes";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Route, Switch } from "react-router-dom";
-import JwtService from "../../jwt.service";
+import JwtService from "../../../jwt.service";
 import Header from "./Header";
-import Story from "../Story/Story";
-import Editor from "../Story/Editor";
-import HomeGlobal from "../Home/HomeGlobal";
-import HomeYours from "../Home/HomeYours";
-import HomeFavorites from "../Home/HomeFavorites";
-import HomeTag from "../Home/HomeTag";
-import Login from "../Auth/Login";
-import Profile from "../Profile/Profile";
-import ProfileFavorites from "../Profile/ProfileFavorites";
-import Register from "../Auth/Register";
-import Settings from "../Profile/Settings";
-import { UsersApi } from "../../client";
+import Story from "../../Story/components/Story";
+import Editor from "../../../components/Story/Editor";
+import HomeGlobal from "../../../components/Home/HomeGlobal";
+import HomeYours from "../../../components/Home/HomeYours";
+import HomeFavorites from "../../../components/Home/HomeFavorites";
+import HomeTag from "../../../components/Home/HomeTag";
+import Login from "../../Auth/components/Login";
+import Profile from "../../../components/Profile/Profile";
+import ProfileFavorites from "../../../components/Profile/ProfileFavorites";
+import Register from "../../../components/Auth/Register";
+import Settings from "../../../components/Profile/Settings";
+import { UsersApi } from "../../../client";
 
 import React, { Fragment, Suspense, useEffect } from "react";
 import { MuiThemeProvider, CssBaseline } from "@material-ui/core";
-import theme from "../../theme";
-import GlobalStyles from "../../GlobalStyles";
+import theme from "../../../theme";
+import GlobalStyles from "../../../GlobalStyles";
 
 const usersApi = new UsersApi();
 

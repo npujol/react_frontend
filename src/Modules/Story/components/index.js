@@ -1,14 +1,14 @@
 import StoryMeta from "./StoryMeta";
 import CommentContainer from "./CommentContainer";
-import { A } from "hookrouter";
+import { A } from "../../../Modules/Story/components/Story/node_modules/hookrouter";
 
 import React from "react";
-import { StoriesApi } from "../../../client";
+import { StoriesApi } from "../../../../client";
 import { connect } from "react-redux";
 import {
   STORY_PAGE_LOADED,
   STORY_PAGE_UNLOADED,
-} from "../../../constants/actionTypes";
+} from "../../../../constants/actionTypes";
 import StoryActions from "./StoryActions";
 
 import { makeStyles } from "@material-ui/core/styles";

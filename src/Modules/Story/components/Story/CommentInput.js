@@ -1,7 +1,7 @@
 import React from 'react';
-import { StoriesApi } from "../../../client"
+import { StoriesApi } from "../../../../client"
 import { connect } from 'react-redux';
-import { ADD_COMMENT } from '../../../constants/actionTypes';
+import { ADD_COMMENT } from '../../../../constants/actionTypes';
 
 const storiesApi = new StoriesApi();
 

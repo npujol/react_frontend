@@ -1,4 +1,4 @@
-import ListErrors from '../Common/ListErrors';
+import ListErrors from '../../Modules/Common/components/ListErrors';
 import React from 'react';
 import { ProfilesApi } from "../../client"
 import { connect } from 'react-redux';

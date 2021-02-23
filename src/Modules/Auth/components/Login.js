@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import { AuthApi } from "../../client";
+import { AuthApi } from "../../../client";
 import { useSelector, useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
@@ -12,7 +12,7 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { login, unloadLogin } from "../../thunk/authThunk.js";
+import { login, unloadLogin } from "../../../thunk/authThunk.js";
 
 const useStyles = makeStyles((theme) => ({
   root: {

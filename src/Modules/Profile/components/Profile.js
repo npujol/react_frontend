@@ -1,6 +1,6 @@
 import StoryList from "../Story/StoryList";
 import React from "react";
-import { A } from "hookrouter";
+import { A } from "../../Story/components/Story/node_modules/hookrouter";
 import { ProfilesApi, StoriesApi } from "../../client";
 import { connect } from "react-redux";
 import {
