@@ -1,28 +1,25 @@
-import { LOAD_APP, REDIRECT } from "../../../constants/actionTypes.js";
-import { useHistory } from "react-router-dom";
+import React, { Fragment, Suspense, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Route, Switch } from "react-router-dom";
-import JwtService from "../../../jwt.service";
+import { Route, Switch, useHistory } from "react-router-dom";
+
 import Header from "./Header";
+import Register from "../../Auth/components/Register";
+import Login from "../../Auth/components/Login";
 import Story from "../../Story/components/Story";
 import Editor from "../../Story/components/Editor";
 import HomeGlobal from "../../Home/components/HomeGlobal";
 import HomeYours from "../../Home/components/HomeYours";
 import HomeFavorites from "../../Home/components/HomeFavorites";
 import HomeTag from "../../Home/components/HomeTag";
-import Login from "../../Auth/components/Login";
 import Profile from "../../Profile/components/Profile";
 import ProfileFavorites from "../../Profile/components/ProfileFavorites";
-import Register from "../../Auth/components/Register";
 import Settings from "../../Profile/components/Settings";
-import { UsersApi } from "../../../client";
 
-import React, { Fragment, Suspense, useEffect } from "react";
 import { MuiThemeProvider, CssBaseline } from "@material-ui/core";
+
 import theme from "../../../theme";
 import GlobalStyles from "../../../GlobalStyles";
-
-const usersApi = new UsersApi();
+import { load_app, redirect } from "../common.thunk.js";
 
 const App = () => {
   const appLoaded = useSelector((state) => state.common.appLoaded);
@@ -33,19 +30,14 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const token = window.localStorage.getItem("jwt");
-    if (token) {
-      JwtService.setHeader();
-    }
-    const payload = token ? usersApi.usersRead(JwtService.getUsername()) : null;
-    dispatch({ type: LOAD_APP, payload, token, skipTracking: true });
+    dispatch(load_app());
   }, [dispatch]);
 
   useEffect(() => {
     console.log("redirectTo", redirectTo, "history", history.location);
     if (redirectTo) {
       history.push(redirectTo);
-      dispatch({ type: REDIRECT });
+      dispatch(redirect());
     }
   }, [dispatch, history, redirectTo]);
 

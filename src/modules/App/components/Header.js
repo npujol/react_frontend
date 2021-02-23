@@ -1,18 +1,21 @@
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+
+import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import HomeIcon from "@material-ui/icons/Home";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import NotificationsIcon from "@material-ui/icons/Notifications";
 import Badge from "@material-ui/core/Badge";
-import { makeStyles } from "@material-ui/core/styles";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Tooltip from "@material-ui/core/Tooltip";
-import { logout } from "../../Auth/auth.thunk.js";
+import IconButton from "@material-ui/core/IconButton";
+
+import HomeIcon from "@material-ui/icons/Home";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import NotificationsIcon from "@material-ui/icons/Notifications";
+
+import { logout } from "../common.thunk.js";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -77,7 +80,7 @@ const LoggedInView = (props) => {
         <Tooltip title="Your profile" placement="bottom">
           <Link to={`/@${props.currentUser.username}`}>
             <IconButton aria-label="The final profile" color="default">
-              <AccountCircle />
+              <AccountCircleIcon />
             </IconButton>
           </Link>
         </Tooltip>
