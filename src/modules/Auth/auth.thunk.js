@@ -1,11 +1,11 @@
-import { AuthApi } from "../client";
+import { AuthApi } from "../../client";
 import {
   UNLOAD_LOGIN_PAGE,
   LOGIN,
   LOGOUT,
   REGISTER,
-} from "../constants/actionTypes";
-import jwtService from "../jwt.service";
+} from "../../constants/actionTypes";
+import jwtService from "../../jwt.service";
 
 const authApi = new AuthApi();
 

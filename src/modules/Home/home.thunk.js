@@ -1,6 +1,6 @@
-import { LOAD_HOME_PAGE } from "../constants/actionTypes.js";
+import { LOAD_HOME_PAGE } from "../../constants/actionTypes.js";
 
-import { TagsApi, StoriesApi } from "../client";
+import { TagsApi, StoriesApi } from "../../client";
 const storiesApi = new StoriesApi();
 const tagsApi = new TagsApi();
 

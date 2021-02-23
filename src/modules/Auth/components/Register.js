@@ -10,7 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { register } from "../../../thunk/authThunk.js";
+import { register } from "../auth.thunk.js";
 
 import { UNLOAD_REGISTER_PAGE } from "../../../constants/actionTypes";
 

@@ -10,7 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { login, unloadLogin } from "../../../thunk/authThunk.js";
+import { login, unloadLogin } from "../auth.thunk.js";
 
 const useStyles = makeStyles((theme) => ({
   root: {
