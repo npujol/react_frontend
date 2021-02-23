@@ -84,13 +84,13 @@ const Register = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (emailError !== undefined) {
+    if (emailError) {
       formik.setErrors({ email: emailError });
     }
   }, [emailError, formik]);
 
   useEffect(() => {
-    if (usernameError !== undefined) {
+    if (usernameError) {
       formik.setErrors({ username: usernameError });
     }
   }, [usernameError, formik]);

@@ -6,6 +6,8 @@ import {
   UPDATE_FIELD_AUTH,
   REGISTER_SUCCESS,
   REGISTER_FAILED,
+  UNLOAD_LOGIN_PAGE,
+  UNLOAD_REGISTER_PAGE,
 } from "../../constants/actionTypes";
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -51,6 +53,19 @@ export default (state = {}, action) => {
       };
     case LOGOUT:
       return { ...state, redirectTo: "/", token: null, currentUser: null };
+    case UNLOAD_LOGIN_PAGE:
+      return {
+        ...state,
+        viewChangeCounter: state.viewChangeCounter + 1,
+        errors: null,
+      };
+    case UNLOAD_REGISTER_PAGE:
+      return {
+        ...state,
+        viewChangeCounter: state.viewChangeCounter + 1,
+        usernameError: null,
+        emailError: null,
+      };
     default:
       return state;
   }

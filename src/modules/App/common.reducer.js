@@ -67,8 +67,6 @@ export default (state = defaultState, action) => {
     case UNLOAD_PROFILE_PAGE:
     case UNLOAD_PROFILE_FAVORITES_PAGE:
     case UNLOAD_SETTINGS_PAGE:
-    case UNLOAD_LOGIN_PAGE:
-    case UNLOAD_REGISTER_PAGE:
       return { ...state, viewChangeCounter: state.viewChangeCounter + 1 };
     default:
       return state;

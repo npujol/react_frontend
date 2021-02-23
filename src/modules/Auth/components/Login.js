@@ -78,7 +78,7 @@ const Login = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (errors !== undefined) {
+    if (errors) {
       alert(errors);
     }
   }, [errors]);
