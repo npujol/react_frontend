@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+
+import { useFormik } from "formik";
+import * as yup from "yup";
+
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -8,11 +12,8 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
-import { useFormik } from "formik";
-import * as yup from "yup";
-import { register } from "../auth.thunk.js";
 
-import { UNLOAD_REGISTER_PAGE } from "../../../constants/actionTypes";
+import { register, unloadRegister } from "../auth.thunk.js";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,8 +61,8 @@ const validationSchema = yup.object({
 
 const Register = () => {
   const classes = useStyles();
-  const emailError = useSelector((state) => state.common.emailError);
-  const usernameError = useSelector((state) => state.common.usernameError);
+  const emailError = useSelector((state) => state.auth.emailError);
+  const usernameError = useSelector((state) => state.auth.usernameError);
   const dispatch = useDispatch();
 
   const formik = useFormik({
@@ -77,7 +78,9 @@ const Register = () => {
   });
 
   useEffect(() => {
-    dispatch({ type: UNLOAD_REGISTER_PAGE });
+    return () => {
+      dispatch(unloadRegister());
+    };
   }, [dispatch]);
 
   useEffect(() => {

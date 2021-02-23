@@ -1,8 +1,7 @@
 import {
   LOAD_APP,
   REDIRECT,
-  LOGIN,
-  REGISTER,
+  SET_REDIRECT,
   LOGOUT,
   SUBMIT_STORY,
   SAVE_SETTINGS,
@@ -32,7 +31,7 @@ export default (state = defaultState, action) => {
     case LOAD_APP:
       return {
         ...state,
-        token: action.token || null,
+        token: action.payload ? action.payload.token : null,
         appLoaded: true,
         currentUser: action.payload ? action.payload.profile : null,
         offline: action.payload ? true : false,
@@ -40,8 +39,7 @@ export default (state = defaultState, action) => {
       };
     case REDIRECT:
       return { ...state, redirectTo: null };
-    case LOGOUT:
-      return { ...state, redirectTo: "/", token: null, currentUser: null };
+   
     case SUBMIT_STORY:
       const redirectUrl = `/story/${action.payload.slug}`;
       return { ...state, redirectTo: redirectUrl };
@@ -56,28 +54,11 @@ export default (state = defaultState, action) => {
         ...state,
         redirectTo: action.payload.route,
       };
-    case LOGIN:
+    case SET_REDIRECT:
       return {
         ...state,
-        redirectTo: action.error !== undefined ? null : "/",
-        token: action.error !== undefined ? null : action.payload.token,
-        currentUser: action.error !== undefined ? null : action.payload.profile,
-        errors: action.error ? action.payload.errors.error : undefined,
-        inProgress: true,
+        redirectTo: action.payload.route,
       };
-    case REGISTER:
-      return {
-        ...state,
-        redirectTo: action.error !== undefined ? null : "/",
-        token: action.error !== undefined ? null : action.payload.token,
-        currentUser: action.error !== undefined ? null : action.payload.profile,
-        usernameError: action.error
-          ? action.payload.errors.username
-          : undefined,
-        emailError: action.error ? action.payload.errors.email : undefined,
-        inProgress: true,
-      };
-
     case DELETE_STORY:
       return { ...state, redirectTo: "/" };
     case UNLOAD_STORY_PAGE:

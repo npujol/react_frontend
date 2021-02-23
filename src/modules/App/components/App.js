@@ -24,7 +24,7 @@ import { load_app, redirect } from "../common.thunk.js";
 const App = () => {
   const appLoaded = useSelector((state) => state.common.appLoaded);
   const appName = useSelector((state) => state.common.appName);
-  const currentUser = useSelector((state) => state.common.currentUser);
+  const currentUser = useSelector((state) => state.auth.currentUser);
   const redirectTo = useSelector((state) => state.common.redirectTo);
   const history = useHistory();
   const dispatch = useDispatch();

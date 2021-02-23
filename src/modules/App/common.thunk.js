@@ -1,5 +1,10 @@
 import { UsersApi } from "../../client";
-import { LOAD_APP, REDIRECT, LOGOUT } from "../../constants/actionTypes";
+import {
+  LOAD_APP,
+  REDIRECT,
+  LOGOUT,
+  SET_REDIRECT,
+} from "../../constants/actionTypes";
 import jwtService from "../../jwt.service";
 
 const usersApi = new UsersApi();
@@ -15,18 +20,26 @@ export const logout = () => {
 export const load_app = () => {
   return async (dispatch) => {
     const token = window.localStorage.getItem("jwt");
+    console.log("token in load_app", token);
     if (token) {
       jwtService.setHeader();
+      const payload = { user: usersApi.usersRead(jwtService.getUsername()) };
+      dispatch({ type: LOAD_APP, payload });
+    } else {
+      dispatch({ type: LOAD_APP });
     }
-    const payload = token ? usersApi.usersRead(JwtService.getUsername()) : null;
-    dispatch({ type: LOAD_APP, payload, token, skipTracking: true });
   };
 };
 
 export const redirect = () => {
   return async (dispatch) => {
-    window.localStorage.setItem("jwt", "");
-    jwtService.destroyCredentials();
-    dispatch({ type: LOGOUT });
+    dispatch({ type: REDIRECT });
+  };
+};
+
+export const setRedirect = (route) => {
+  return async (dispatch) => {
+    const payload = { route: route };
+    dispatch({ type: SET_REDIRECT, payload });
   };
 };
