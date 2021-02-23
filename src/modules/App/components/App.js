@@ -45,7 +45,7 @@ const App = () => {
     return (
       <MuiThemeProvider theme={theme}>
         <CssBaseline />
-        <GlobalStyles />
+        {/* <GlobalStyles /> */}
         <div>
           <Header
             appName={appName}
