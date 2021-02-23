@@ -12,7 +12,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { register } from "../../../thunk/authThunk.js";
 
-import { REGISTER_PAGE_UNLOADED } from "../../../constants/actionTypes";
+import { UNLOAD_REGISTER_PAGE } from "../../../constants/actionTypes";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -77,7 +77,7 @@ const Register = () => {
   });
 
   useEffect(() => {
-    dispatch({ type: REGISTER_PAGE_UNLOADED });
+    dispatch({ type: UNLOAD_REGISTER_PAGE });
   }, [dispatch]);
 
   useEffect(() => {

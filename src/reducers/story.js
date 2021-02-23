@@ -1,6 +1,6 @@
 import {
-  STORY_PAGE_LOADED,
-  STORY_PAGE_UNLOADED,
+  LOAD_STORY_PAGE,
+  UNLOAD_STORY_PAGE,
   ADD_COMMENT,
   DELETE_COMMENT,
 } from "../constants/actionTypes";
@@ -9,13 +9,13 @@ import {
 export default (state = {}, action) => {
   // console.log("storyjs", action.payload);
   switch (action.type) {
-    case STORY_PAGE_LOADED:
+    case LOAD_STORY_PAGE:
       return {
         ...state,
         story: action.payload[0] ? action.payload[0] : [],
         comments: action.payload[1] ? action.payload[1].results : [],
       };
-    case STORY_PAGE_UNLOADED:
+    case UNLOAD_STORY_PAGE:
       return {};
     case ADD_COMMENT:
       return {

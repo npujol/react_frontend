@@ -6,8 +6,8 @@ import React from "react";
 import { StoriesApi } from "../../../../client";
 import { connect } from "react-redux";
 import {
-  STORY_PAGE_LOADED,
-  STORY_PAGE_UNLOADED,
+  LOAD_STORY_PAGE,
+  UNLOAD_STORY_PAGE,
 } from "../../../../constants/actionTypes";
 import StoryActions from "./StoryActions";
 
@@ -87,8 +87,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onLoad: (payload) => dispatch({ type: STORY_PAGE_LOADED, payload }),
-  onUnload: () => dispatch({ type: STORY_PAGE_UNLOADED }),
+  onLoad: (payload) => dispatch({ type: LOAD_STORY_PAGE, payload }),
+  onUnload: () => dispatch({ type: UNLOAD_STORY_PAGE }),
 });
 
 class Story extends React.Component {

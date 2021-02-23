@@ -1,6 +1,6 @@
 import { AuthApi } from "../client";
 import {
-  LOGIN_PAGE_UNLOADED,
+  UNLOAD_LOGIN_PAGE,
   LOGIN,
   LOGOUT,
   REGISTER,
@@ -44,7 +44,7 @@ export const register = (values) => {
 };
 
 export const unloadLogin = () => {
-  return { type: LOGIN_PAGE_UNLOADED };
+  return { type: UNLOAD_LOGIN_PAGE };
 };
 
 export const logout = () => {

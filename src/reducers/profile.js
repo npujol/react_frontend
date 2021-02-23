@@ -1,24 +1,24 @@
 import {
-  PROFILE_PAGE_LOADED,
-  PROFILE_PAGE_UNLOADED,
+  LOAD_PROFILE_PAGE,
+  UNLOAD_PROFILE_PAGE,
   FOLLOW_USER,
-  UNFOLLOW_USER
-} from '../constants/actionTypes';
+  UNFOLLOW_USER,
+} from "../constants/actionTypes";
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (state = {}, action) => {
   // console.log("profile reducer", action.payload);
   switch (action.type) {
-    case PROFILE_PAGE_LOADED:
+    case LOAD_PROFILE_PAGE:
       return {
-        ...action.payload[0]
+        ...action.payload[0],
       };
-    case PROFILE_PAGE_UNLOADED:
+    case UNLOAD_PROFILE_PAGE:
       return {};
     case FOLLOW_USER:
     case UNFOLLOW_USER:
       return {
-        ...action.payload
+        ...action.payload,
       };
     default:
       return state;

@@ -3,8 +3,8 @@ import React from "react";
 import { ProfilesApi } from "../../../client";
 import { connect } from "react-redux";
 import {
-  SETTINGS_SAVED,
-  SETTINGS_PAGE_UNLOADED,
+  SAVE_SETTINGS,
+  UNLOAD_SETTINGS_PAGE,
   LOGOUT,
 } from "../../../constants/actionTypes";
 
@@ -140,10 +140,10 @@ const mapDispatchToProps = (dispatch) => ({
   onClickLogout: () => dispatch({ type: LOGOUT }),
   onSubmitForm: (user) =>
     dispatch({
-      type: SETTINGS_SAVED,
+      type: SAVE_SETTINGS,
       payload: profilesApi.profilesUpdate(user.username, user),
     }),
-  onUnload: () => dispatch({ type: SETTINGS_PAGE_UNLOADED }),
+  onUnload: () => dispatch({ type: UNLOAD_SETTINGS_PAGE }),
 });
 
 class Settings extends React.Component {

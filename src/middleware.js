@@ -1,7 +1,7 @@
 import JwtService from "./jwt.service";
 import {
   ASYNC_START,
-  ASYNC_END,
+  END_ASYNC,
   LOGIN,
   LOGOUT,
   REGISTER,
@@ -22,7 +22,7 @@ const promiseMiddleware = (store) => (next) => (action) => {
         }
         console.log("RESULT", res);
         action.payload = res;
-        store.dispatch({ type: ASYNC_END, promise: action.payload });
+        store.dispatch({ type: END_ASYNC, promise: action.payload });
         store.dispatch(action);
       },
       (error) => {
@@ -34,7 +34,7 @@ const promiseMiddleware = (store) => (next) => (action) => {
         action.error = true;
         action.payload = error.response;
         if (!action.skipTracking) {
-          store.dispatch({ type: ASYNC_END, promise: action.payload });
+          store.dispatch({ type: END_ASYNC, promise: action.payload });
         }
         store.dispatch(action);
       }

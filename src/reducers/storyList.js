@@ -1,23 +1,23 @@
 import {
-  STORY_FAVORITED,
-  STORY_UNFAVORITED,
+  SET_STORY_FAVORITED,
+  SET_STORY_UNFAVORITED,
   SET_PAGE,
   APPLY_TAG_FILTER,
-  HOME_PAGE_LOADED,
-  HOME_PAGE_UNLOADED,
+  LOAD_HOME_PAGE,
+  UNLOAD_HOME_PAGE,
   CHANGE_TAB,
-  PROFILE_PAGE_LOADED,
-  PROFILE_PAGE_UNLOADED,
-  PROFILE_FAVORITES_PAGE_LOADED,
-  PROFILE_FAVORITES_PAGE_UNLOADED,
+  LOAD_PROFILE_PAGE,
+  UNLOAD_PROFILE_PAGE,
+  LOAD_PROFILE_FAVORITES_PAGE,
+  UNLOAD_PROFILE_FAVORITES_PAGE,
 } from "../constants/actionTypes";
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (state = {}, action) => {
   console.log("StoryList", action.payload);
   switch (action.type) {
-    case STORY_FAVORITED:
-    case STORY_UNFAVORITED:
+    case SET_STORY_FAVORITED:
+    case SET_STORY_UNFAVORITED:
       return {
         ...state,
         stories: state.stories.map((story) => {
@@ -52,7 +52,7 @@ export default (state = {}, action) => {
         tag: action.tag,
         currentPage: 0,
       };
-    case HOME_PAGE_LOADED:
+    case LOAD_HOME_PAGE:
       return {
         ...state,
         pager: action.pager,
@@ -68,7 +68,7 @@ export default (state = {}, action) => {
           action.payload !== undefined ? action.payload[1].count : 0,
         currentPage: 0,
       };
-    case HOME_PAGE_UNLOADED:
+    case UNLOAD_HOME_PAGE:
       return {};
     case CHANGE_TAB:
       return {
@@ -84,8 +84,8 @@ export default (state = {}, action) => {
         currentPage: 0,
         tag: null,
       };
-    case PROFILE_PAGE_LOADED:
-    case PROFILE_FAVORITES_PAGE_LOADED:
+    case LOAD_PROFILE_PAGE:
+    case LOAD_PROFILE_FAVORITES_PAGE:
       return {
         ...state,
         pager: action.pager,
@@ -97,8 +97,8 @@ export default (state = {}, action) => {
           action.payload[1] !== undefined ? action.payload[1].count : 0,
         currentPage: 0,
       };
-    case PROFILE_PAGE_UNLOADED:
-    case PROFILE_FAVORITES_PAGE_UNLOADED:
+    case UNLOAD_PROFILE_PAGE:
+    case UNLOAD_PROFILE_FAVORITES_PAGE:
       return {};
     default:
       return state;

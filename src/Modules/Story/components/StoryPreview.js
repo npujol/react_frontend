@@ -1,8 +1,8 @@
 import React from "react";
 import { StoriesApi } from "../../../client";
 import {
-  STORY_FAVORITED,
-  STORY_UNFAVORITED,
+  SET_STORY_FAVORITED,
+  SET_STORY_UNFAVORITED,
 } from "../../../constants/actionTypes";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -52,12 +52,12 @@ const StoryPreview = (props) => {
     ev.preventDefault();
     if (story.favorited === "true") {
       dispatch({
-        type: STORY_UNFAVORITED,
+        type: SET_STORY_UNFAVORITED,
         payload: storiesApi.storiesUnfavorite(story.slug, {}),
       });
     } else {
       dispatch({
-        type: STORY_FAVORITED,
+        type: SET_STORY_FAVORITED,
         payload: storiesApi.storiesFavorite(story.slug, {}),
       });
     }

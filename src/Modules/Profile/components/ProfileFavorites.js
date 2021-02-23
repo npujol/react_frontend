@@ -3,8 +3,8 @@ import React from "react";
 
 import { connect } from "react-redux";
 import {
-  PROFILE_PAGE_LOADED,
-  PROFILE_PAGE_UNLOADED,
+  LOAD_PROFILE_PAGE,
+  UNLOAD_PROFILE_PAGE,
 } from "../../../constants/actionTypes";
 import { ProfilesApi, StoriesApi } from "../../../client";
 import { Link } from "react-router-dom";
@@ -14,8 +14,8 @@ const storiesApi = new StoriesApi();
 
 const mapDispatchToProps = (dispatch) => ({
   onLoad: (pager, payload) =>
-    dispatch({ type: PROFILE_PAGE_LOADED, pager, payload }),
-  onUnload: () => dispatch({ type: PROFILE_PAGE_UNLOADED }),
+    dispatch({ type: LOAD_PROFILE_PAGE, pager, payload }),
+  onUnload: () => dispatch({ type: UNLOAD_PROFILE_PAGE }),
 });
 
 class ProfileFavorites extends Profile {

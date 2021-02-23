@@ -5,7 +5,7 @@ import StoryList from "../../Story/components/StoryList";
 import Banner from "./Banner";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  HOME_PAGE_UNLOADED,
+  UNLOAD_HOME_PAGE,
   APPLY_TAG_FILTER,
 } from "../../../constants/actionTypes";
 
@@ -51,7 +51,7 @@ const Home = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch({ type: HOME_PAGE_UNLOADED });
+    dispatch({ type: UNLOAD_HOME_PAGE });
   }, [dispatch]);
 
   return (

@@ -4,10 +4,10 @@ import { StoriesApi } from "../../../client";
 import { connect } from "react-redux";
 import {
   ADD_TAG,
-  EDITOR_PAGE_LOADED,
+  LOAD_EDITOR_PAGE,
   REMOVE_TAG,
-  STORY_SUBMITTED,
-  EDITOR_PAGE_UNLOADED,
+  SUBMIT_STORY,
+  UNLOAD_EDITOR_PAGE,
   UPDATE_FIELD_EDITOR,
 } from "../../../constants/actionTypes";
 
@@ -19,10 +19,10 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   onAddTag: () => dispatch({ type: ADD_TAG }),
-  onLoad: (payload) => dispatch({ type: EDITOR_PAGE_LOADED, payload }),
+  onLoad: (payload) => dispatch({ type: LOAD_EDITOR_PAGE, payload }),
   onRemoveTag: (tag) => dispatch({ type: REMOVE_TAG, tag }),
-  onSubmit: (payload) => dispatch({ type: STORY_SUBMITTED, payload }),
-  onUnload: (payload) => dispatch({ type: EDITOR_PAGE_UNLOADED, payload }),
+  onSubmit: (payload) => dispatch({ type: SUBMIT_STORY, payload }),
+  onUnload: (payload) => dispatch({ type: UNLOAD_EDITOR_PAGE, payload }),
   onUpdateField: (key, value) =>
     dispatch({ type: UPDATE_FIELD_EDITOR, key, value }),
 });

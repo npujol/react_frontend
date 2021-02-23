@@ -1,4 +1,4 @@
-import { HOME_PAGE_LOADED } from "../constants/actionTypes.js";
+import { LOAD_HOME_PAGE } from "../constants/actionTypes.js";
 
 import { TagsApi, StoriesApi } from "../client";
 const storiesApi = new StoriesApi();
@@ -9,7 +9,7 @@ export const fetchStoriesGlobal = () => {
     const tags = await tagsApi.tagsList();
     const stories = await storiesApi.storiesFeedList({ offset: 0, limit: 10 });
     const payload = [tags, stories];
-    dispatch({ type: HOME_PAGE_LOADED, payload });
+    dispatch({ type: LOAD_HOME_PAGE, payload });
   };
 };
 export const fetchStoriesFavorites = (username) => {
@@ -21,7 +21,7 @@ export const fetchStoriesFavorites = (username) => {
       limit: 10,
     });
     const payload = [tags, stories];
-    dispatch({ type: HOME_PAGE_LOADED, payload });
+    dispatch({ type: LOAD_HOME_PAGE, payload });
   };
 };
 
@@ -34,7 +34,7 @@ export const fetchStoriesTag = (tag) => {
       limit: 10,
     });
     const payload = [tags, stories];
-    dispatch({ type: HOME_PAGE_LOADED, payload });
+    dispatch({ type: LOAD_HOME_PAGE, payload });
   };
 };
 
@@ -47,6 +47,6 @@ export const fetchStoriesYours = (username) => {
       limit: 10,
     });
     const payload = [tags, stories];
-    dispatch({ type: HOME_PAGE_LOADED, payload });
+    dispatch({ type: LOAD_HOME_PAGE, payload });
   };
 };

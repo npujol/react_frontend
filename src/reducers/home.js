@@ -1,9 +1,9 @@
-import { HOME_PAGE_LOADED, HOME_PAGE_UNLOADED } from "../constants/actionTypes";
+import { LOAD_HOME_PAGE, UNLOAD_HOME_PAGE } from "../constants/actionTypes";
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (state = {}, action) => {
   switch (action.type) {
-    case HOME_PAGE_LOADED:
+    case LOAD_HOME_PAGE:
       return {
         ...state,
         tags: action.payload
@@ -11,7 +11,7 @@ export default (state = {}, action) => {
           : [],
         tab: 0,
       };
-    case HOME_PAGE_UNLOADED:
+    case UNLOAD_HOME_PAGE:
       return {};
     default:
       return state;

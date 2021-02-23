@@ -1,4 +1,4 @@
-import { APP_LOAD, REDIRECT } from "../../../constants/actionTypes.js";
+import { LOAD_APP, REDIRECT } from "../../../constants/actionTypes.js";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Route, Switch } from "react-router-dom";
@@ -38,7 +38,7 @@ const App = () => {
       JwtService.setHeader();
     }
     const payload = token ? usersApi.usersRead(JwtService.getUsername()) : null;
-    dispatch({ type: APP_LOAD, payload, token, skipTracking: true });
+    dispatch({ type: LOAD_APP, payload, token, skipTracking: true });
   }, [dispatch]);
 
   useEffect(() => {

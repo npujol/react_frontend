@@ -6,8 +6,8 @@ import TabsMenu from "./TabsMenu";
 import Banner from "./Banner";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  HOME_PAGE_LOADED,
-  HOME_PAGE_UNLOADED,
+  LOAD_HOME_PAGE,
+  UNLOAD_HOME_PAGE,
   APPLY_TAG_FILTER,
 } from "../../../constants/actionTypes";
 import { makeStyles } from "@material-ui/core/styles";
@@ -52,7 +52,7 @@ const Home = () => {
   }, [paramTag, dispatch]);
 
   useEffect(() => {
-    dispatch({ type: HOME_PAGE_UNLOADED });
+    dispatch({ type: UNLOAD_HOME_PAGE });
   }, [dispatch]);
 
   return (

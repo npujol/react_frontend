@@ -8,8 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
 import {
-  HOME_PAGE_LOADED,
-  HOME_PAGE_UNLOADED,
+  LOAD_HOME_PAGE,
+  UNLOAD_HOME_PAGE,
   APPLY_TAG_FILTER,
 } from "../../../constants/actionTypes";
 import { makeStyles } from "@material-ui/core/styles";
@@ -51,8 +51,8 @@ const useStyles = makeStyles((theme) => ({
 //   onClickTag: (tag, pager, payload) =>
 //     dispatch({ type: APPLY_TAG_FILTER, tag, pager, payload }),
 //   onLoad: (tab, pager, payload) =>
-//     dispatch({ type: HOME_PAGE_LOADED, tab, pager, payload }),
-//   onUnload: () => dispatch({ type: HOME_PAGE_UNLOADED }),
+//     dispatch({ type: LOAD_HOME_PAGE, tab, pager, payload }),
+//   onUnload: () => dispatch({ type: UNLOAD_HOME_PAGE }),
 // });
 
 const Home = () => {
@@ -84,7 +84,7 @@ const Home = () => {
     dispatch({ type: APPLY_TAG_FILTER, tag, pager, payload });
   }
   // function onLoad(tab, pager, payload) {
-  //   dispatch({ type: HOME_PAGE_LOADED, tab, storiesPromise, payload });
+  //   dispatch({ type: LOAD_HOME_PAGE, tab, storiesPromise, payload });
   // }
 
   // function componentWillUnmount() {
@@ -96,11 +96,11 @@ const Home = () => {
       tagsApi.tagsList(),
       storiesApi.storiesFeedList({ offset: 0, limit: 10 }),
     ]);
-    dispatch({ type: HOME_PAGE_LOADED, tab, storiesPromise, payload });
+    dispatch({ type: LOAD_HOME_PAGE, tab, storiesPromise, payload });
   }, [tab, storiesPromise, dispatch]);
 
   useEffect(() => {
-    dispatch({ type: HOME_PAGE_UNLOADED });
+    dispatch({ type: UNLOAD_HOME_PAGE });
   }, [dispatch]);
 
   return (

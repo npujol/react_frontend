@@ -6,8 +6,8 @@ import { connect } from "react-redux";
 import {
   FOLLOW_USER,
   UNFOLLOW_USER,
-  PROFILE_PAGE_LOADED,
-  PROFILE_PAGE_UNLOADED,
+  LOAD_PROFILE_PAGE,
+  UNLOAD_PROFILE_PAGE,
 } from "../../../constants/actionTypes";
 
 const profilesApi = new ProfilesApi();
@@ -70,13 +70,13 @@ const mapDispatchToProps = (dispatch) => ({
       type: FOLLOW_USER,
       payload: profilesApi.profilesFollow(username, {}),
     }),
-  onLoad: (payload) => dispatch({ type: PROFILE_PAGE_LOADED, payload }),
+  onLoad: (payload) => dispatch({ type: LOAD_PROFILE_PAGE, payload }),
   onUnfollow: (username) =>
     dispatch({
       type: UNFOLLOW_USER,
       payload: profilesApi.profilesUnfollow(username, {}),
     }),
-  onUnload: () => dispatch({ type: PROFILE_PAGE_UNLOADED }),
+  onUnload: () => dispatch({ type: UNLOAD_PROFILE_PAGE }),
 });
 
 class Profile extends React.Component {
