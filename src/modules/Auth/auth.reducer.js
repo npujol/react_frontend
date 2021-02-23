@@ -3,7 +3,7 @@ import {
   REGISTER,
   ASYNC_START,
   UPDATE_FIELD_AUTH,
-} from "../constants/actionTypes";
+} from "../../constants/actionTypes";
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (state = {}, action) => {

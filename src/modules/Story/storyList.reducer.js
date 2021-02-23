@@ -10,7 +10,7 @@ import {
   UNLOAD_PROFILE_PAGE,
   LOAD_PROFILE_FAVORITES_PAGE,
   UNLOAD_PROFILE_FAVORITES_PAGE,
-} from "../constants/actionTypes";
+} from "../../constants/actionTypes";
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (state = {}, action) => {

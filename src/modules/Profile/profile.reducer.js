@@ -3,7 +3,7 @@ import {
   UNLOAD_PROFILE_PAGE,
   FOLLOW_USER,
   UNFOLLOW_USER,
-} from "../constants/actionTypes";
+} from "../../constants/actionTypes";
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (state = {}, action) => {

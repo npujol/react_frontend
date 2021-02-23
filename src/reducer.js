@@ -1,13 +1,13 @@
-import story from './reducers/story';
-import storyList from './reducers/storyList';
-import auth from './reducers/auth';
-import { combineReducers } from 'redux';
-import common from './reducers/common';
-import editor from './reducers/editor';
-import home from './reducers/home';
-import profile from './reducers/profile';
-import settings from './reducers/settings';
-import { routerReducer } from 'react-router-redux';
+import story from "./modules/Story/story.reducer";
+import storyList from "./modules/Story/storyList.reducer";
+import auth from "./modules/Auth/auth.reducer";
+import common from "./modules/App/common.reducer";
+import editor from "./modules/Story/editor.reducer";
+import home from "./modules/Home/home.reducer";
+import profile from "./modules/Profile/profile.reducer";
+import settings from "./modules/Profile/settings.reducer";
+import { routerReducer } from "react-router-redux";
+import { combineReducers } from "redux";
 
 export default combineReducers({
   story,
@@ -18,5 +18,5 @@ export default combineReducers({
   home,
   profile,
   settings,
-  router: routerReducer
+  router: routerReducer,
 });

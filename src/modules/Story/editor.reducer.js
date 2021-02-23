@@ -6,7 +6,7 @@ import {
   ADD_TAG,
   REMOVE_TAG,
   UPDATE_FIELD_EDITOR,
-} from "../constants/actionTypes";
+} from "../../constants/actionTypes";
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (state = {}, action) => {

@@ -1,4 +1,4 @@
-import { LOAD_HOME_PAGE, UNLOAD_HOME_PAGE } from "../constants/actionTypes";
+import { LOAD_HOME_PAGE, UNLOAD_HOME_PAGE } from "../../constants/actionTypes";
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (state = {}, action) => {

@@ -3,7 +3,7 @@ import {
   UNLOAD_STORY_PAGE,
   ADD_COMMENT,
   DELETE_COMMENT,
-} from "../constants/actionTypes";
+} from "../../constants/actionTypes";
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (state = {}, action) => {

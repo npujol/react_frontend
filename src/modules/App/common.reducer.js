@@ -16,7 +16,7 @@ import {
   UNLOAD_LOGIN_PAGE,
   UNLOAD_REGISTER_PAGE,
   CHANGE_TAB_REDIRECT,
-} from "../constants/actionTypes";
+} from "../../constants/actionTypes";
 
 const defaultState = {
   appName: "My stories",
