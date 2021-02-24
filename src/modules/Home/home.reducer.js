@@ -40,12 +40,16 @@ export default (state = {}, action) => {
     case APPLY_TAG_FILTER:
       return {
         ...state,
+        tags:
+          action.payload !== undefined
+            ? action.payload.tags.results.map((obj) => obj.tag)
+            : [],
         stories:
           action.payload !== undefined
-            ? action.payload[1].results.map((obj) => obj)
+            ? action.payload.stories.results.map((obj) => obj)
             : [],
         storiesCount:
-          action.payload !== undefined ? action.payload[1].count : 0,
+          action.payload !== undefined ? action.payload.stories.count : 0,
         tag: action.tag,
         currentPage: 0,
       };
@@ -54,14 +58,14 @@ export default (state = {}, action) => {
         ...state,
         tags:
           action.payload !== undefined
-            ? action.payload[0].results.map((obj) => obj.tag)
+            ? action.payload.tags.results.map((obj) => obj.tag)
             : [],
         stories:
           action.payload !== undefined
-            ? action.payload[1].results.map((obj) => obj)
+            ? action.payload.stories.results.map((obj) => obj)
             : [],
         storiesCount:
-          action.payload !== undefined ? action.payload[1].count : 0,
+          action.payload !== undefined ? action.payload.stories.count : 0,
         currentPage: 0,
       };
     case UNLOAD_HOME_PAGE:
@@ -69,12 +73,16 @@ export default (state = {}, action) => {
     case CHANGE_TAB:
       return {
         ...state,
+        tags:
+          action.payload !== undefined
+            ? action.payload.tags.results.map((obj) => obj.tag)
+            : [],
         stories:
           action.payload !== undefined
-            ? action.payload[1].results.map((obj) => obj)
+            ? action.payload.stories.results.map((obj) => obj)
             : [],
         storiesCount:
-          action.payload !== undefined ? action.payload[1].count : 0,
+          action.payload !== undefined ? action.payload.stories.count : 0,
         currentPage: 0,
         tag: null,
       };
@@ -84,22 +92,15 @@ export default (state = {}, action) => {
         ...state,
         stories:
           action.payload !== undefined
-            ? action.payload[1].results.map((obj) => obj)
+            ? action.payload.stories.results.map((obj) => obj)
             : [],
         storiesCount:
-          action.payload[1] !== undefined ? action.payload[1].count : 0,
+          action.payload !== undefined ? action.payload.stories.count : 0,
         currentPage: 0,
       };
     case UNLOAD_PROFILE_PAGE:
     case UNLOAD_PROFILE_FAVORITES_PAGE:
       return {};
-    case LOAD_HOME_PAGE:
-      return {
-        ...state,
-        tags: action.payload
-          ? action.payload[0].results.map((obj) => obj.tag)
-          : [],
-      };
     case UNLOAD_HOME_PAGE:
       return {};
     default:

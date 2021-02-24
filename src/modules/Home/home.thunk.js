@@ -12,7 +12,7 @@ export const fetchStoriesGlobal = () => {
   return async (dispatch) => {
     const tags = await tagsApi.tagsList();
     const stories = await storiesApi.storiesFeedList({ offset: 0, limit: 10 });
-    const payload = [tags, stories];
+    const payload = { tags: tags, stories: stories };
     dispatch({ type: LOAD_HOME_PAGE, payload });
   };
 };
@@ -24,7 +24,7 @@ export const fetchStoriesFavorites = (username) => {
       offset: 0,
       limit: 10,
     });
-    const payload = [tags, stories];
+    const payload = { tags: tags, stories: stories };
     dispatch({ type: LOAD_HOME_PAGE, payload });
   };
 };
@@ -37,7 +37,7 @@ export const fetchStoriesTag = (tag) => {
       offset: 0,
       limit: 10,
     });
-    const payload = [tags, stories];
+    const payload = { tags: tags, stories: stories };
     dispatch({ type: LOAD_HOME_PAGE, payload });
   };
 };
@@ -50,7 +50,7 @@ export const fetchStoriesYours = (username) => {
       offset: 0,
       limit: 10,
     });
-    const payload = [tags, stories];
+    const payload = { tags: tags, stories: stories };
     dispatch({ type: LOAD_HOME_PAGE, payload });
   };
 };
