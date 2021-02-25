@@ -79,7 +79,7 @@ export default (state = {}, action) => {
         ...state,
         inProgress: false,
         redirectTo: "/",
-        currentUser: action.payload.profile,
+        currentUser: action.payload,
       };
     default:
       return state;

@@ -38,7 +38,6 @@ export default (state = {}, action) => {
         inProgress: false,
         imageError: action.payload.errors.image,
         bioError: action.payload.errors.bio,
-        usernameError: action.payload.errors.username,
       };
     case UNLOAD_SETTINGS_PAGE:
       return {};

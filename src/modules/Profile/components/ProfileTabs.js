@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TabsWrappedLabel(props) {
   const classes = useStyles();
-  const [value, setValue] = React.useState("one");
+  const [value, setValue] = React.useState(() => "one");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
