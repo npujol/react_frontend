@@ -1,180 +1,190 @@
-import StoryList from "../../Home/components/StoryList";
-import React from "react";
-import { Link } from "react-router-dom";
-import { ProfilesApi, StoriesApi } from "../../../client";
-import { connect } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
+import { makeStyles } from "@material-ui/core/styles";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import EditIcon from "@material-ui/icons/Edit";
+import ReplyIcon from "@material-ui/icons/Reply";
+import Tooltip from "@material-ui/core/Tooltip";
+import Paper from "@material-ui/core/Paper";
+
+import Avatar from "@material-ui/core/Avatar";
+import IconButton from "@material-ui/core/IconButton";
+import Typography from "@material-ui/core/Typography";
+
+import ProfileTabs from "./ProfileTabs";
+import Grid from "@material-ui/core/Grid";
+
 import {
-  FOLLOW_USER,
-  UNFOLLOW_USER,
-  LOAD_PROFILE_PAGE,
-  UNLOAD_PROFILE_PAGE,
-} from "../../../constants/actionTypes";
+  fetchProfileStories,
+  onFollow,
+  onUnfollow,
+  unloadProfile,
+} from "../profile.thunk.js";
 
-const profilesApi = new ProfilesApi();
-const storiesApi = new StoriesApi();
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  card: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  buttons: {
+    marginLeft: "auto",
+  },
+  paper: {
+    padding: theme.spacing(1),
+    textAlign: "center",
+    alignItems: "center",
+    color: theme.palette.text.secondary,
+  },
+  details: {
+    display: "flex",
+    flexDirection: "column",
+    marginLeft: 100,
+    marginTop: 50,
+    marginBottom: 50,
+  },
 
-const EditProfileSettings = (props) => {
-  if (props.isUser) {
-    return (
-      <Link
-        to="/settings"
-        className="btn btn-sm btn-outline-secondary action-btn"
-      >
-        <i className="ion-gear-a"></i> Edit Profile Settings
-      </Link>
-    );
-  }
-  return null;
-};
+  avatar: {
+    width: 250,
+    height: 250,
+    marginLeft: 12,
+    marginTop: 12,
+    marginBottom: 12,
+  },
+}));
 
-const FollowUserButton = (props) => {
-  if (props.isUser) {
+const CardButtons = (props) => {
+  const profile = props.profile;
+  const currentUser = useSelector((state) => state.auth.currentUser);
+  const [followingColor, setFollowingColor] = useState(
+    profile.following === "true" ? "secondary" : "default"
+  );
+  const [followingText, setFollowingText] = useState(
+    profile.following === "true" ? "Unfollow" : "Follow"
+  );
+
+  useEffect(() => {
+    const color = profile.following === "true" ? "secondary" : "default";
+    const text = profile.following === "true" ? "Unfollow" : "Follow";
+    setFollowingColor(color);
+    setFollowingText(text);
+  }, [profile]);
+
+  const isCurrentUser =
+    currentUser && props.profile.username === currentUser.username;
+  if (currentUser) {
+    if (isCurrentUser) {
+      return (
+        <Tooltip title="Edit profile" placement="bottom">
+          <Link to="/settings">
+            <IconButton
+              to="/settings"
+              edge="end"
+              color="default"
+              aria-label="edit"
+            >
+              <EditIcon />
+            </IconButton>
+          </Link>
+        </Tooltip>
+      );
+    } else {
+      return (
+        <Tooltip title={followingText} placement="bottom">
+          <IconButton
+            onClick={props.handleFollowing}
+            edge="end"
+            color={followingColor}
+            aria-label="following"
+          >
+            <ReplyIcon />
+          </IconButton>
+        </Tooltip>
+      );
+    }
+  } else {
     return null;
   }
+};
 
-  let classes = "btn btn-sm action-btn";
-  if (props.user.following) {
-    classes += " btn-secondary";
-  } else {
-    classes += " btn-outline-secondary";
-  }
+const Profile = () => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+  const param = useParams();
+  const username = param.username;
 
-  const handleClick = (ev) => {
+  const profile = useSelector((state) => state.profile.profile);
+  const yoursStories = useSelector((state) => state.profile.yoursStories);
+  const favoriteStories = useSelector((state) => state.profile.favoriteStories);
+
+  useEffect(() => {
+    dispatch(fetchProfileStories(username));
+
+    return () => {
+      dispatch(unloadProfile());
+    };
+  }, [username, dispatch]);
+
+  const handleFollowing = (ev) => {
     ev.preventDefault();
-    if (props.user.following === "true") {
-      props.unfollow(props.user.username);
+    if (profile.following === "true") {
+      dispatch(onUnfollow(username));
     } else {
-      props.follow(props.user.username);
+      dispatch(onFollow(username));
     }
   };
 
-  return (
-    <button className={classes} onClick={handleClick}>
-      <i className="ion-plus-round"></i>
-      &nbsp;
-      {props.user.following === "true" ? "Unfollow" : "Follow"}{" "}
-      {props.user.username}
-    </button>
-  );
-};
-
-const mapStateToProps = (state) => ({
-  ...state.home,
-  currentUser: state.common.currentUser,
-  profile: state.profile,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onFollow: (username) =>
-    dispatch({
-      type: FOLLOW_USER,
-      payload: profilesApi.profilesFollow(username, {}),
-    }),
-  onLoad: (payload) => dispatch({ type: LOAD_PROFILE_PAGE, payload }),
-  onUnfollow: (username) =>
-    dispatch({
-      type: UNFOLLOW_USER,
-      payload: profilesApi.profilesUnfollow(username, {}),
-    }),
-  onUnload: () => dispatch({ type: UNLOAD_PROFILE_PAGE }),
-});
-
-class Profile extends React.Component {
-  componentWillMount() {
-    this.props.onLoad(
-      Promise.all([
-        profilesApi.profilesRead(this.props.match.params.username),
-        storiesApi.storiesList({
-          ownerUserUsername: this.props.match.params.username,
-          limit: 10,
-          offset: 0,
-        }),
-      ])
-    );
-  }
-
-  componentWillUnmount() {
-    this.props.onUnload();
-  }
-
-  renderTabs() {
+  if (profile) {
     return (
-      <ul className="nav nav-pills outline-active">
-        <li className="nav-item">
-          <Link
-            className="nav-link active"
-            to={`/@${this.props.profile.username}`}
-          >
-            My Stories
-          </Link>
-        </li>
-
-        <li className="nav-item">
-          <Link
-            className="nav-link"
-            to={`/@${this.props.profile.username}/favorites`}
-          >
-            Favorited Stories
-          </Link>
-        </li>
-      </ul>
-    );
-  }
-
-  render() {
-    const profile = this.props.profile;
-    if (!profile) {
-      return null;
-    }
-
-    const isUser =
-      this.props.currentUser &&
-      this.props.profile.username === this.props.currentUser.username;
-
-    return (
-      <div className="profile-page">
-        <div className="user-info">
-          <div className="container">
-            <div className="row">
-              <div className="col-xs-12 col-md-10 offset-md-1">
-                <img
-                  src={profile.image}
-                  className="user-img"
-                  alt={profile.username}
-                />
-                <h4>{profile.username}</h4>
-                <p>{profile.bio}</p>
-
-                <EditProfileSettings isUser={isUser} />
-                <FollowUserButton
-                  isUser={isUser}
-                  user={profile}
-                  follow={this.props.onFollow}
-                  unfollow={this.props.onUnfollow}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="container">
-          <div className="row">
-            <div className="col-xs-12 col-md-10 offset-md-1">
-              <div className="stories-toggle">{this.renderTabs()}</div>
-
-              <StoryList
-                pager={this.props.pager}
-                stories={this.props.stories}
-                storiesCount={this.props.storiesCount}
-                state={this.props.currentPage}
+      <div className={classes.root}>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Paper className={classes.paper}>
+              <Card className={classes.card}>
+                <Grid item xs={6}>
+                  <Avatar
+                    alt={profile.username}
+                    src="https://picsum.photos/510/300?random"
+                    className={classes.avatar}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <CardContent>
+                    <Typography variant="h5" color="textPrimary" component="h5">
+                      {profile.username}
+                      <CardButtons
+                        profile={profile}
+                        handleFollowing={handleFollowing}
+                      />
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      component="p"
+                    >
+                      {profile.bio}
+                    </Typography>
+                  </CardContent>
+                </Grid>
+              </Card>
+            </Paper>
+            <Paper className={classes.paper}>
+              <ProfileTabs
+                yoursStories={yoursStories}
+                favoriteStories={favoriteStories}
               />
-            </div>
-          </div>
-        </div>
+            </Paper>
+          </Grid>
+        </Grid>
       </div>
     );
-  }
-}
+  } else return null;
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Profile);
-export { Profile, mapStateToProps };
+export default Profile;

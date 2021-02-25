@@ -5,7 +5,6 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
 import StoryPreview from "../../Story/components/StoryPreview";
-import ListPagination from "../../Common/components/ListPagination";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -54,12 +53,6 @@ const StoryList = (props) => {
       {props.stories.map((story) => {
         return <StoryPreview story={story} key={story.slug} />;
       })}
-
-      <ListPagination
-        pager={props.pager}
-        storiesCount={props.storiesCount}
-        currentPage={props.currentPage}
-      />
     </Paper>
   );
 };

@@ -11,14 +11,22 @@ export default (state = {}, action) => {
   switch (action.type) {
     case LOAD_PROFILE_PAGE:
       return {
-        ...action.payload[0],
+        ...state,
+        yoursStories: action.payload
+          ? action.payload.yoursStories.results.map((obj) => obj)
+          : [],
+        favoriteStories: action.payload
+          ? action.payload.favoriteStories.results.map((obj) => obj)
+          : [],
+        profile: action.payload ? action.payload.profile : null,
       };
     case UNLOAD_PROFILE_PAGE:
       return {};
     case FOLLOW_USER:
     case UNFOLLOW_USER:
       return {
-        ...action.payload,
+        ...state,
+        profile: action.payload.profile,
       };
     default:
       return state;

@@ -6,8 +6,6 @@ import {
   SET_PAGE,
   APPLY_TAG_FILTER,
   CHANGE_TAB,
-  LOAD_PROFILE_PAGE,
-  UNLOAD_PROFILE_PAGE,
   LOAD_PROFILE_FAVORITES_PAGE,
   UNLOAD_PROFILE_FAVORITES_PAGE,
 } from "../../constants/actionTypes";
@@ -86,7 +84,6 @@ export default (state = {}, action) => {
         currentPage: 0,
         tag: null,
       };
-    case LOAD_PROFILE_PAGE:
     case LOAD_PROFILE_FAVORITES_PAGE:
       return {
         ...state,
@@ -98,7 +95,6 @@ export default (state = {}, action) => {
           action.payload !== undefined ? action.payload.stories.count : 0,
         currentPage: 0,
       };
-    case UNLOAD_PROFILE_PAGE:
     case UNLOAD_PROFILE_FAVORITES_PAGE:
       return {};
     case UNLOAD_HOME_PAGE:

@@ -12,7 +12,6 @@ import HomeYours from "../../Home/components/HomeYours";
 import HomeFavorites from "../../Home/components/HomeFavorites";
 import HomeTag from "../../Home/components/HomeTag";
 import Profile from "../../Profile/components/Profile";
-import ProfileFavorites from "../../Profile/components/ProfileFavorites";
 import Settings from "../../Profile/components/Settings";
 
 import { MuiThemeProvider, CssBaseline } from "@material-ui/core";
@@ -64,7 +63,6 @@ const App = () => {
             <Route exact path="/editor" component={Editor} />
             <Route path="/story/:id" component={Story} />
             <Route exact path="/settings" component={Settings} />
-            <Route path="/@:username/favorites" component={ProfileFavorites} />
             <Route path="/@:username" component={Profile} />
           </Switch>
         </Suspense>
