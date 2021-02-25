@@ -62,16 +62,23 @@ export const unloadSettings = () => {
   return { type: UNLOAD_SETTINGS_PAGE };
 };
 
-export const saveSettings = (values) => {
+export const saveBio = (username, values) => {
   return async (dispatch) => {
     try {
-      const payload = await profilesApi.profilesUpdate(values.username, values);
+      const payload = await profilesApi.profilesPartialUpdate(username, values);
       dispatch({ type: SAVE_SETTINGS_SUCCESS, payload });
     } catch (error) {
+      console.log(error);
       dispatch({
         type: SAVE_SETTINGS_FAILED,
         payload: JSON.parse(error.response.text),
       });
     }
+  };
+};
+export const saveImage = (username, image) => {
+  return async (dispatch) => {
+    const payload = await profilesApi.profilesChangeImage(username, image);
+    dispatch({ type: SAVE_SETTINGS_SUCCESS, payload });
   };
 };

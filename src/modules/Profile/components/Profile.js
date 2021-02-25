@@ -1,27 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import EditIcon from "@material-ui/icons/Edit";
-import ReplyIcon from "@material-ui/icons/Reply";
-import Tooltip from "@material-ui/core/Tooltip";
 import Paper from "@material-ui/core/Paper";
-
-import Avatar from "@material-ui/core/Avatar";
-import IconButton from "@material-ui/core/IconButton";
+import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
 import ProfileTabs from "./ProfileTabs";
-import Grid from "@material-ui/core/Grid";
+import Biography from "./Biography";
+import CardButtons from "./CardButtons";
+import ImageHeader from "./ImageHeader";
 
 import {
   fetchProfileStories,
   onFollow,
   onUnfollow,
   unloadProfile,
+  saveBio,
+  saveImage,
 } from "../profile.thunk.js";
 
 const useStyles = makeStyles((theme) => ({
@@ -33,85 +32,13 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "row",
   },
-  buttons: {
-    marginLeft: "auto",
-  },
   paper: {
     padding: theme.spacing(1),
     textAlign: "center",
     alignItems: "center",
     color: theme.palette.text.secondary,
   },
-  details: {
-    display: "flex",
-    flexDirection: "column",
-    marginLeft: 100,
-    marginTop: 50,
-    marginBottom: 50,
-  },
-
-  avatar: {
-    width: 250,
-    height: 250,
-    marginLeft: 12,
-    marginTop: 12,
-    marginBottom: 12,
-  },
 }));
-
-const CardButtons = (props) => {
-  const profile = props.profile;
-  const currentUser = useSelector((state) => state.auth.currentUser);
-  const [followingColor, setFollowingColor] = useState(
-    profile.following === "true" ? "secondary" : "default"
-  );
-  const [followingText, setFollowingText] = useState(
-    profile.following === "true" ? "Unfollow" : "Follow"
-  );
-
-  useEffect(() => {
-    const color = profile.following === "true" ? "secondary" : "default";
-    const text = profile.following === "true" ? "Unfollow" : "Follow";
-    setFollowingColor(color);
-    setFollowingText(text);
-  }, [profile]);
-
-  const isCurrentUser =
-    currentUser && props.profile.username === currentUser.username;
-  if (currentUser) {
-    if (isCurrentUser) {
-      return (
-        <Tooltip title="Edit profile" placement="bottom">
-          <Link to={`/@${currentUser.username}/settings`}>
-            <IconButton
-              to="/settings"
-              edge="end"
-              color="default"
-              aria-label="edit"
-            >
-              <EditIcon />
-            </IconButton>
-          </Link>
-        </Tooltip>
-      );
-    } else {
-      return (
-        <Tooltip title={followingText} placement="bottom">
-          <IconButton
-            onClick={props.handleFollowing}
-            edge="end"
-            color={followingColor}
-            aria-label="following"
-          >
-            <ReplyIcon />
-          </IconButton>
-        </Tooltip>
-      );
-    }
-  } else {
-    return null;
-  }
-};
 
 const Profile = () => {
   const classes = useStyles();
@@ -122,6 +49,7 @@ const Profile = () => {
   const profile = useSelector((state) => state.profile.profile);
   const yoursStories = useSelector((state) => state.profile.yoursStories);
   const favoriteStories = useSelector((state) => state.profile.favoriteStories);
+  const [isEditing, setIsEditing] = useState(() => false);
 
   useEffect(() => {
     dispatch(fetchProfileStories(username));
@@ -131,14 +59,28 @@ const Profile = () => {
     };
   }, [username, dispatch]);
 
-  const handleFollowing = (ev) => {
+  function handleUpdateBio(values) {
+    dispatch(saveBio(profile.username, values));
+    setIsEditing(false);
+  }
+  function handleUpdateImage(image) {
+    dispatch(saveImage(profile.username, image));
+    setIsEditing(false);
+  }
+
+  function handleEditing(ev) {
+    ev.preventDefault();
+    setIsEditing(true);
+  }
+
+  function handleFollowing(ev) {
     ev.preventDefault();
     if (profile.following === "true") {
       dispatch(onUnfollow(username));
     } else {
       dispatch(onFollow(username));
     }
-  };
+  }
 
   if (profile) {
     return (
@@ -148,10 +90,10 @@ const Profile = () => {
             <Paper className={classes.paper}>
               <Card className={classes.card}>
                 <Grid item xs={6}>
-                  <Avatar
-                    alt={profile.username}
-                    src="https://picsum.photos/510/300?random"
-                    className={classes.avatar}
+                  <ImageHeader
+                    isEditing={isEditing}
+                    profile={profile}
+                    handleUpdateImage={handleUpdateImage}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -161,15 +103,14 @@ const Profile = () => {
                       <CardButtons
                         profile={profile}
                         handleFollowing={handleFollowing}
+                        handleEditing={handleEditing}
                       />
                     </Typography>
-                    <Typography
-                      variant="body2"
-                      color="textSecondary"
-                      component="p"
-                    >
-                      {profile.bio}
-                    </Typography>
+                    <Biography
+                      isEditing={isEditing}
+                      profile={profile}
+                      handleUpdateBio={handleUpdateBio}
+                    ></Biography>
                   </CardContent>
                 </Grid>
               </Card>
