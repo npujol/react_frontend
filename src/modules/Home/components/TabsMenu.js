@@ -57,7 +57,9 @@ const TagFilterTab = (props) => {
 const TabsMenu = (props) => {
   const classes = useStyles();
   const currentUser = useSelector((state) => state.auth.currentUser);
-  const [value, setValue] = useState(props.tab);
+  const [value, setValue] = useState(() => {
+    props.tab;
+  });
   const dispatch = useDispatch();
 
   function onTabClick(route) {
