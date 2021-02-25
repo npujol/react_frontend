@@ -62,7 +62,7 @@ const App = () => {
             <Route path="/editor/:slug" component={Editor} />
             <Route exact path="/editor" component={Editor} />
             <Route path="/story/:id" component={Story} />
-            <Route exact path="/settings" component={Settings} />
+            <Route exact path="/@:username/settings" component={Settings} />
             <Route path="/@:username" component={Profile} />
           </Switch>
         </Suspense>

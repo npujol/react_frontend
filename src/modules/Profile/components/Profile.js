@@ -82,7 +82,7 @@ const CardButtons = (props) => {
     if (isCurrentUser) {
       return (
         <Tooltip title="Edit profile" placement="bottom">
-          <Link to="/settings">
+          <Link to={`/@${currentUser.username}/settings`}>
             <IconButton
               to="/settings"
               edge="end"
