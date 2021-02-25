@@ -31,15 +31,14 @@ export default (state = defaultState, action) => {
     case LOAD_APP:
       return {
         ...state,
-        token: action.payload ? action.payload.token : null,
+        token: action.payload ? action.payload.user.token : null,
         appLoaded: true,
-        currentUser: action.payload ? action.payload.profile : null,
         offline: action.payload ? true : false,
         redirectTo: "/",
       };
     case REDIRECT:
       return { ...state, redirectTo: null };
-   
+
     case SUBMIT_STORY:
       const redirectUrl = `/story/${action.payload.slug}`;
       return { ...state, redirectTo: redirectUrl };

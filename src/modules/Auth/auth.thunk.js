@@ -1,4 +1,4 @@
-import { AuthApi } from "../../client";
+import { AuthApi, UsersApi } from "../../client";
 import {
   LOGIN_SUCCESS,
   LOGIN_FAILED,
@@ -6,11 +6,13 @@ import {
   REGISTER_FAILED,
   UNLOAD_LOGIN_PAGE,
   UNLOAD_REGISTER_PAGE,
+  SET_AUTH_LOAD,
 } from "../../constants/actionTypes";
 import jwtService from "../../jwt.service";
 import { load_app } from "../../modules/App/common.thunk.js";
 
 const authApi = new AuthApi();
+const userApi = new UsersApi();
 
 function setAuth({ username, token }) {
   window.localStorage.setItem("jwt", token);
@@ -67,4 +69,15 @@ export const unloadLogin = () => {
 
 export const unloadRegister = () => {
   return { type: UNLOAD_REGISTER_PAGE };
+};
+
+export const setAuthLoad = () => {
+  return async (dispatch) => {
+    const username = jwtService.getUsername();
+    const data = await userApi.usersRead(username);
+    const payload = { payload: data };
+    dispatch({ type: SET_AUTH_LOAD, payload });
+
+    dispatch(load_app());
+  };
 };

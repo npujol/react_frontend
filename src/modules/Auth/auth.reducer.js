@@ -8,6 +8,7 @@ import {
   REGISTER_FAILED,
   UNLOAD_LOGIN_PAGE,
   UNLOAD_REGISTER_PAGE,
+  SET_AUTH_LOAD,
 } from "../../constants/actionTypes";
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -39,8 +40,8 @@ export default (state = {}, action) => {
       return {
         ...state,
         redirectTo: "/",
-        token: action.payload.token,
-        currentUser: action.payload.profile,
+        token: action.payload.user.token,
+        currentUser: action.payload.user.profile,
       };
     case REGISTER_FAILED:
       return {
@@ -50,6 +51,12 @@ export default (state = {}, action) => {
         currentUser: null,
         usernameError: action.payload.errors.username,
         emailError: action.payload.errors.email,
+      };
+    case SET_AUTH_LOAD:
+      return {
+        ...state,
+        token: action.payload.token,
+        currentUser: action.payload.user.profile,
       };
     case LOGOUT:
       return { ...state, redirectTo: "/", token: null, currentUser: null };

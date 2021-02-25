@@ -4,6 +4,7 @@ import {
   REDIRECT,
   LOGOUT,
   SET_REDIRECT,
+  SET_AUTH_LOAD,
 } from "../../constants/actionTypes";
 import jwtService from "../../jwt.service";
 
@@ -23,11 +24,11 @@ export const load_app = () => {
     console.log("token in load_app", token);
     if (token) {
       jwtService.setHeader();
-      const payload = { user: usersApi.usersRead(jwtService.getUsername()) };
-      dispatch({ type: LOAD_APP, payload });
-    } else {
-      dispatch({ type: LOAD_APP });
+      const data = await usersApi.usersRead(jwtService.getUsername());
+      const payload = { user: data, token: token };
+      dispatch({ type: SET_AUTH_LOAD, payload });
     }
+    dispatch({ type: LOAD_APP });
   };
 };
 
