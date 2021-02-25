@@ -9,6 +9,7 @@ import {
   UNLOAD_LOGIN_PAGE,
   UNLOAD_REGISTER_PAGE,
   SET_AUTH_LOAD,
+  SAVE_SETTINGS_SUCCESS,
 } from "../../constants/actionTypes";
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -72,6 +73,13 @@ export default (state = {}, action) => {
         viewChangeCounter: state.viewChangeCounter + 1,
         usernameError: null,
         emailError: null,
+      };
+    case SAVE_SETTINGS_SUCCESS:
+      return {
+        ...state,
+        inProgress: false,
+        redirectTo: "/",
+        currentUser: action.payload.profile,
       };
     default:
       return state;

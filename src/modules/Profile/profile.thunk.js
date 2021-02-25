@@ -3,6 +3,9 @@ import {
   UNFOLLOW_USER,
   LOAD_PROFILE_PAGE,
   UNLOAD_PROFILE_PAGE,
+  SAVE_SETTINGS_FAILED,
+  SAVE_SETTINGS_SUCCESS,
+  UNLOAD_SETTINGS_PAGE,
 } from "../../constants/actionTypes.js";
 
 import { StoriesApi, ProfilesApi } from "../../client";
@@ -53,4 +56,22 @@ export const onUnfollow = (username) => {
 
 export const unloadProfile = () => {
   return { type: UNLOAD_PROFILE_PAGE };
+};
+
+export const unloadSettings = () => {
+  return { type: UNLOAD_SETTINGS_PAGE };
+};
+
+export const saveSettings = (values) => {
+  return async (dispatch) => {
+    try {
+      const payload = await profilesApi.profilesUpdate(values.username, values);
+      dispatch({ type: SAVE_SETTINGS_SUCCESS, payload });
+    } catch (error) {
+      dispatch({
+        type: SAVE_SETTINGS_FAILED,
+        payload: JSON.parse(error.response.text),
+      });
+    }
+  };
 };
