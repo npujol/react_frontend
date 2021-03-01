@@ -1,62 +1,87 @@
 import {
-  LOAD_PROFILE_PAGE,
-  UNLOAD_PROFILE_PAGE,
-  SAVE_SETTINGS_FAILED,
+  SAVE_STORY_FAILED,
+  SAVE_STORY_SUCCESS,
   SAVE_SETTINGS_SUCCESS,
-  UNLOAD_SETTINGS_PAGE,
+  ADD_TAG,
+  LOAD_EDITOR_PAGE,
+  REMOVE_TAG,
+  SUBMIT_STORY,
+  UNLOAD_EDITOR_PAGE,
+  REDIRECT,
 } from "../../constants/actionTypes.js";
 
-import { StoriesApi, ProfilesApi } from "../../client";
+import { StoriesApi } from "../../client";
 const storiesApi = new StoriesApi();
-const profilesApi = new ProfilesApi();
 
-export const fetchProfileStories = (username) => {
+export const loadEditor = (slug) => {
   return async (dispatch) => {
-    const yoursStories = await storiesApi.storiesList({
-      favoritedByUserUsername: username,
-      offset: 0,
-      limit: 10,
+    const story = await storiesApi.storiesRead({
+      slug,
     });
-    const favoriteStories = await storiesApi.storiesList({
-      ownerUserUsername: username,
-      offset: 0,
-      limit: 10,
-    });
-    const profile = await profilesApi.profilesRead(username);
+
     const payload = {
-      yoursStories: yoursStories,
-      favoriteStories: favoriteStories,
-      profile: profile,
+      story: story,
     };
-    dispatch({ type: LOAD_PROFILE_PAGE, payload });
+    dispatch({ type: LOAD_EDITOR_PAGE, payload });
   };
 };
 
-export const unloadProfile = () => {
-  return { type: UNLOAD_PROFILE_PAGE };
+export const unloadEditor = () => {
+  return { type: UNLOAD_EDITOR_PAGE };
 };
 
-export const unloadSettings = () => {
-  return { type: UNLOAD_SETTINGS_PAGE };
-};
-
-export const saveBio = (username, values) => {
+export const createStory = (values) => {
   return async (dispatch) => {
     try {
-      const payload = await profilesApi.profilesPartialUpdate(username, values);
-      dispatch({ type: SAVE_SETTINGS_SUCCESS, payload });
+      const { title, description, body, tagList } = values;
+
+      const data = {
+        title: title,
+        description: description,
+        body_markdown: body,
+        tags: tagList,
+      };
+      const payload = await storiesApi.storiesCreate(data);
+      dispatch({ type: SUBMIT_STORY, payload });
     } catch (error) {
       console.log(error);
       dispatch({
-        type: SAVE_SETTINGS_FAILED,
+        type: SAVE_STORY_FAILED,
         payload: JSON.parse(error.response.text),
       });
     }
   };
 };
-export const saveImage = (username, image) => {
+
+export const updateStory = (slug, values) => {
   return async (dispatch) => {
-    const payload = await profilesApi.profilesChangeImage(username, image);
+    try {
+      const payload = await storiesApi.storiesPartialUpdate(slug, values);
+      dispatch({ type: SUBMIT_STORY, payload });
+    } catch (error) {
+      console.log(error);
+      dispatch({
+        type: SAVE_STORY_FAILED,
+        payload: JSON.parse(error.response.text),
+      });
+    }
+  };
+};
+export const saveImage = (slug, image) => {
+  return async (dispatch) => {
+    const payload = await storiesApi.storiesChangeImage(slug, image);
     dispatch({ type: SAVE_SETTINGS_SUCCESS, payload });
+  };
+};
+
+export const addTag = () => {
+  return async (dispatch) => {
+    dispatch({ type: ADD_TAG });
+  };
+};
+
+export const removeTag = (tag) => {
+  return async (dispatch) => {
+    dispatch({ type: REMOVE_TAG, tag });
   };
 };

@@ -1,188 +1,221 @@
-import ListErrors from "../../Common/components/ListErrors";
-import React from "react";
-import { StoriesApi } from "../../../client";
-import { connect } from "react-redux";
+import React, { useEffect } from "react";
+import { useParams } from "react-router-dom";
+
+import { useSelector, useDispatch } from "react-redux";
+
+import { useFormik } from "formik";
+import * as yup from "yup";
+
+import { makeStyles } from "@material-ui/core/styles";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import Grid from "@material-ui/core/Grid";
+
+import ImageStoryHeader from "./ImageStoryHeader";
+import TagsEditor from "./TagsEditor";
+
 import {
-  ADD_TAG,
-  LOAD_EDITOR_PAGE,
-  REMOVE_TAG,
-  SUBMIT_STORY,
-  UNLOAD_EDITOR_PAGE,
-  UPDATE_FIELD_EDITOR,
-} from "../../../constants/actionTypes";
+  loadEditor,
+  unloadEditor,
+  createStory,
+  updateStory,
+  addTag,
+  removeTag,
+  saveImage,
+} from "../editor.thunk";
 
-const storiesApi = new StoriesApi();
+const useStyles = makeStyles((theme) => ({
+  root: {
+    minWidth: "50%",
+    marginBottom: 12,
+    marginTop: 12,
+    alignContent: "center",
 
-const mapStateToProps = (state) => ({
-  ...state.editor,
+    "& .MuiTextField-root": {
+      margin: theme.spacing(2),
+      width: "100%",
+    },
+    "& .MuiButton-root": {
+      margin: theme.spacing(2),
+      width: "100%",
+    },
+  },
+  title: {
+    fontSize: 20,
+    textAlign: "center",
+    marginBottom: 12,
+    marginTop: 12,
+  },
+  link: {
+    textAlign: "center",
+    marginBottom: 12,
+    marginTop: 12,
+  },
+}));
+
+const validationSchema = yup.object({
+  title: yup
+    .string("Enter the title")
+    .max(50, "Title should be of maximum of 50 characters length")
+    .required("Title is required"),
+  description: yup
+    .string("Enter the description")
+    .max(250, "Description should be of maximum of 250 characters length")
+    .required("description is required"),
+  body: yup.string("Enter the body in markdown").required("body is required"),
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  onAddTag: () => dispatch({ type: ADD_TAG }),
-  onLoad: (payload) => dispatch({ type: LOAD_EDITOR_PAGE, payload }),
-  onRemoveTag: (tag) => dispatch({ type: REMOVE_TAG, tag }),
-  onSubmit: (payload) => dispatch({ type: SUBMIT_STORY, payload }),
-  onUnload: (payload) => dispatch({ type: UNLOAD_EDITOR_PAGE, payload }),
-  onUpdateField: (key, value) =>
-    dispatch({ type: UPDATE_FIELD_EDITOR, key, value }),
-});
+const Editor = () => {
+  const classes = useStyles();
 
-class Editor extends React.Component {
-  constructor() {
-    super();
+  const dispatch = useDispatch();
+  const story = useSelector((state) => state.editor.story);
 
-    const updateFieldEvent = (key) => (ev) =>
-      this.props.onUpdateField(key, ev.target.value);
-    this.changeTitle = updateFieldEvent("title");
-    this.changeDescription = updateFieldEvent("description");
-    this.changeBody = updateFieldEvent("body");
-    this.changeTagInput = updateFieldEvent("tagInput");
+  const titleError = useSelector((state) => state.editor.titleError);
+  const descriptionError = useSelector(
+    (state) => state.editor.descriptionError
+  );
+  const bodyError = useSelector((state) => state.editor.bodyError);
+  const tagListError = useSelector((state) => state.editor.tagListError);
+  const imageError = useSelector((state) => state.editor.imageError);
+  const param = useParams();
+  const slug = param.title;
 
-    this.watchForEnter = (ev) => {
-      if (ev.keyCode === 13) {
-        ev.preventDefault();
-        this.props.onAddTag();
+  const formik = useFormik({
+    initialValues: {
+      title: story ? story.title : "",
+      description: story ? story.description : "",
+      body: story ? story.body : "",
+      tagList: story ? story.tags : ["default"],
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      console.log(values, "en values");
+      if (slug) {
+        dispatch(updateStory(slug, values));
+      } else {
+        dispatch(createStory(values));
       }
-    };
+    },
+  });
 
-    this.removeTagHandler = (tag) => () => {
-      this.props.onRemoveTag(tag);
-    };
-
-    this.submitForm = (ev) => {
-      ev.preventDefault();
-      const story = {
-        title: this.props.title,
-        description: this.props.description,
-        body: this.props.body,
-        tagList: this.props.tagList,
-      };
-
-      const slug = { slug: this.props.storySlug };
-      const promise = this.props.storySlug
-        ? storiesApi.storiesUpdate(this.props.match.params.slug, {
-            title: this.props.title,
-            description: this.props.description,
-            body_markdown: this.props.body,
-            tags: this.props.tagList,
-          })
-        : storiesApi.storiesCreate({
-            title: this.props.title,
-            description: this.props.description,
-            body_markdown: this.props.body,
-            tags: this.props.tagList,
-          });
-
-      this.props.onSubmit(promise);
-    };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.match.params.slug !== nextProps.match.params.slug) {
-      if (nextProps.match.params.slug) {
-        this.props.onUnload();
-        return this.props.onLoad(
-          storiesApi.storiesRead(this.props.match.params.slug)
-        );
-      }
-      this.props.onLoad(null);
+  function handleUpdateImage(image) {
+    if (slug && image) {
+      dispatch(saveImage(slug, image));
     }
   }
 
-  componentWillMount() {
-    if (this.props.match.params.slug) {
-      return this.props.onLoad(
-        storiesApi.storiesRead(this.props.match.params.slug)
-      );
+  useEffect(() => {
+    if (slug) {
+      dispatch(loadEditor(slug));
     }
-    this.props.onLoad(null);
-  }
 
-  componentWillUnmount() {
-    this.props.onUnload();
-  }
+    return () => {
+      dispatch(unloadEditor());
+    };
+  }, [slug, dispatch]);
 
-  render() {
-    return (
-      <div className="editor-page">
-        <div className="container page">
-          <div className="row">
-            <div className="col-md-10 offset-md-1 col-xs-12">
-              <ListErrors errors={this.props.errors}></ListErrors>
+  useEffect(() => {
+    if (titleError) {
+      formik.setErrors({ title: titleError });
+    }
+  }, [titleError, formik]);
 
-              <form>
-                <fieldset>
-                  <fieldset className="form-group">
-                    <input
-                      className="form-control form-control-lg"
-                      type="text"
-                      placeholder="Story Title"
-                      value={this.props.title}
-                      onChange={this.changeTitle}
-                    />
-                  </fieldset>
+  useEffect(() => {
+    if (descriptionError) {
+      formik.setErrors({ description: descriptionError });
+    }
+  }, [descriptionError, formik]);
 
-                  <fieldset className="form-group">
-                    <input
-                      className="form-control"
-                      type="text"
-                      placeholder="What's this story about?"
-                      value={this.props.description}
-                      onChange={this.changeDescription}
-                    />
-                  </fieldset>
+  useEffect(() => {
+    if (imageError) {
+      formik.setErrors({ image: imageError });
+    }
+  }, [imageError, formik]);
 
-                  <fieldset className="form-group">
-                    <textarea
-                      className="form-control"
-                      rows="8"
-                      placeholder="Write your story (in markdown)"
-                      value={this.props.body}
-                      onChange={this.changeBody}
-                    ></textarea>
-                  </fieldset>
+  useEffect(() => {
+    if (bodyError) {
+      formik.setErrors({ body: bodyError });
+    }
+  }, [bodyError, formik]);
 
-                  <fieldset className="form-group">
-                    <input
-                      className="form-control"
-                      type="text"
-                      placeholder="Enter tags"
-                      value={this.props.tagInput}
-                      onChange={this.changeTagInput}
-                      onKeyUp={this.watchForEnter}
-                    />
+  useEffect(() => {
+    if (tagListError) {
+      formik.setErrors({ tagList: tagListError });
+    }
+  }, [tagListError, formik]);
 
-                    <div className="tag-list">
-                      {(this.props.tagList || []).map((tag) => {
-                        return (
-                          <span className="tag-default tag-pill" key={tag}>
-                            <i
-                              className="ion-close-round"
-                              onClick={this.removeTagHandler(tag)}
-                            ></i>
-                            {tag}
-                          </span>
-                        );
-                      })}
-                    </div>
-                  </fieldset>
+  return (
+    <div className="editor-page">
+      <Card className={classes.root} variant="outlined">
+        <ImageStoryHeader
+          image={story ? story.image : "https://picsum.photos/510/300?random"}
+          handleUpdateImage={handleUpdateImage}
+          isEditing={slug ? true : false}
+        />
+        <CardContent>
+          <Typography
+            className={classes.title}
+            gutterBottom
+            variant="h5"
+            component="h2"
+          >
+            Your story
+          </Typography>
+          <Grid container justify="center" spacing={3}>
+            <form onSubmit={formik.handleSubmit}>
+              <TextField
+                id="title"
+                name="title"
+                label="Title"
+                value={formik.values.title}
+                onChange={formik.handleChange}
+                error={formik.touched.title && Boolean(formik.errors.title)}
+                helperText={formik.touched.title && formik.errors.title}
+              />
+              <TextField
+                id="description"
+                name="description"
+                label="Description"
+                type="text"
+                multiline
+                rows={4}
+                value={formik.values.description}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.description &&
+                  Boolean(formik.errors.description)
+                }
+                helperText={
+                  formik.touched.description && formik.errors.description
+                }
+              />
 
-                  <button
-                    className="btn btn-lg pull-xs-right btn-primary"
-                    type="button"
-                    disabled={this.props.inProgress}
-                    onClick={this.submitForm}
-                  >
-                    Publish Story
-                  </button>
-                </fieldset>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-}
+              <TagsEditor tags={formik.tagList}></TagsEditor>
+              <TextField
+                id="body"
+                name="body"
+                label="Body"
+                type="text"
+                multiline
+                rows={4}
+                value={formik.values.body}
+                onChange={formik.handleChange}
+                error={formik.touched.body && Boolean(formik.errors.body)}
+                helperText={formik.touched.body && formik.errors.body}
+              />
+              <Button color="primary" variant="contained" type="submit">
+                Ok
+              </Button>
+            </form>
+          </Grid>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Editor);
+export default Editor;
