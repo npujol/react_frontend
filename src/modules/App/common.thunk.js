@@ -23,10 +23,15 @@ export const load_app = () => {
     const token = window.localStorage.getItem("jwt");
     console.log("token in load_app", token);
     if (token) {
-      jwtService.setHeader();
-      const data = await usersApi.usersRead(jwtService.getUsername());
-      const payload = { user: data, token: token };
-      dispatch({ type: SET_AUTH_LOAD, payload });
+      try {
+        jwtService.setHeader();
+        const data = await usersApi.usersRead(jwtService.getUsername());
+        const payload = { user: data, token: token };
+        dispatch({ type: SET_AUTH_LOAD, payload });
+      } catch (error) {
+        window.localStorage.setItem("jwt", "");
+        jwtService.destroyCredentials();
+      }
     }
     dispatch({ type: LOAD_APP });
   };
