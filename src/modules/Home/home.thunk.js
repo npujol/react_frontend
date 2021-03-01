@@ -2,6 +2,8 @@ import {
   LOAD_HOME_PAGE,
   UNLOAD_HOME_PAGE,
   CHANGE_TAB_REDIRECT,
+  SET_STORY_FAVORITED,
+  SET_STORY_UNFAVORITED,
 } from "../../constants/actionTypes.js";
 
 import { TagsApi, StoriesApi } from "../../client";
@@ -61,4 +63,24 @@ export const unloadHome = () => {
 
 export const changeTabRedirect = (route) => {
   return { type: CHANGE_TAB_REDIRECT, payload: route };
+};
+
+export const setFavorite = (slug) => {
+  return async (dispatch) => {
+    const data = await storiesApi.storiesUnfavorite(slug, {});
+    const payload = {
+      story: data,
+    };
+    dispatch({ type: SET_STORY_FAVORITED, payload });
+  };
+};
+
+export const removeFavorite = (slug) => {
+  return async (dispatch) => {
+    const data = await storiesApi.storiesUnfavorite(slug, {});
+    const payload = {
+      story: data,
+    };
+    dispatch({ type: SET_STORY_UNFAVORITED, payload });
+  };
 };

@@ -18,11 +18,11 @@ export default (state = {}, action) => {
       return {
         ...state,
         stories: state.stories.map((story) => {
-          if (story.slug === action.payload.slug) {
+          if (story.slug === action.payload.story.slug) {
             return {
               ...story,
-              favorited: action.payload.favorited,
-              favoritesCount: action.payload.favoritesCount,
+              favorited: action.payload.story.favorited,
+              favoritesCount: action.payload.story.favoritesCount,
             };
           }
           return story;

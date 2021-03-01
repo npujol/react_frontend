@@ -18,11 +18,11 @@ import Typography from "@material-ui/core/Typography";
 import { red } from "@material-ui/core/colors";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import { Divider } from "@material-ui/core";
-import Tags from "../../Home/components/Tags";
+import Tags from "./Tags";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-const storiesApi = new StoriesApi();
+import { setFavorite, removeFavorite } from "../home.thunk";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,20 +48,15 @@ const StoryPreview = (props) => {
   const dispatch = useDispatch();
 
   const story = props.story;
-  const handleClickToggleFavorite = (ev) => {
+
+  function handleClickToggleFavorite(ev) {
     ev.preventDefault();
     if (story.favorited === "true") {
-      dispatch({
-        type: SET_STORY_UNFAVORITED,
-        payload: storiesApi.storiesUnfavorite(story.slug, {}),
-      });
+      dispatch(removeFavorite(story.slug));
     } else {
-      dispatch({
-        type: SET_STORY_FAVORITED,
-        payload: storiesApi.storiesFavorite(story.slug, {}),
-      });
+      dispatch(setFavorite(story.slug));
     }
-  };
+  }
 
   return (
     <div>
@@ -86,9 +81,7 @@ const StoryPreview = (props) => {
         <CardMedia
           className={classes.media}
           image={
-            story.image
-              ? "https://picsum.photos/510/300?random"
-              : "https://picsum.photos/510/300?random"
+            story.image ? story.image : "https://picsum.photos/510/300?random"
           }
           title={story.title}
         />
