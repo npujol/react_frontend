@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import React from "react";
-import { StoriesApi } from "../../../../client";
+import { StoriesApi } from "../../../client";
 import { connect } from "react-redux";
-import { DELETE_STORY } from "../../../../constants/actionTypes";
+import { DELETE_STORY } from "../../../constants/actionTypes";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { makeStyles } from "@material-ui/core/styles";
 

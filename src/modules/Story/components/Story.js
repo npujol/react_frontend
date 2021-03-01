@@ -1,15 +1,17 @@
-import StoryMeta from "./StoryMeta";
-import CommentContainer from "./CommentContainer";
+import CommentContainer from "../../Comment/components/CommentContainer";
 import { Link } from "react-router-dom";
 
-import React from "react";
-import { StoriesApi } from "../../../../client";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { StoriesApi } from "../../../client";
 import { connect } from "react-redux";
 import {
   LOAD_STORY_PAGE,
   UNLOAD_STORY_PAGE,
-} from "../../../../constants/actionTypes";
+} from "../../../constants/actionTypes";
 import StoryActions from "./StoryActions";
+import StoryMeta from "./StoryMeta";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
@@ -25,6 +27,7 @@ import { red, grey } from "@material-ui/core/colors";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import Chip from "@material-ui/core/Chip";
 
+import { onloadStory, unloadStory } from "../story.thunk";
 const storiesApi = new StoriesApi();
 
 const useStyles = makeStyles((theme) => ({
@@ -52,9 +55,7 @@ const StoryPreview = (props) => {
         <CardMedia
           className={classes.media}
           image={
-            story.image
-              ? "https://picsum.photos/510/300?random"
-              : "https://picsum.photos/510/300?random"
+            story.image ? story.image : "https://picsum.photos/510/300?random"
           }
           title={story.title}
         ></CardMedia>
@@ -91,46 +92,49 @@ const mapDispatchToProps = (dispatch) => ({
   onUnload: () => dispatch({ type: UNLOAD_STORY_PAGE }),
 });
 
-class Story extends React.Component {
-  componentWillMount() {
-    this.props.onLoad(
-      Promise.all([
-        storiesApi.storiesRead(this.props.match.params.id),
-        storiesApi.storiesCommentsList(this.props.match.params.id, {
-          limit: 10,
-          offset: 0,
-        }),
-      ])
-    );
-  }
+const Story = () => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+  const param = useParams();
+  const slug = param.id;
 
-  // componentWillUnmount() {
-  //   this.props.onUnload();
-  // }
+  const story = useSelector((state) => state.story.story);
+  const comments = useSelector((state) => state.story.comments);
 
-  render() {
-    if (!this.props.story) {
-      return null;
+  const currentUser = useSelector((state) => state.auth.currentUser);
+
+  useEffect(() => {
+    if (slug) {
+      dispatch(onloadStory(slug));
     }
 
+    return () => {
+      dispatch(unloadStory());
+    };
+  }, [slug, dispatch]);
+
+  console.log(comments);
+
+  if (story) {
     // const markup = { __html: marked(this.props.story.body, { sanitize: true }) };
-    const markup = { __html: this.props.story.body };
+    const markup = { __html: story.body };
 
     const canModify =
-      this.props.currentUser &&
-      this.props.currentUser.username === this.props.story.owner.username;
+      currentUser && currentUser.username === story.owner.username;
     return (
       <StoryPreview
-        story={this.props.story}
+        story={story}
         canModify={canModify}
         markup={markup}
-        comments={this.props.comments}
-        errors={this.props.commentErrors}
-        slug={this.props.match.params.id}
-        currentUser={this.props.currentUser}
+        comments={comments}
+        // errors={commentErrors}
+        slug={slug}
+        currentUser={currentUser}
       />
     );
+  } else {
+    return null;
   }
-}
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Story);
+export default Story;

@@ -1,6 +1,6 @@
 import {
-  LOAD_STORY_PAGE,
-  UNLOAD_STORY_PAGE,
+  LOAD_PROFILE_PAGE,
+  UNLOAD_PROFILE_PAGE,
   SAVE_SETTINGS_FAILED,
   SAVE_SETTINGS_SUCCESS,
   UNLOAD_SETTINGS_PAGE,
@@ -10,23 +10,34 @@ import { StoriesApi, ProfilesApi } from "../../client";
 const storiesApi = new StoriesApi();
 const profilesApi = new ProfilesApi();
 
-export const onloadStory = (slug) => {
+export const fetchProfileStories = (username) => {
   return async (dispatch) => {
-    const story = await storiesApi.storiesRead(slug);
-    const comments = await storiesApi.storiesCommentsList(slug, {
-      limit: 10,
+    const yoursStories = await storiesApi.storiesList({
+      favoritedByUserUsername: username,
       offset: 0,
+      limit: 10,
     });
+    const favoriteStories = await storiesApi.storiesList({
+      ownerUserUsername: username,
+      offset: 0,
+      limit: 10,
+    });
+    const profile = await profilesApi.profilesRead(username);
     const payload = {
-      story: story,
-      comments: comments,
+      yoursStories: yoursStories,
+      favoriteStories: favoriteStories,
+      profile: profile,
     };
-    dispatch({ type: LOAD_STORY_PAGE, payload });
+    dispatch({ type: LOAD_PROFILE_PAGE, payload });
   };
 };
 
-export const unloadStory = () => {
-  return { type: UNLOAD_STORY_PAGE };
+export const unloadProfile = () => {
+  return { type: UNLOAD_PROFILE_PAGE };
+};
+
+export const unloadSettings = () => {
+  return { type: UNLOAD_SETTINGS_PAGE };
 };
 
 export const saveBio = (username, values) => {

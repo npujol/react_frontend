@@ -12,8 +12,8 @@ export default (state = {}, action) => {
     case LOAD_STORY_PAGE:
       return {
         ...state,
-        story: action.payload.story,
-        comments: action.payload.comments.results,
+        story: action.payload[0] ? action.payload[0] : [],
+        comments: action.payload[1] ? action.payload[1].results : [],
       };
     case UNLOAD_STORY_PAGE:
       return {};
