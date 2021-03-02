@@ -4,6 +4,7 @@ import {
   CHANGE_TAB_REDIRECT,
   SET_STORY_FAVORITED,
   SET_STORY_UNFAVORITED,
+  DELETE_STORY,
 } from "../../constants/actionTypes.js";
 
 import { TagsApi, StoriesApi } from "../../client";
@@ -67,7 +68,7 @@ export const changeTabRedirect = (route) => {
 
 export const setFavorite = (slug) => {
   return async (dispatch) => {
-    const data = await storiesApi.storiesUnfavorite(slug, {});
+    const data = await storiesApi.storiesFavorite(slug, {});
     const payload = {
       story: data,
     };

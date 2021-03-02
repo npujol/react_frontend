@@ -1,14 +1,13 @@
 import {
   LOAD_STORY_PAGE,
   UNLOAD_STORY_PAGE,
-  SAVE_SETTINGS_FAILED,
-  SAVE_SETTINGS_SUCCESS,
-  UNLOAD_SETTINGS_PAGE,
+  DELETE_STORY,
+  SET_STORY_FAVORITED_IN_STORY,
+  SET_STORY_UNFAVORITED_IN_STORY,
 } from "../../constants/actionTypes.js";
 
-import { StoriesApi, ProfilesApi } from "../../client";
+import { StoriesApi } from "../../client";
 const storiesApi = new StoriesApi();
-const profilesApi = new ProfilesApi();
 
 export const onloadStory = (slug) => {
   return async (dispatch) => {
@@ -29,23 +28,32 @@ export const unloadStory = () => {
   return { type: UNLOAD_STORY_PAGE };
 };
 
-export const saveBio = (username, values) => {
+export const storyDelete = (slug) => {
   return async (dispatch) => {
-    try {
-      const payload = await profilesApi.profilesPartialUpdate(username, values);
-      dispatch({ type: SAVE_SETTINGS_SUCCESS, payload });
-    } catch (error) {
-      console.log(error);
-      dispatch({
-        type: SAVE_SETTINGS_FAILED,
-        payload: JSON.parse(error.response.text),
-      });
-    }
+    const data = await storiesApi.storiesDelete(slug);
+    const payload = {
+      data,
+    };
+    dispatch({ type: DELETE_STORY, payload });
   };
 };
-export const saveImage = (username, image) => {
+
+export const setFavorite = (slug) => {
   return async (dispatch) => {
-    const payload = await profilesApi.profilesChangeImage(username, image);
-    dispatch({ type: SAVE_SETTINGS_SUCCESS, payload });
+    const data = await storiesApi.storiesFavorite(slug, {});
+    const payload = {
+      story: data,
+    };
+    dispatch({ type: SET_STORY_FAVORITED_IN_STORY, payload });
+  };
+};
+
+export const removeFavorite = (slug) => {
+  return async (dispatch) => {
+    const data = await storiesApi.storiesUnfavorite(slug, {});
+    const payload = {
+      story: data,
+    };
+    dispatch({ type: SET_STORY_UNFAVORITED_IN_STORY, payload });
   };
 };

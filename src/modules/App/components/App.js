@@ -58,7 +58,7 @@ const App = () => {
             <Route path="/tag/:tag" component={HomeTag} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
-            <Route path="/editor/:slug" component={Editor} />
+            <Route path="/edit/:slug" component={Editor} />
             <Route exact path="/editor" component={Editor} />
             <Route path="/story/:id" component={Story} />
             <Route path="/@:username" component={Profile} />

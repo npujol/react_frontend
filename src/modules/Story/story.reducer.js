@@ -3,11 +3,12 @@ import {
   UNLOAD_STORY_PAGE,
   ADD_COMMENT,
   DELETE_COMMENT,
+  SET_STORY_FAVORITED_IN_STORY,
+  SET_STORY_UNFAVORITED_IN_STORY,
 } from "../../constants/actionTypes";
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (state = {}, action) => {
-  // console.log("storyjs", action.payload);
   switch (action.type) {
     case LOAD_STORY_PAGE:
       return {
@@ -30,6 +31,12 @@ export default (state = {}, action) => {
       return {
         ...state,
         comments: state.comments.filter((comment) => comment.id !== commentId),
+      };
+    case SET_STORY_FAVORITED_IN_STORY:
+    case SET_STORY_UNFAVORITED_IN_STORY:
+      return {
+        ...state,
+        story: action.payload.story,
       };
     default:
       return state;

@@ -1,8 +1,10 @@
-import StoryActions from "./StoryActions";
-import { Link } from "react-router-dom";
 import React from "react";
+
+import { Link } from "react-router-dom";
 import CardHeader from "@material-ui/core/CardHeader";
 import Avatar from "@material-ui/core/Avatar";
+
+import StoryActions from "./StoryActions";
 
 const StoryMeta = (props) => {
   const story = props.story;

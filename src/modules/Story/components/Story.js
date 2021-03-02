@@ -1,34 +1,19 @@
-import CommentContainer from "../../Comment/components/CommentContainer";
-import { Link } from "react-router-dom";
-
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { StoriesApi } from "../../../client";
-import { connect } from "react-redux";
-import {
-  LOAD_STORY_PAGE,
-  UNLOAD_STORY_PAGE,
-} from "../../../constants/actionTypes";
-import StoryActions from "./StoryActions";
-import StoryMeta from "./StoryMeta";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
-import Button from "@material-ui/core/Button";
-import CardHeader from "@material-ui/core/CardHeader";
-import Avatar from "@material-ui/core/Avatar";
-import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import { red, grey } from "@material-ui/core/colors";
-import FavoriteIcon from "@material-ui/icons/Favorite";
+import { red } from "@material-ui/core/colors";
 import Chip from "@material-ui/core/Chip";
 
+import CommentContainer from "../../Comment/components/CommentContainer";
+import StoryMeta from "./StoryMeta";
+
 import { onloadStory, unloadStory } from "../story.thunk";
-const storiesApi = new StoriesApi();
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,55 +28,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const StoryPreview = (props) => {
-  const classes = useStyles();
-  const story = props.story;
-
-  return (
-    <div>
-      <Card className={classes.root}>
-        <StoryMeta story={props.story} canModify={props.canModify} />
-
-        <CardMedia
-          className={classes.media}
-          image={
-            story.image ? story.image : "https://picsum.photos/510/300?random"
-          }
-          title={story.title}
-        ></CardMedia>
-
-        <CardContent>
-          <ul className="tag-list">
-            {story.tags.map((tag, pk) => {
-              return <Chip label={tag} variant="outlined" key={pk} />;
-            })}
-          </ul>
-          <Typography>{story.description}</Typography>
-          <Typography>{story.body}</Typography>
-        </CardContent>
-      </Card>
-      <div className="row">
-        <CommentContainer
-          comments={props.comments || []}
-          errors={props.errors}
-          slug={props.slug}
-          currentUser={props.currentUser}
-        />
-      </div>
-    </div>
-  );
-};
-
-const mapStateToProps = (state) => ({
-  ...state.story,
-  currentUser: state.common.currentUser,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onLoad: (payload) => dispatch({ type: LOAD_STORY_PAGE, payload }),
-  onUnload: () => dispatch({ type: UNLOAD_STORY_PAGE }),
-});
-
 const Story = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -103,6 +39,12 @@ const Story = () => {
 
   const currentUser = useSelector((state) => state.auth.currentUser);
 
+  function htmlDecode(input) {
+    var e = document.createElement("div");
+    e.innerHTML = input;
+    return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+  }
+
   useEffect(() => {
     if (slug) {
       dispatch(onloadStory(slug));
@@ -113,24 +55,46 @@ const Story = () => {
     };
   }, [slug, dispatch]);
 
-  console.log(comments);
-
   if (story) {
-    // const markup = { __html: marked(this.props.story.body, { sanitize: true }) };
-    const markup = { __html: story.body };
-
     const canModify =
       currentUser && currentUser.username === story.owner.username;
     return (
-      <StoryPreview
-        story={story}
-        canModify={canModify}
-        markup={markup}
-        comments={comments}
-        // errors={commentErrors}
-        slug={slug}
-        currentUser={currentUser}
-      />
+      <div>
+        <Card className={classes.root}>
+          <CardMedia
+            className={classes.media}
+            image={
+              story.image
+                ? "https://picsum.photos/510/300?random"
+                : "https://picsum.photos/510/300?random"
+            }
+            title={story.title}
+          ></CardMedia>
+          <StoryMeta story={story} canModify={canModify} />
+
+          <CardContent>
+            <ul className="tag-list">
+              {story.tags.map((tag, pk) => {
+                return <Chip label={tag} variant="outlined" key={pk} />;
+              })}
+            </ul>
+            <Typography>{story.description}</Typography>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: htmlDecode(story.body),
+              }}
+            />
+            );
+          </CardContent>
+        </Card>
+        <div className="row">
+          <CommentContainer
+            comments={comments || []}
+            slug={slug}
+            currentUser={currentUser}
+          />
+        </div>
+      </div>
     );
   } else {
     return null;

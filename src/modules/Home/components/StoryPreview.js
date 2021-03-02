@@ -1,4 +1,7 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
@@ -12,10 +15,8 @@ import Typography from "@material-ui/core/Typography";
 import { red } from "@material-ui/core/colors";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import { Divider } from "@material-ui/core";
-import Tags from "./Tags";
-import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 
+import Tags from "./Tags";
 import { setFavorite, removeFavorite } from "../home.thunk";
 
 const useStyles = makeStyles((theme) => ({
