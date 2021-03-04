@@ -47,13 +47,8 @@ const StoryActions = (props) => {
       <div>
         <Tooltip title="Edit story" placement="bottom">
           {/* Check this */}
-          <Link to={`/edit/${story.slug}`}>
-            <IconButton
-              to={`/edit/${story.slug}`}
-              edge="start"
-              color="default"
-              aria-label="edit"
-            >
+          <Link to={`/editor/${story.slug}`}>
+            <IconButton edge="start" color="default" aria-label="edit">
               <EditIcon />
             </IconButton>
           </Link>

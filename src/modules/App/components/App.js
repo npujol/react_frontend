@@ -58,8 +58,8 @@ const App = () => {
             <Route path="/tag/:tag" component={HomeTag} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
-            <Route path="/editor/:slug" component={NewStory} />
-            <Route exact path="/story/new" component={Editor} />
+            <Route path="/editor/:slug" component={Editor} />
+            <Route exact path="/story/new" component={NewStory} />
             <Route path="/story/:id" component={Story} />
             <Route path="/@:username" component={Profile} />
           </Switch>
