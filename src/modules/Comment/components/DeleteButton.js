@@ -1,32 +1,34 @@
 import React from "react";
-import { StoriesApi } from "../../../client";
-import { connect } from "react-redux";
-import { DELETE_COMMENT } from "../../../constants/actionTypes";
+import { useDispatch } from "react-redux";
 
-const storiesApi = new StoriesApi();
+import DeleteIcon from "@material-ui/icons/Delete";
+import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@material-ui/core/Tooltip";
 
-const mapDispatchToProps = (dispatch) => ({
-  onClick: (payload, commentId) =>
-    dispatch({ type: DELETE_COMMENT, payload, commentId }),
-});
+import { removeComment } from "../comment.thunk";
 
 const DeleteButton = (props) => {
-  const del = () => {
-    const payload = storiesApi.storiesCommentsDelete(
-      props.commentId,
-      props.slug
-    );
-    props.onClick(payload, props.commentId);
-  };
+  const dispatch = useDispatch();
+
+  function handelDeleteComment() {
+    dispatch(removeComment(props.commentId, props.slug));
+  }
 
   if (props.show) {
     return (
-      <span className="mod-options">
-        <i className="ion-trash-a" onClick={del}></i>
-      </span>
+      <Tooltip title="Delete Comment" placement="bottom">
+        <IconButton
+          edge="end"
+          color="default"
+          aria-label="delete"
+          onClick={handelDeleteComment}
+        >
+          <DeleteIcon />
+        </IconButton>
+      </Tooltip>
     );
   }
   return null;
 };
 
-export default connect(() => ({}), mapDispatchToProps)(DeleteButton);
+export default DeleteButton;

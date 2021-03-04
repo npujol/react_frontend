@@ -68,7 +68,6 @@ export const saveBio = (username, values) => {
       const payload = await profilesApi.profilesPartialUpdate(username, values);
       dispatch({ type: SAVE_SETTINGS_SUCCESS, payload });
     } catch (error) {
-      console.log(error);
       dispatch({
         type: SAVE_SETTINGS_FAILED,
         payload: JSON.parse(error.response.text),

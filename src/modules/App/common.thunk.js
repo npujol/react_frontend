@@ -21,7 +21,6 @@ export const logout = () => {
 export const load_app = () => {
   return async (dispatch) => {
     const token = window.localStorage.getItem("jwt");
-    console.log("token in load_app", token);
     if (token) {
       try {
         jwtService.setHeader();

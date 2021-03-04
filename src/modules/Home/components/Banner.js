@@ -33,8 +33,8 @@ const Banner = ({ currentUser }) => {
   }
   return (
     <Paper className={classes.banner}>
-      <Link to="/editor">
-        <Fab color="secondary" to="/editor" aria-label="add">
+      <Link to="/story/new">
+        <Fab color="secondary" to="/story/new" aria-label="add">
           <AddIcon />
         </Fab>
       </Link>

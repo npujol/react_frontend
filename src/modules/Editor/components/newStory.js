@@ -68,7 +68,7 @@ const validationSchema = yup.object({
   body: yup.string("Enter the body in markdown").required("body is required"),
 });
 
-const Editor = () => {
+const newStory = () => {
   const classes = useStyles();
 
   const dispatch = useDispatch();
@@ -217,4 +217,4 @@ const Editor = () => {
   );
 };
 
-export default Editor;
+export default newStory;

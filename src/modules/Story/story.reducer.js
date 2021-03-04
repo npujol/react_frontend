@@ -19,15 +19,15 @@ export default (state = {}, action) => {
     case UNLOAD_STORY_PAGE:
       return {};
     case ADD_COMMENT:
+      state.comments.push(action.payload.comment);
+
       return {
         ...state,
         commentErrors: action.error ? action.payload.errors : null,
-        comments: action.error
-          ? null
-          : (state.comments || []).concat([action.payload]),
+        comments: state.comments,
       };
     case DELETE_COMMENT:
-      const commentId = action.commentId;
+      const commentId = action.payload.commentId;
       return {
         ...state,
         comments: state.comments.filter((comment) => comment.id !== commentId),

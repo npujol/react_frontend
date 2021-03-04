@@ -9,6 +9,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import { red } from "@material-ui/core/colors";
 import Chip from "@material-ui/core/Chip";
+import Paper from "@material-ui/core/Paper";
 
 import CommentContainer from "../../Comment/components/CommentContainer";
 import StoryMeta from "./StoryMeta";
@@ -26,6 +27,21 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     backgroundColor: red[500],
   },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: "center",
+    justify: "flex-start",
+    alignItems: "center",
+    color: theme.palette.text.secondary,
+  },
+  tags: {
+    display: "flex",
+    justifyContent: "center",
+    flexWrap: "wrap",
+    "& > *": {
+      margin: theme.spacing(0.5),
+    },
+  },
 }));
 
 const Story = () => {
@@ -36,7 +52,6 @@ const Story = () => {
 
   const story = useSelector((state) => state.story.story);
   const comments = useSelector((state) => state.story.comments);
-
   const currentUser = useSelector((state) => state.auth.currentUser);
 
   function htmlDecode(input) {
@@ -59,41 +74,50 @@ const Story = () => {
     const canModify =
       currentUser && currentUser.username === story.owner.username;
     return (
-      <div>
-        <Card className={classes.root}>
-          <CardMedia
-            className={classes.media}
-            image={
-              story.image
-                ? "https://picsum.photos/510/300?random"
-                : "https://picsum.photos/510/300?random"
-            }
-            title={story.title}
-          ></CardMedia>
-          <StoryMeta story={story} canModify={canModify} />
+      <div className={classes.root}>
+        <Paper className={classes.paper}>
+          <Card>
+            <CardMedia
+              className={classes.media}
+              image={
+                story.image
+                  ? story.image
+                  : "https://picsum.photos/510/300?random"
+              }
+              title={story.title}
+            ></CardMedia>
+            <StoryMeta story={story} canModify={canModify} />
 
-          <CardContent>
-            <ul className="tag-list">
-              {story.tags.map((tag, pk) => {
-                return <Chip label={tag} variant="outlined" key={pk} />;
-              })}
-            </ul>
-            <Typography>{story.description}</Typography>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: htmlDecode(story.body),
-              }}
+            <CardContent>
+              <div className={classes.root}>
+                {story.tags.map((tag, pk) => {
+                  return (
+                    <Chip
+                      variant="outlined"
+                      size="small"
+                      label={tag}
+                      key={pk}
+                    />
+                  );
+                })}
+              </div>
+              <Typography>{story.description}</Typography>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: htmlDecode(story.body),
+                }}
+              />
+              );
+            </CardContent>
+          </Card>
+          <div className="row">
+            <CommentContainer
+              comments={comments || []}
+              slug={slug}
+              currentUser={currentUser}
             />
-            );
-          </CardContent>
-        </Card>
-        <div className="row">
-          <CommentContainer
-            comments={comments || []}
-            slug={slug}
-            currentUser={currentUser}
-          />
-        </div>
+          </div>
+        </Paper>
       </div>
     );
   } else {

@@ -44,7 +44,6 @@ export const createStory = (values) => {
       const payload = await storiesApi.storiesCreate(data);
       dispatch({ type: SUBMIT_STORY, payload });
     } catch (error) {
-      console.log(error);
       dispatch({
         type: SAVE_STORY_FAILED,
         payload: JSON.parse(error.response.text),
@@ -59,7 +58,6 @@ export const updateStory = (slug, values) => {
       const payload = await storiesApi.storiesPartialUpdate(slug, values);
       dispatch({ type: SUBMIT_STORY, payload });
     } catch (error) {
-      console.log(error);
       dispatch({
         type: SAVE_STORY_FAILED,
         payload: JSON.parse(error.response.text),

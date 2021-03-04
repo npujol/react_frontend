@@ -7,6 +7,7 @@ import Register from "../../Auth/components/Register";
 import Login from "../../Auth/components/Login";
 import Story from "../../Story/components/Story";
 import Editor from "../../Editor/components/Editor";
+import NewStory from "../../Editor/components/newStory";
 import HomeGlobal from "../../Home/components/HomeGlobal";
 import HomeYours from "../../Home/components/HomeYours";
 import HomeFavorites from "../../Home/components/HomeFavorites";
@@ -32,7 +33,6 @@ const App = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    console.log("redirectTo", redirectTo, "history", history.location);
     if (redirectTo) {
       history.push(redirectTo);
       dispatch(redirect());
@@ -58,8 +58,8 @@ const App = () => {
             <Route path="/tag/:tag" component={HomeTag} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
-            <Route path="/edit/:slug" component={Editor} />
-            <Route exact path="/editor" component={Editor} />
+            <Route path="/editor/:slug" component={NewStory} />
+            <Route exact path="/story/new" component={Editor} />
             <Route path="/story/:id" component={Story} />
             <Route path="/@:username" component={Profile} />
           </Switch>

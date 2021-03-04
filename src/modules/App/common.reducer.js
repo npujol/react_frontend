@@ -26,7 +26,6 @@ const defaultState = {
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (state = defaultState, action) => {
-  // console.log("payload in common", action.payload);
   switch (action.type) {
     case LOAD_APP:
       return {

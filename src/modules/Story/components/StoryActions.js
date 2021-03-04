@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux";
 
 import DeleteIcon from "@material-ui/icons/Delete";
 import FavoriteIcon from "@material-ui/icons/Favorite";
-import { red } from "@material-ui/core/colors";
 import EditIcon from "@material-ui/icons/Edit";
 import { Link } from "@material-ui/core";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -13,25 +12,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { storyDelete, setFavorite, removeFavorite } from "../story.thunk";
 
 const useStyles = makeStyles((theme) => ({
-  margin: {
-    margin: theme.spacing(1),
-  },
-  extendedIcon: {
-    marginRight: theme.spacing(1),
-  },
-  root: {
-    flexGrow: 4,
-    alignContent: "center",
-    marginBottom: 12,
-    marginTop: 12,
-  },
-  media: {
-    height: 0,
-    paddingTop: "56.25%", // 16:9
-  },
-  avatar: {
-    backgroundColor: red[500],
-  },
   buttons: {
     marginLeft: "auto",
   },
@@ -56,10 +36,8 @@ const StoryActions = (props) => {
   function handleClickToggleFavorite(ev) {
     ev.preventDefault();
     if (story.favorited === "true") {
-      console.log("is favorited");
       dispatch(removeFavorite(story.slug));
     } else {
-      console.log("no es favorited");
       dispatch(setFavorite(story.slug));
     }
   }
