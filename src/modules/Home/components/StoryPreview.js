@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -43,6 +43,15 @@ const StoryPreview = (props) => {
   const dispatch = useDispatch();
 
   const story = props.story;
+
+  const [favoriteColor, setFavoriteColor] = useState(() => {
+    story.favorited === "true" ? "secondary" : "default";
+  });
+
+  useEffect(() => {
+    const color = story.favorited === "true" ? "secondary" : "default";
+    setFavoriteColor(color);
+  }, [story]);
 
   function handleClickToggleFavorite(ev) {
     ev.preventDefault();
@@ -96,6 +105,7 @@ const StoryPreview = (props) => {
             className={classes.buttons}
             aria-label="add to favorites"
             onClick={handleClickToggleFavorite}
+            color={favoriteColor}
           >
             <FavoriteIcon /> {story.favoritesCount}
           </IconButton>
