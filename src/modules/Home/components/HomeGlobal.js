@@ -58,9 +58,12 @@ const Home = () => {
         </Grid>
         <Grid item xs={9}>
           <Paper className={classes.paper}>
-            <TabsMenu tab={0} currentUser={currentUser} />
+            <TabsMenu
+              tab={0}
+              currentUser={currentUser}
+              isCurrentUser={currentUser ? true : false}
+            />
             <StoryList
-              // pager={storyList.pager}
               stories={storyList.stories}
               loading={storyList.loading}
               storiesCount={storyList.storiesCount}

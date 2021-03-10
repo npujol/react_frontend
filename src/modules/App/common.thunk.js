@@ -20,7 +20,7 @@ export const logout = () => {
 
 export const load_app = () => {
   return async (dispatch) => {
-    const token = window.localStorage.getItem("jwt");
+    const token = window.localStorage.getItem("token");
     if (token) {
       try {
         jwtService.setHeader();
@@ -28,7 +28,6 @@ export const load_app = () => {
         const payload = { user: data, token: token };
         dispatch({ type: SET_AUTH_LOAD, payload });
       } catch (error) {
-        window.localStorage.setItem("jwt", "");
         jwtService.destroyCredentials();
       }
     }

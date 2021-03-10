@@ -56,7 +56,7 @@ const TagFilterTab = (props) => {
 
 const TabsMenu = (props) => {
   const classes = useStyles();
-  const currentUser = useSelector((state) => state.auth.currentUser);
+  const isCurrentUser = props.isCurrentUser;
   const [value, setValue] = useState(() => {
     props.tab;
   });
@@ -70,7 +70,7 @@ const TabsMenu = (props) => {
     setValue(newValue);
   };
 
-  if (currentUser) {
+  if (isCurrentUser) {
     return (
       <div className={classes.root}>
         <AppBar position="static" color="default">
@@ -94,7 +94,7 @@ const TabsMenu = (props) => {
       <div className={classes.root}>
         <AppBar position="static" color="default">
           <Tabs
-            value={value}
+            value={props.tab}
             onChange={handleChange}
             indicatorColor="primary"
             textColor="primary"
