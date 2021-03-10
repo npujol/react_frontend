@@ -29,9 +29,6 @@ const useStyles = makeStyles((theme) => ({
 const Banner = ({ currentUser }) => {
   const classes = useStyles();
   if (currentUser) {
-    return null;
-  }
-  return (
     <Paper className={classes.banner}>
       <Link to="/story/new">
         <Fab color="secondary" to="/story/new" aria-label="add">
@@ -46,8 +43,21 @@ const Banner = ({ currentUser }) => {
       >
         A place to share your stories
       </Typography>
-    </Paper>
-  );
+    </Paper>;
+  } else {
+    return (
+      <Paper className={classes.banner}>
+        <Typography
+          className={classes.paper}
+          variant="h4"
+          component="h2"
+          gutterBottom
+        >
+          A place to share your stories
+        </Typography>
+      </Paper>
+    );
+  }
 };
 
 export default Banner;
