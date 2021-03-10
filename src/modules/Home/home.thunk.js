@@ -65,23 +65,3 @@ export const unloadHome = () => {
 export const changeTabRedirect = (route) => {
   return { type: CHANGE_TAB_REDIRECT, payload: route };
 };
-
-export const setFavorite = (slug) => {
-  return async (dispatch) => {
-    const data = await storiesApi.storiesFavorite(slug, {});
-    const payload = {
-      story: data,
-    };
-    dispatch({ type: SET_STORY_FAVORITED, payload });
-  };
-};
-
-export const removeFavorite = (slug) => {
-  return async (dispatch) => {
-    const data = await storiesApi.storiesUnfavorite(slug, {});
-    const payload = {
-      story: data,
-    };
-    dispatch({ type: SET_STORY_UNFAVORITED, payload });
-  };
-};

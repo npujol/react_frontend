@@ -6,7 +6,7 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
-import StoryList from "./StoryList";
+import StoryList from "../../StoryList/components/StoryList";
 import Tags from "./Tags";
 import TabsMenu from "./TabsMenu";
 import Banner from "./Banner";
@@ -37,7 +37,7 @@ const Home = () => {
   const currentUser = useSelector((state) => state.auth.currentUser);
   const dispatch = useDispatch();
   const tags = useSelector((state) => state.home.tags);
-  const storyList = useSelector((state) => state.home);
+  const home = useSelector((state) => state.home);
 
   useEffect(() => {
     dispatch(fetchStoriesFavorites(currentUser.username));
@@ -59,11 +59,10 @@ const Home = () => {
           <Paper className={classes.paper}>
             <TabsMenu tab={2} currentUser={currentUser} />
             <StoryList
-              // pager={storyList.pager}
-              stories={storyList.stories}
-              loading={storyList.loading}
-              storiesCount={storyList.storiesCount}
-              currentPage={storyList.currentPage}
+              stories={home.stories}
+              loading={home.loading}
+              storiesCount={home.storiesCount}
+              currentPage={home.currentPage}
             />
           </Paper>
         </Grid>

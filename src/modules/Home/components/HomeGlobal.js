@@ -8,7 +8,7 @@ import Typography from "@material-ui/core/Typography";
 
 import Tags from "./Tags";
 import TabsMenu from "./TabsMenu";
-import StoryList from "./StoryList";
+import StoryList from "../../StoryList/components/StoryList";
 import Banner from "./Banner";
 
 import { fetchStoriesGlobal, unloadHome } from "../home.thunk.js";
@@ -38,7 +38,7 @@ const Home = () => {
 
   const currentUser = useSelector((state) => state.auth.currentUser);
   const tags = useSelector((state) => state.home.tags);
-  const storyList = useSelector((state) => state.home);
+  const home = useSelector((state) => state.home);
 
   useEffect(() => {
     dispatch(fetchStoriesGlobal());
@@ -64,10 +64,10 @@ const Home = () => {
               isCurrentUser={currentUser ? true : false}
             />
             <StoryList
-              stories={storyList.stories}
-              loading={storyList.loading}
-              storiesCount={storyList.storiesCount}
-              currentPage={storyList.currentPage}
+              stories={home.stories}
+              loading={home.loading}
+              storiesCount={home.storiesCount}
+              currentPage={home.currentPage}
             />
           </Paper>
         </Grid>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
@@ -16,8 +16,8 @@ import { red } from "@material-ui/core/colors";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import { Divider } from "@material-ui/core";
 
-import Tags from "./Tags";
-import { setFavorite, removeFavorite } from "../home.thunk";
+import Tags from "../../Home/components/Tags";
+import { setFavorite, removeFavorite } from "../storyList.thunk";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,6 +43,7 @@ const StoryPreview = (props) => {
   const dispatch = useDispatch();
 
   const story = props.story;
+  const token = useSelector((state) => state.common.token);
 
   const [favoriteColor, setFavoriteColor] = useState(() => {
     story.favorited === "true" ? "secondary" : "default";
@@ -76,7 +77,7 @@ const StoryPreview = (props) => {
                     : "https://picsum.photos/510/300?random"
                 }
                 alt={story.owner.username}
-              ></Avatar>
+              />
             </Link>
           }
           title={story.title}

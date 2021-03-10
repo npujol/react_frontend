@@ -4,6 +4,8 @@ import common from "./modules/App/common.reducer";
 import editor from "./modules/Editor/editor.reducer";
 import home from "./modules/Home/home.reducer";
 import profile from "./modules/Profile/profile.reducer";
+import storyList from "./modules/StoryList/storyList.reducer";
+
 import { routerReducer } from "react-router-redux";
 import { combineReducers } from "redux";
 
@@ -14,5 +16,6 @@ export default combineReducers({
   editor,
   home,
   profile,
+  storyList,
   router: routerReducer,
 });
