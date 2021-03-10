@@ -6,6 +6,7 @@ import {
   ADD_TAG,
   REMOVE_TAG,
   SAVE_STORY_FAILED,
+  LOAD_NEW_STORY_PAGE,
 } from "../../constants/actionTypes";
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -17,13 +18,18 @@ export default (state = {}, action) => {
         story: action.payload.story,
         tagList: action.payload.story.tags.filter((tag) => tag.tag),
       };
+    case LOAD_NEW_STORY_PAGE:
+      return {
+        ...state,
+        tagList: [],
+      };
     case UNLOAD_EDITOR_PAGE:
       return {};
     case ADD_TAG:
+      state.tagList.push(action.payload.inputTag);
       return {
         ...state,
-        tagList: state.tagList.concat([state.tagInput]),
-        tagInput: "",
+        tagList: state.tagList.filter((v, i, a) => a.indexOf(v) === i),
       };
     case REMOVE_TAG:
       return {

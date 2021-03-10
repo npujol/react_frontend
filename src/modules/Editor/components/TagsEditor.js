@@ -1,103 +1,77 @@
-import React from "react";
-// import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import { v4 as uuidv4 } from "uuid";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Chip from "@material-ui/core/Chip";
+import Paper from "@material-ui/core/Paper";
+import Button from "@material-ui/core/Button";
+import TagFacesIcon from "@material-ui/icons/TagFaces";
+import TextField from "@material-ui/core/TextField";
+
+import { addTag, removeTag } from "../editor.thunk";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     justifyContent: "center",
     flexWrap: "wrap",
-    "& > *": {
-      margin: theme.spacing(0.5),
-    },
+    listStyle: "none",
+    padding: theme.spacing(0.5),
+    margin: 0,
+  },
+  chip: {
+    margin: theme.spacing(0.5),
   },
 }));
 
-const TagsEditor = (props) => {
+const TagsEditor = () => {
   const classes = useStyles();
-  const tags = props.tags;
-  // const dispatch = useDispatch();
+  const tagList = useSelector((state) =>
+    state.editor.tagList ? state.editor.tagList : []
+  );
+  const [inputTag, setInputTag] = useState(() => "");
+  const dispatch = useDispatch();
+  const handleDelete = (tag) => () => {
+    dispatch(removeTag(tag));
+  };
 
-  if (tags) {
-    return (
-      <div className={classes.root}>
-        <fieldset className="form-group">
-          <input
-            className="form-control"
-            type="text"
-            placeholder="Enter tags"
-            value={this.props.tagInput}
-            onChange={this.changeTagInput}
-            onKeyUp={this.watchForEnter}
-          />
+  const handleAdd = () => {
+    dispatch(addTag(inputTag));
+    setInputTag("");
+  };
 
-          <div className="tag-list">
-            {(this.props.tagList || []).map((tag) => {
-              return (
-                <span className="tag-default tag-pill" key={tag}>
-                  <i
-                    className="ion-close-round"
-                    onClick={this.removeTagHandler(tag)}
-                  ></i>
-                  {tag}
-                </span>
-              );
-            })}
-          </div>
-        </fieldset>
-        {tags.map((tag) => {
-          const handleClick = (ev) => {
-            ev.preventDefault();
-            {
-              /* const payload = { route: `/tag/${tag}` };
-            dispatch(changeTabRedirect(payload)); */
-            }
-          };
+  const handleChange = (ev) => {
+    setInputTag(ev.target.value);
+  };
+  return (
+    <Paper component="ul" className={classes.root}>
+      {tagList.map((data) => {
+        let icon;
 
-          return (
+        return (
+          <li key={uuidv4()}>
             <Chip
-              variant="outlined"
-              size="small"
-              label={tag}
-              key={uuidv4()}
-              onClick={handleClick}
+              icon={icon}
+              label={data}
+              onDelete={handleDelete(data)}
+              className={classes.chip}
             />
-          );
-        })}
-      </div>
-    );
-  } else {
-    return (
-      <fieldset className="form-group">
-        <input
-          className="form-control"
-          type="text"
-          placeholder="Enter tags"
-          // value={props.tagInput}
-          // onChange={changeTagInput}
-          // onKeyUp={watchForEnter}
-        />
+          </li>
+        );
+      })}
 
-        <div className="tag-list">
-          {(props.tags || []).map((tag) => {
-            return (
-              <span className="tag-default tag-pill" key={tag}>
-                <i
-                  className="ion-close-round"
-                  onClick={this.removeTagHandler(tag)}
-                ></i>
-                {tag}
-              </span>
-            );
-          })}
-        </div>
-      </fieldset>
-    );
-  }
+      <TextField
+        value={inputTag}
+        onChange={handleChange}
+        type="text"
+        placeholder="Add tag..."
+      />
+      <Button color="primary" variant="contained" onClick={handleAdd}>
+        ADD
+      </Button>
+    </Paper>
+  );
 };
-
 export default TagsEditor;

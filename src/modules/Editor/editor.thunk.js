@@ -8,6 +8,7 @@ import {
   SUBMIT_STORY,
   UNLOAD_EDITOR_PAGE,
   REDIRECT,
+  LOAD_NEW_STORY_PAGE,
 } from "../../constants/actionTypes.js";
 
 import { StoriesApi } from "../../client";
@@ -28,6 +29,10 @@ export const loadEditor = (slug) => {
 
 export const unloadEditor = () => {
   return { type: UNLOAD_EDITOR_PAGE };
+};
+
+export const loadNewStory = () => {
+  return { type: LOAD_NEW_STORY_PAGE };
 };
 
 export const createStory = (values) => {
@@ -72,9 +77,11 @@ export const saveImage = (slug, image) => {
   };
 };
 
-export const addTag = () => {
+export const addTag = (inputTag) => {
+  console.log("inputData", inputTag);
   return async (dispatch) => {
-    dispatch({ type: ADD_TAG });
+    const payload = { inputTag: inputTag };
+    dispatch({ type: ADD_TAG, payload: payload });
   };
 };
 

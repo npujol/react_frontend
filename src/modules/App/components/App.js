@@ -7,7 +7,7 @@ import Register from "../../Auth/components/Register";
 import Login from "../../Auth/components/Login";
 import Story from "../../Story/components/Story";
 import Editor from "../../Editor/components/Editor";
-import NewStory from "../../Editor/components/newStory";
+import NewStory from "../../Editor/components/NewStory";
 import HomeGlobal from "../../Home/components/HomeGlobal";
 import HomeYours from "../../Home/components/HomeYours";
 import HomeFavorites from "../../Home/components/HomeFavorites";
