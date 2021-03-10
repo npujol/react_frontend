@@ -3,9 +3,8 @@ import {
   SET_STORY_UNFAVORITED,
 } from "../../constants/actionTypes.js";
 
-import { TagsApi, StoriesApi } from "../../client";
+import { StoriesApi } from "../../client";
 const storiesApi = new StoriesApi();
-const tagsApi = new TagsApi();
 
 export const setFavorite = (slug) => {
   return async (dispatch) => {

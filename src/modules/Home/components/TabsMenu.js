@@ -56,27 +56,20 @@ const TagFilterTab = (props) => {
 
 const TabsMenu = (props) => {
   const classes = useStyles();
-  const isCurrentUser = props.isCurrentUser;
-  const [value, setValue] = useState(() => {
-    props.tab;
-  });
+  const currentUser = props.currentUser;
+
   const dispatch = useDispatch();
 
   function onTabClick(route) {
     dispatch(changeTabRedirect(route));
   }
-  const handleChange = (event, newValue) => {
-    event.preventDefault();
-    setValue(newValue);
-  };
 
-  if (isCurrentUser) {
+  if (currentUser) {
     return (
       <div className={classes.root}>
         <AppBar position="static" color="default">
           <Tabs
             value={props.tab}
-            onChange={handleChange}
             indicatorColor="primary"
             textColor="primary"
             centered
@@ -95,7 +88,6 @@ const TabsMenu = (props) => {
         <AppBar position="static" color="default">
           <Tabs
             value={props.tab}
-            onChange={handleChange}
             indicatorColor="primary"
             textColor="primary"
             centered

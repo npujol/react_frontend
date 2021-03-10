@@ -26,24 +26,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Banner = ({ currentUser }) => {
+const Banner = (props) => {
   const classes = useStyles();
-  if (currentUser) {
-    <Paper className={classes.banner}>
-      <Link to="/story/new">
-        <Fab color="secondary" to="/story/new" aria-label="add">
-          <AddIcon />
-        </Fab>
-      </Link>
-      <Typography
-        className={classes.paper}
-        variant="h4"
-        component="h2"
-        gutterBottom
-      >
-        A place to share your stories
-      </Typography>
-    </Paper>;
+  if (props.currentUser) {
+    return (
+      <Paper className={classes.banner}>
+        <Link to="/story/new">
+          <Fab color="secondary" to="/story/new" aria-label="add">
+            <AddIcon />
+          </Fab>
+        </Link>
+        <Typography
+          className={classes.paper}
+          variant="h4"
+          component="h2"
+          gutterBottom
+        >
+          A place to share your stories
+        </Typography>
+      </Paper>
+    );
   } else {
     return (
       <Paper className={classes.banner}>

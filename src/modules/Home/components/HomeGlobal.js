@@ -54,15 +54,11 @@ const Home = () => {
     <div className={classes.root}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Banner />
+          <Banner currentUser={currentUser} />
         </Grid>
         <Grid item xs={9}>
           <Paper className={classes.paper}>
-            <TabsMenu
-              tab={0}
-              currentUser={currentUser}
-              isCurrentUser={currentUser ? true : false}
-            />
+            <TabsMenu tab={0} currentUser={currentUser} />
             <StoryList
               stories={home.stories}
               loading={home.loading}
