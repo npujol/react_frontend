@@ -6,8 +6,9 @@ import { v4 as uuidv4 } from "uuid";
 import { makeStyles } from "@material-ui/core/styles";
 import Chip from "@material-ui/core/Chip";
 import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
-import TagFacesIcon from "@material-ui/icons/TagFaces";
+import IconButton from "@material-ui/core/IconButton";
+import AddIcon from "@material-ui/icons/Add";
+import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 
 import { addTag, removeTag } from "../editor.thunk";
@@ -24,9 +25,12 @@ const useStyles = makeStyles((theme) => ({
   chip: {
     margin: theme.spacing(0.5),
   },
+  input: {
+    width: "25ch",
+  },
 }));
 
-const TagsEditor = () => {
+const TagsEditor = (props) => {
   const classes = useStyles();
   const tagList = useSelector((state) =>
     state.editor.tagList ? state.editor.tagList : []
@@ -38,8 +42,10 @@ const TagsEditor = () => {
   };
 
   const handleAdd = () => {
-    dispatch(addTag(inputTag));
-    setInputTag("");
+    if (inputTag !== "") {
+      dispatch(addTag(inputTag));
+      setInputTag("");
+    }
   };
 
   const handleChange = (ev) => {
@@ -61,16 +67,25 @@ const TagsEditor = () => {
           </li>
         );
       })}
-
-      <TextField
-        value={inputTag}
-        onChange={handleChange}
-        type="text"
-        placeholder="Add tag..."
-      />
-      <Button color="primary" variant="contained" onClick={handleAdd}>
-        ADD
-      </Button>
+      <Grid
+        container
+        direction="row"
+        justify="center"
+        spacing={2}
+        alignItems="center"
+      >
+        <TextField
+          className={classes.input}
+          value={inputTag}
+          onChange={handleChange}
+          type="text"
+          placeholder="Add tag..."
+          error={props.touched && Boolean(props.errors)}
+        />
+        <IconButton color="default" onClick={handleAdd}>
+          <AddIcon />
+        </IconButton>
+      </Grid>
     </Paper>
   );
 };

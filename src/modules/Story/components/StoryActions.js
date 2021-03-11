@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import DeleteIcon from "@material-ui/icons/Delete";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import EditIcon from "@material-ui/icons/Edit";
-import { Link } from "@material-ui/core";
+import { Link } from "react-router-dom";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
@@ -48,7 +48,12 @@ const StoryActions = (props) => {
         <Tooltip title="Edit story" placement="bottom">
           {/* Check this */}
           <Link to={`/editor/${story.slug}`}>
-            <IconButton edge="start" color="default" aria-label="edit">
+            <IconButton
+              to={`/editor/${story.slug}`}
+              edge="start"
+              color="default"
+              aria-label="edit"
+            >
               <EditIcon />
             </IconButton>
           </Link>

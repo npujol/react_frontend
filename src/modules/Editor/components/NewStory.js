@@ -69,6 +69,9 @@ const newStory = () => {
   const descriptionError = useSelector(
     (state) => state.editor.descriptionError
   );
+  const tagList = useSelector((state) =>
+    state.editor.tagList ? state.editor.tagList : []
+  );
   const bodyError = useSelector((state) => state.editor.bodyError);
   const tagListError = useSelector((state) => state.editor.tagListError);
   const imageError = useSelector((state) => state.editor.imageError);
@@ -82,7 +85,11 @@ const newStory = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      dispatch(createStory(values));
+      if (!tagList) {
+        formik.setErrors({ tagList: tagListError });
+      } else {
+        dispatch(createStory(values, tagList));
+      }
     },
   });
 
@@ -162,7 +169,11 @@ const newStory = () => {
                 formik.touched.description && formik.errors.description
               }
             />
-            <TagsEditor tagList={formik.values.tagList}></TagsEditor>
+            <TagsEditor
+              error={formik.errors.tagList}
+              touched={formik.touched.tagList}
+              tagList={formik.values.tagList}
+            ></TagsEditor>
             <TextField
               id="body"
               name="body"

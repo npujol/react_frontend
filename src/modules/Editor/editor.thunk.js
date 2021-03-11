@@ -35,16 +35,16 @@ export const loadNewStory = () => {
   return { type: LOAD_NEW_STORY_PAGE };
 };
 
-export const createStory = (values) => {
+export const createStory = (values, tags) => {
   return async (dispatch) => {
     try {
-      const { title, description, body, tagList } = values;
+      const { title, description, body } = values;
 
       const data = {
         title: title,
         description: description,
         body_markdown: body,
-        tags: tagList,
+        tags: tags,
       };
       const payload = await storiesApi.storiesCreate(data);
       dispatch({ type: SUBMIT_STORY, payload });
