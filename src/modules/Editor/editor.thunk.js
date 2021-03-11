@@ -7,7 +7,6 @@ import {
   REMOVE_TAG,
   SUBMIT_STORY,
   UNLOAD_EDITOR_PAGE,
-  REDIRECT,
   LOAD_NEW_STORY_PAGE,
 } from "../../constants/actionTypes.js";
 
@@ -16,12 +15,12 @@ const storiesApi = new StoriesApi();
 
 export const loadEditor = (slug) => {
   return async (dispatch) => {
-    const story = await storiesApi.storiesRead({
-      slug,
-    });
+    const story = await storiesApi.storiesRead(slug);
+    const bodyMarkdown = await storiesApi.storiesGetBodyMarkdown(slug);
 
     const payload = {
       story: story,
+      bodyMarkdown: bodyMarkdown,
     };
     dispatch({ type: LOAD_EDITOR_PAGE, payload });
   };
@@ -57,10 +56,18 @@ export const createStory = (values, tags) => {
   };
 };
 
-export const updateStory = (slug, values) => {
+export const updateStory = (slug, values, tags) => {
   return async (dispatch) => {
     try {
-      const payload = await storiesApi.storiesPartialUpdate(slug, values);
+      const { title, description, body } = values;
+
+      const data = {
+        title: title,
+        description: description,
+        body_markdown: body,
+        tags: tags,
+      };
+      const payload = await storiesApi.storiesPartialUpdate(slug, data);
       dispatch({ type: SUBMIT_STORY, payload });
     } catch (error) {
       dispatch({
@@ -78,7 +85,6 @@ export const saveImage = (slug, image) => {
 };
 
 export const addTag = (inputTag) => {
-  console.log("inputData", inputTag);
   return async (dispatch) => {
     const payload = { inputTag: inputTag };
     dispatch({ type: ADD_TAG, payload: payload });

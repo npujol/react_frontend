@@ -22,8 +22,6 @@ import {
   unloadEditor,
   createStory,
   updateStory,
-  addTag,
-  removeTag,
   saveImage,
 } from "../editor.thunk";
 
@@ -70,52 +68,50 @@ const validationSchema = yup.object({
 
 const Editor = () => {
   const classes = useStyles();
-
   const dispatch = useDispatch();
   const story = useSelector((state) => state.editor.story);
+  const bodyMarkdown = useSelector((state) => state.editor.bodyMarkdown);
 
   const titleError = useSelector((state) => state.editor.titleError);
   const descriptionError = useSelector(
     (state) => state.editor.descriptionError
   );
+  const tagList = useSelector((state) =>
+    state.editor.tagList ? state.editor.tagList : []
+  );
   const bodyError = useSelector((state) => state.editor.bodyError);
   const tagListError = useSelector((state) => state.editor.tagListError);
   const imageError = useSelector((state) => state.editor.imageError);
   const param = useParams();
-  const slug = param.title;
+  const slug = param.slug;
 
   const formik = useFormik({
     initialValues: {
       title: story ? story.title : "",
       description: story ? story.description : "",
-      body: story ? story.body : "",
-      tagList: story ? story.tags : ["default"],
+      body: story ? bodyMarkdown : "",
+      tagList: story ? story.tags : [],
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      if (slug) {
-        dispatch(updateStory(slug, values));
-      } else {
-        dispatch(createStory(values));
-      }
+      dispatch(updateStory(slug, values, tagList));
     },
   });
+
+  useEffect(() => {
+    formik.setValues({
+      title: story.title,
+      description: story.description,
+      body: bodyMarkdown,
+      tagList: story.tags,
+    });
+  }, [story]);
 
   function handleUpdateImage(image) {
     if (slug && image) {
       dispatch(saveImage(slug, image));
     }
   }
-
-  useEffect(() => {
-    if (slug) {
-      dispatch(loadEditor(slug));
-    }
-
-    return () => {
-      dispatch(unloadEditor());
-    };
-  }, [slug, dispatch]);
 
   useEffect(() => {
     if (titleError) {
@@ -193,7 +189,11 @@ const Editor = () => {
                 }
               />
 
-              <TagsEditor tags={formik.tagList}></TagsEditor>
+              <TagsEditor
+                error={formik.errors.tagList}
+                touched={formik.touched.tagList}
+                tags={formik.tagList}
+              ></TagsEditor>
               <TextField
                 id="body"
                 name="body"

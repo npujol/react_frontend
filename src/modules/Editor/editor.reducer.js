@@ -1,8 +1,6 @@
 import {
   LOAD_EDITOR_PAGE,
   UNLOAD_EDITOR_PAGE,
-  SUBMIT_STORY,
-  ASYNC_START,
   ADD_TAG,
   REMOVE_TAG,
   SAVE_STORY_FAILED,
@@ -16,6 +14,7 @@ export default (state = {}, action) => {
       return {
         ...state,
         story: action.payload.story,
+        bodyMarkdown: action.payload.bodyMarkdown.bodyMarkdown,
         tagList: action.payload.story.tags.filter((tag) => tag.tag),
       };
     case LOAD_NEW_STORY_PAGE:

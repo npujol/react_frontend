@@ -107,7 +107,6 @@ const Story = () => {
                   __html: htmlDecode(story.body),
                 }}
               />
-              );
             </CardContent>
           </Card>
           <div className="row">
